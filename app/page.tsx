@@ -21,8 +21,9 @@ export default function Home() {
           <MdGpsFixed size={40}  className="border-[1px]  bg-slate-300 w-[10%] rounded-md p-2 " />
         </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {/* {Object.values(card.shoplist).map((item)=><div  key={item.Company}> <ProductCart  data={item} id={Object.keys(item)}/></div> )} */}
 
-          {Object.values(card.shoplist).map((item)=><div  key={item.Company}> <ProductCart  data={item}/></div> )}
+          {Object.values(card.shoplist).map((item:any)=><div  key={item.Company}> <ProductCart  data={item} /></div> )}
           
         </div>
       </div>

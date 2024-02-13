@@ -8,18 +8,52 @@ import { FaChevronLeft, FaUserCircle } from "react-icons/fa";
 import NavBar from "./NavBar";
 import { CiMobile3 } from "react-icons/ci";
 import { TiTick } from "react-icons/ti";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 const FormCnx = () => {
     const [type,setType] =useState("Connexion")
     const [isSignup,setIsSignup] =useState(false)
+    const[isLoading,setIsLoading]= useState(false)
+
+    const {register ,handleSubmit, formState:{errors}} = useForm<FieldValues>(
+        { defaultValues:{
+            email:"",
+            password:""
+    }})
+
+    const onSubmit:SubmitHandler<FieldValues>= (data)=>{
+        setIsLoading(true)
+        console.log(data)
+    }
+
+    const {
+        register: registerSignup,
+        handleSubmit: handleSubmitSignup,
+        formState: { errors:errorsSignup }} = useForm<FieldValues>(
+            {defaultValues: {
+                nom: '',
+                prénom: '',
+                télephone: '',
+                email: '',
+                password: '',
+                },
+            });
+
+    const onSubmitSignup:SubmitHandler<FieldValues>= (data)=>{
+        setIsLoading(true)
+        console.log(data)
+    }
+
     
     function handleSignup (){
         setIsSignup(true);
+        setIsLoading(false)
         setType("Inscription")
     }
 
     function handleMenuCnx (){
         setIsSignup(false);
+        setIsLoading(false)
         setType("Connexion")
 
     }
@@ -42,12 +76,18 @@ const FormCnx = () => {
                     <div className="flex-grow overflow-y-auto justify-content-between">
     {isSignup?
     <>
-        <Input type="text"  placeholder="Saisissez votre nom" label="Nom" Icon={FaUserCircle} />
-        <Input type="text"  placeholder="Saisissez votre prénom" label="Prénom" Icon={FaUserCircle} />
-        <Input type="text"  placeholder="06 12 34 56 78" label="Télephone" Icon={CiMobile3} />
-        <Input type="email"  placeholder="Saisissez votre e-mail" label="E-mail" Icon={MdOutlineMarkEmailRead} />
-        <Input type="password"  placeholder="Saisissez votre mot de passe" label="E-mail" Icon={PiLockKeyThin} />
-        <Input type="password"  placeholder="Comfirmez votre mot de passe" label="E-mail" Icon={PiLockKeyThin} />
+        <Input id="nom" required register={registerSignup}  errors={errorsSignup}
+    type="text"  placeholder="Saisissez votre nom" label="Nom" Icon={FaUserCircle} />
+        <Input id="prénom" required register={registerSignup}  errors={errorsSignup}
+    type="text"  placeholder="Saisissez votre prénom" label="Prénom" Icon={FaUserCircle} />
+        <Input  id="télephone" required register={registerSignup}  errors={errorsSignup}
+    type="text"  placeholder="06 12 34 56 78" label="Télephone" Icon={CiMobile3} />
+        <Input  id="email" required register={registerSignup}  errors={errorsSignup}
+    type="email"  placeholder="Saisissez votre e-mail" label="E-mail" Icon={MdOutlineMarkEmailRead} />
+        <Input  id="password" required register={registerSignup}  errors={errorsSignup}
+    type="password"  placeholder="Saisissez votre mot de passe" label="Password" Icon={PiLockKeyThin} />
+        <Input  id="password1" register={registerSignup}  errors={errorsSignup} 
+    type="password"  placeholder="Comfirmez votre mot de passe"  Icon={PiLockKeyThin}  />
         <div >
             <p className="flex gap-1 px-4 "><TiTick size={15} className="rounded-2xl border-[1px] border-black mt-1 "/> 1 Minuscule & 1 Majuscule </p>
             <p className="flex gap-1 px-4"><TiTick size={15} className="rounded-2xl border-[1px] border-black mt-1 "/> 1 chiffre (0-9)</p>
@@ -56,16 +96,19 @@ const FormCnx = () => {
         
         <div className="w-full p-5">
             <Button  
-                label="Je crée mon compte"
-                onClick={()=>{}} />
+                label={isLoading? "Loading":"Je crée mon compte"}
+                onClick={handleSubmitSignup(onSubmitSignup)} />
+
         </div>
 
     </> : 
     <>
     <div className="">
             
-        <Input type="email"  placeholder="Saisissez votre e-mail" label="E-mail" Icon={MdOutlineMarkEmailRead} />
-        <Input type="password"  placeholder="Saisissez votre mot de passe" label="Mot de passe" Icon={PiLockKeyThin}/>
+        <Input id="email" required disabled={isLoading}
+    register={register}  errors={errors} type="email"  placeholder="Saisissez votre e-mail" label="E-mail" Icon={MdOutlineMarkEmailRead} />
+        <Input id="password"required  disabled={isLoading}
+    register={register}  errors={errors} type="password"  placeholder="Saisissez votre mot de passe" label="Mot de passe" Icon={PiLockKeyThin}/>
         
     </div>
     
@@ -73,8 +116,8 @@ const FormCnx = () => {
         <div  className=" text-right  text-m text-black underline w-full"><Link href="">Mot de passe oublié !</Link></div>
         <div className="w-full p-5">
             <Button  
-                label="Connexion"
-                onClick={()=>{}} />
+                label={isLoading? "Loading":"Connexion"}
+                onClick={handleSubmit(onSubmit)} />
         </div>
         <h1 className="w-full text-center">Ou</h1>
         < div className=" text-center  text-xl p-2 text-black underline w-full"><button onClick={handleSignup} className="underline">Inscription</button></div>

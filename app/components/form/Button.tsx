@@ -20,7 +20,9 @@ const Button :React.FC<ButtonProps> = (
     custom,
     onClick}) => {
 
-    return ( <button disabled={disabled} 
+    return ( <button
+        onClick={onClick}
+        disabled={disabled} 
         className={`disabled:opacity-70   disabled:cursor-not-allowed rounded-md hover:opacity-80 transition w-full border-gray-700 flex item-center justify-center gap-2
             ${outline? "bg-white":"bg-gray-700"}
             ${outline? "text-slate-200": "text-white"} 
