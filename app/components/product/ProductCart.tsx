@@ -25,7 +25,7 @@ const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
   console.log("id xx", id);
   return (
     <div
-      className="col-span-1 h-full cursor-pointer border-[1.2px] border-slate-200 bg-slate-50 rounded-sm
+      className="relative col-span-1 h-full cursor-pointer border-[1.2px] border-slate-200 bg-slate-50 rounded-sm
     transition hover:scale-105  text-sm "
     >
       <div className="flex flex-col gap-2">

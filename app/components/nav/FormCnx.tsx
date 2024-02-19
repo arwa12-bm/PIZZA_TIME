@@ -67,7 +67,7 @@ const FormCnx = () => {
         
 <div >
 {isClicked?                     
-<div className="fixed flex flex-col min-h-screen top-0 right-0 bg-white  h-screen z-10 w-[70%]  " >
+<div className="fixed  flex flex-col min-h-screen top-0 right-0 bg-white  h-screen z-30 w-[70%]  " >
                     <div className="flex w-full justify-content  py-3">
                         <button onClick={type==="Inscription"?handleMenuCnx : handleMenu}><FaChevronLeft size={20} className="pt-1 mt-1"/></button>
                         <h1 className="text-2xl font-semibold w-full text-center">{type}</h1>

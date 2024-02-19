@@ -9,7 +9,7 @@ interface ButtonProps{
     small?:boolean,
     custom?:string,
     Icon?:IconType,
-    onClick:(e:React.MouseEvent<HTMLButtonElement>) =>void
+    onClick?:(e:React.MouseEvent<HTMLButtonElement>) =>void
     
 }
 const Button :React.FC<ButtonProps> = ( 
@@ -18,6 +18,7 @@ const Button :React.FC<ButtonProps> = (
     outline,
     small,
     custom,
+
     onClick}) => {
 
     return ( <button
