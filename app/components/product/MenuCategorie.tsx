@@ -1,14 +1,29 @@
-import { card } from "@/app/utils/products";
-import { useEffect, useState } from "react";
-import CategorieCart from "./CategorieCart";
-import { DropdownApp } from "./dropDown";
+"use client"
 
-const MenuCategorie:React.FC = () => {
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { card } from "@/app/utils/products";
+import { DropdownApp } from "./dropDown";
+import CategorieCart from "./CategorieCart";
+
+interface MenuCategorieProps{
+    data?:any,
+    Id?:any
+}
+
+
+const MenuCategorie:React.FC<MenuCategorieProps>= ({data,Id}) => {
     const [taille,setTaille] = useState(0)
     const [n,setN] = useState(4)
+    const router = useRouter()
     
     let listCategorie:any[]
     let ListDrop:any[]
+
+    listCategorie =Object.values(card.categories).slice(1, n)
+    ListDrop= Object.values(card.categories).filter((item:any)=>listCategorie.findIndex((el:any)=>el.title===item.title)===-1 )
+
     useEffect(() => {
         
         setTaille(window.innerWidth)
@@ -28,19 +43,16 @@ const MenuCategorie:React.FC = () => {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
-    listCategorie =Object.values(card.categories).slice(1, n)
-    //console.log({listCategorie});
     
-    
-    ListDrop= Object.values(card.categories).filter((item:any)=>listCategorie.findIndex((el:any)=>el.title===item.title)===-1 )
-    //console.log({ListDrop});
 
     return (  
-    <div className="flex justify-center shadow-md shadow-rounded-lg shadow-black gap-2  w-full justify-content p-4 ">
-    {listCategorie.map((item)=><div  className=""><CategorieCart  data={item} isTitle={true} /></div>)}
-    <DropdownApp items={ListDrop}/>
-    
-</div> );
+    <div className="flex justify-center justify-between shadow-md shadow-rounded-lg shadow-black gap-2  w-full justify-content p-4 ">
+    <p className="text-xl cursor-pointer " onClick={() => router.push(`/product/${Id}`)} >Menu</p>
+    <div className="flex justify-center gap-2">
+    {listCategorie.map((item)=><div  key={item.id} className=""><CategorieCart  data={item} isTitle={true}  /></div>)}
+    </div>
+    <DropdownApp items={ListDrop} title=" Voir plus ..."/>
+    </div> );
 }
- 
+
 export default MenuCategorie  ;
