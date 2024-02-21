@@ -3,8 +3,9 @@ import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@ne
 
 interface DropdownAppProps{
     items:any
+    title?:string
 }
-export const DropdownApp:React.FC<DropdownAppProps> = ({items})=> {
+export const DropdownApp:React.FC<DropdownAppProps> = ({items,title})=> {
     return (
         <Dropdown>
         <DropdownTrigger>
@@ -12,7 +13,7 @@ export const DropdownApp:React.FC<DropdownAppProps> = ({items})=> {
             variant="bordered" 
             className="text-lg"
             >
-            Voir plus ... 
+            {title} 
             </Button>
         </DropdownTrigger>
         <DropdownMenu aria-label="Static Actions" className="bg-slate-200  rounded-md overflow-y-auto  ">

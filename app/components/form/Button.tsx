@@ -8,6 +8,8 @@ interface ButtonProps{
     outline?:boolean,
     small?:boolean,
     custom?:string,
+    type?:string,
+    href?:string,
     Icon?:IconType,
     onClick?:(e:React.MouseEvent<HTMLButtonElement>) =>void
     
@@ -16,6 +18,7 @@ const Button :React.FC<ButtonProps> = (
     {label,
     disabled,
     outline,
+    href,
     small,
     custom,
 

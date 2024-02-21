@@ -13,7 +13,7 @@ interface ProductCartProps {
 }
 const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
   const router = useRouter();
-  const {Id,getIdShopList} = useCard()
+  const {IdShopList,getIdShopList} = useCard()
   useEffect(() => {
     getIdShopList(data)
   }, []);
@@ -30,7 +30,7 @@ const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
             fill
             src={data.image}
             alt=""
-            onClick={() => router.push(`/product/${Id}`)}
+            onClick={() => router.push(`/product/${IdShopList}`)}
           />
         </div>
         <div className="grid grid-cols-2  justify-between  text-[15px] font-semibold px-1  w-full  text-green-600">

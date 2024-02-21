@@ -5,23 +5,35 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 import { card } from "../utils/products";
 
 type  CartContextType={
-    selectedIdCategirie:any,
+    selectedElCategorie:any,
     selectedIdShopList:any,
-    Id:string,
+    IdShopList:string,
+    IdCategorieList:string,
+    IdCategorieEl:string,
+    CategorieObject:any,
     setSelectedIdShopList:()=>any
     setSelectedIdCategirie:()=>any
     getSelectedIdShopList:(params:any)=>any
     getIdShopList:(el:any)=>any
+    getIdCategorieList:(el:any)=>any
+    getSelectedIdCategorieList:(params:any)=>any
+    getCategorieById:(id:any)=>any
 }
 
 export const CardContext = createContext<CartContextType| null >(null);
 
 
 export const CardProvider = (props:any)=>{
-    const [selectedIdCategirie,setSelectedIdCategirie]=useState()
+    const [selectedElCategorie,setSelectedElCategorie]=useState()
     const [selectedIdShopList,setSelectedIdShopList]=useState()
-    const [Id,setId]=useState<string|undefined>()
+    const [IdShopList,setIdShopList]=useState<string|undefined>()
+    const [IdCategorieList,setIdCategorieList]=useState<string|undefined>()
+    const [IdCategorieEl,setIdCategorieEl]=useState<string|undefined>()
 
+    
+    const[CategorieObject,setCategorieObject]=useState()
+
+//get id from params
     const getSelectedIdShopList=useCallback((params:any)=>{
                 for (let item in Object.keys(card.shoplist)) {
                     let  selectedProduct:any
@@ -30,27 +42,70 @@ export const CardProvider = (props:any)=>{
                         setSelectedIdShopList(selectedProduct)
                     }
                 }
-                setId(params.productId)
+                setIdShopList(params.productId)
             },[selectedIdShopList]) 
+    const getSelectedIdCategorieList=useCallback((params:any)=>{
+                for (let item in Object.keys(card.categories)) {
+                    let  selectedCategorie:any
+                    if (JSON.stringify((Object.keys(card.categories)as any)[item]) === JSON.stringify(params?.productId) ) {
+                        selectedCategorie  =  Object.values(card.categories as any)[item]
+                        setSelectedElCategorie(selectedCategorie)
+                    }
+                }
+                setIdCategorieList(params.productId)
+    
+            },[selectedElCategorie]) 
 
-     const getIdShopList=useCallback((el:any)=>{
+// get id from object
+
+        const getIdShopList=useCallback((el:any)=>{
                 let id:string
                 for (let item of Object.keys(card.shoplist)) {
                     if (JSON.stringify((card.shoplist as any)[item]) === JSON.stringify(el)) {
                     id = item;
-                    setId(id)
+                    setIdShopList(id)
                     }
                 }
                 
-            },[Id])
+            },[IdShopList])
+
+
+        // const getIdCategorieList=useCallback((el:any)=>{
+        //         console.log({el});
+        //         let id:string
+        //         for (let item of Object.keys(card.categories)) {
+        //             if (JSON.stringify((card.categories as any)[item]) === JSON.stringify(el)) {
+        //             setIdCategorieEl(item)
+        //             console.log("id",item);
+        //             }
+        //         }
+                
+        //     },[IdCategorieList])
+
+            const getCategorieById=useCallback((id:any)=>{
+                let el:any
+                for (let item of Object.keys(card.categories)) {
+                    if (item === id) {
+                    el = (card.categories as any)[item];
+                    console.log("el",el)
+                    setCategorieObject(el)
+                    }
+                }
+                
+            },[CategorieObject])
                     
             
     const value = { 
-        selectedIdCategirie,
+        selectedElCategorie,
         selectedIdShopList,
-        Id,
+        IdShopList,
+        IdCategorieList,
+        CategorieObject,
+        IdCategorieEl,
+        getCategorieById,
         getIdShopList,
-        getSelectedIdShopList
+        getSelectedIdShopList,
+        getSelectedIdCategorieList
         
         };
     return <CardContext.Provider  value={value}  {...props} />
