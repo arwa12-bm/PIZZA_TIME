@@ -14,10 +14,10 @@ const Footer = () => {
                 <FooterList>
                     <h3 className='text-base font-bold mb-2'>Téléchargez notre application</h3>
                         <Link href="https://play.google.com/store/apps/details?id=com.softavera.pizzatime&hl=ln">
-                            <Image  src="/GooglePlay.png"  alt="logo"  width={"120"} height={"120"} />
+                            <Image  src="https://www.commande-pizzatime.fr/CESARWEB_WEB/play_store-icon.png"  alt="play_store"  width={"120"} height={"120"} />
                         </Link>
                         <Link href="https://apps.apple.com/us/app/pizza-time-france/id1556496063">
-                            <Image  src="/AppStore.png"  alt="logo"  width={"120"} height={"120"} />
+                            <Image  src="https://www.commande-pizzatime.fr/CESARWEB_WEB/app_store_icon.png"  alt="app_store"  width={"120"} height={"120"} />
                         </Link>
                     <h3 className='text-base  mb-2'>Mentions légales</h3>
                     <h3 className=''>Politique de confidentialité</h3>
