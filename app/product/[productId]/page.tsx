@@ -4,8 +4,8 @@ import { useEffect,useState } from "react";
 
 import Container from "@/app/components/Container";
 import HomePhoto from "@/app/components/HomePhoto";
-import CategorieCart from "@/app/components/product/CategorieCart";
-import MenuCategorie from "@/app/components/product/MenuCategorie";
+import CategorieCart from "@/app/components/categorie/CategorieCart";
+import MenuCategorie from "@/app/components/categorie/MenuCategorie";
 import useCard from "@/app/hooks/useCard";
 import { card } from "@/app/utils/products";
 
