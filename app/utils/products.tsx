@@ -1239,8 +1239,16 @@ export const card={
                     
                   ],
                   "originalKeyElements": [
-                    "d99758ef-0049-4513-90fe-ca44bd069aac",
-                    "KIOSK"
+                    {"id":"d99758ef-0049-4513-90fe-ca44bd069aac",
+                      "title":"CREME FRAICHE"
+                    },
+                    {"id":"d99758ef-0049-4513-90fe-ca44bd069aad",
+                    "title":"OIGNONS"
+                    },
+                    {"id":"d99758ef-0049-4513-90fe-ca44bd069aae",
+                    "title":"FROMAGE"
+                    },
+                    
                   ]
                 },
                 "313154d3-9c2d-5f49-beb4-399ff32f806c": {
@@ -1849,11 +1857,28 @@ export const card={
               "08406871-3262-4dfe-9fee-1309a499fc0a": {
                 "id": 2,
                 "rank": 1,
-                "title": "m1",
+                "title": "CREME FRAICHE",
                 "quantity": 1,
                 "isVisible": true,
                 "isObligatory": true
-              }
+              },   
+              "08406871-3262-4dfe-9fee-1309a499fc0b": {
+                "id": 2,
+                "rank": 1,
+                "title": "OIGNON",
+                "quantity": 1,
+                "isVisible": true,
+                "isObligatory": true
+              },
+              "08406871-3262-4dfe-9fee-1309a499fc0c": {
+                "id": 2,
+                "rank": 1,
+                "title": "FROMAGE",
+                "quantity": 1,
+                "isVisible": true,
+                "isObligatory": true
+              },
+
             },
             "isOptionChoiceEnable": false,
             "isItemDesignationShown": true
@@ -4610,6 +4635,35 @@ export const card={
             "isItemDesignationShown": true
           },
         
+        },
+        "SupplimentComposition": {
+          "08406871-3262-4dfe-9fee-1309a499fc01": {
+            "id": 2,
+            "rank": 1,
+            "title": "AIL",
+            "quantity": 1,
+            "price": 1 ,
+            "isVisible": true,
+            "isObligatory": true
+          }, 
+          "08406871-3262-4dfe-9fee-1309a499fc02": {
+            "id": 2,
+            "rank": 1,
+            "title": "ANCHOIS",
+            "quantity": 1,
+            "price": 1 ,
+            "isVisible": true,
+            "isObligatory": true
+          },
+          "08406871-3262-4dfe-9fee-1309a499fc03": {
+            "id": 2,
+            "rank": 1,
+            "title": "ARTICHAUTS",
+            "quantity": 1,
+            "price": 1 ,
+            "isVisible": true,
+            "isObligatory": true
+          },
         },
         "steps": {
           "0973b81c-868e-40bf-b24e-76d53bcd7e98": {
