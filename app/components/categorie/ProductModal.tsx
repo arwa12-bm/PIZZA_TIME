@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Modal } from 'antd';
-import Button from '../form/Button';
 import Image from 'next/image';
-import CheckBox from './checkList';
+import { Modal } from 'antd';
+
+import Button from '../form/Button';
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import { formatPrice } from '@/app/utils/formatPrice';
 import { card } from '@/app/utils/products';
 import NumberControl from './InputNumber';
+
+
 interface ProductModalAppProps{
     Open:boolean
     onClose:()=>void
@@ -15,6 +17,7 @@ interface ProductModalAppProps{
     CompList?:any
     
 }
+
 const ProductModalApp: React.FC<ProductModalAppProps> = ({Open,onClose,img,titleP,CompList}) => {
     if (!Open) return null
 
