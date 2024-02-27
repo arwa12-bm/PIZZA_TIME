@@ -43,7 +43,7 @@ import useCard from "@/app/hooks/useCard";
                         </div>
                     </div>
                     
-                    <CategorieModalApp  />
+                    <CategorieModalApp data={data} />
                 </div>
             </div>
             
