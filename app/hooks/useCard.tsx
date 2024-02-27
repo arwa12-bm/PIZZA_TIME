@@ -40,10 +40,14 @@ export const CardProvider = (props:any)=>{
                     if (JSON.stringify((Object.keys(card.shoplist)as any)[item]) === JSON.stringify(params.productId) ) {
                         selectedProduct  =  Object.values(card.shoplist as any)[item]
                         setSelectedIdShopList(selectedProduct)
+                        localStorage.setItem("selectedProductData",JSON.stringify(selectedProduct))
                     }
                 }
                 setIdShopList(params.productId)
+                localStorage.setItem("selectedProductId",JSON.stringify({"Id":params.productId}))
             },[selectedIdShopList]) 
+
+
     const getSelectedIdCategorieList=useCallback((params:any)=>{
                 for (let item in Object.keys(card.categories)) {
                     let  selectedCategorie:any
@@ -97,7 +101,7 @@ export const CardProvider = (props:any)=>{
             
     const value = { 
         selectedElCategorie,
-        selectedIdShopList,
+       // selectedIdShopList,
         IdShopList,
         IdCategorieList,
         CategorieObject,
