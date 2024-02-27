@@ -45,14 +45,14 @@
     return (
         <>
         <ButtonContainer>
-            <DecreaseButton onClick={handleDecreaseClick}>-</DecreaseButton>
+            <DecreaseButton onClick={handleDecreaseClick} className='rounded-full '>-</DecreaseButton>
             <input
             type='number'
             style={{ width: '70px', textAlign: 'center' }}
             value={value}
             readOnly
             />
-            <IncreaseButton onClick={handleIncreaseClick}>+</IncreaseButton>
+            <IncreaseButton onClick={handleIncreaseClick} className='rounded-full'>+</IncreaseButton>
         </ButtonContainer>
         </>
     )
