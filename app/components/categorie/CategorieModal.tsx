@@ -2,33 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { Modal } from 'antd';
 import { HiOutlineShoppingBag } from 'react-icons/hi2';
 import { TbTruckDelivery } from 'react-icons/tb';
+import dayjs from 'dayjs';
 
 import TimePickerApp from '../product/TimePicker';
 import Button from '../form/Button';
+import { useRouter } from 'next/navigation';
 
-const CategorieModalApp: React.FC = () => {
+
+interface CategorieModalAppProps{
+    data:any
+}
+
+const CategorieModalApp: React.FC<CategorieModalAppProps>= ({data}) => {
+
+    const format = 'HH:mm';
+
 
     const [big,setBig]=useState(true)
     const[emporter,setEmporter]=useState(true)
     const[livrer,setLivrer]=useState(false)
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
-
-    const showModal = () => {
-        setOpen(true);
-    };
-
-    const handleOk = () => {
-        setLoading(true);
-        setTimeout(() => {
-        setLoading(false);
-        setOpen(false);
-        }, 3000);
-    };
-
-    const handleCancel = () => {
-        setOpen(false);
-    };
+    const [selectedTime, setSelectedTime] = useState(dayjs('12:00', format));
+    const [ModeRetrait, setModeRetrait] = useState();
+    const router = useRouter()
 
 
     const handleEmporter =()=>{
@@ -40,7 +37,20 @@ const CategorieModalApp: React.FC = () => {
         setEmporter(false)
     }
 
+    const handleValider= ()=>{
+        localStorage.setItem("ModeRetrait",JSON.stringify({"Time":selectedTime.format(format),"emporter":emporter,"livrer":livrer}))
+        router.push(`/menu/${data.id}`)
+    }
+    const handleTimeChange = (time:any) => {
+        setSelectedTime(time);
+    };
 
+    useEffect(()=>{
+        setModeRetrait(localStorage.getItem("ModeRetrait")!==null?JSON.parse(localStorage.getItem("ModeRetrait")??'{}'):{})
+        console.log({ModeRetrait});
+    },[])
+    
+    
     useEffect(() => {
         
         const handleResize = () => {
@@ -61,14 +71,11 @@ const CategorieModalApp: React.FC = () => {
 
     return (
         <>
-        <Button label='Commander'  onClick={showModal}   />
-            
-        
+        <Button label='Commander'  onClick={()=>setOpen(true)}   />
         <Modal
             open={open}
             title="Modes de retrait"
-            onOk={handleOk}
-            onCancel={handleCancel}
+            onCancel={()=>setOpen(false)}
             footer={[
         
             <Button
@@ -76,7 +83,7 @@ const CategorieModalApp: React.FC = () => {
                 key="link"
                 href=""
                 disabled={loading}
-                onClick={handleOk}
+                onClick={handleValider}
             />
             ]}
         >
@@ -92,7 +99,7 @@ const CategorieModalApp: React.FC = () => {
             </div>
             <div className={big? "flex flex-col gap-8 mt-10 mb-8" : "flex flex-col" }>
                 <label htmlFor="" className="relative mb-2 border-[1px] text-center p-2">Aujourd'hui</label>
-                <TimePickerApp />
+                <TimePickerApp ModeRetrait={ModeRetrait}  handleTimeChange={handleTimeChange}/>
             </div>
         </Modal>
         </>
