@@ -4,9 +4,8 @@ import { Modal } from 'antd';
 
 import Button from '../form/Button';
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
-import { formatPrice } from '@/app/utils/formatPrice';
 import { card } from '@/app/utils/products';
-import NumberControl from './InputNumber';
+import InputSupp from '../form/InputSupp';
 
 
 interface ProductModalAppProps{
@@ -23,9 +22,24 @@ const ProductModalApp: React.FC<ProductModalAppProps> = ({Open,onClose,img,title
 
     const [big,setBig]=useState(true)
     const [loading, setLoading] = useState(false);
+    const [checkedItems, setCheckedItems] = useState({CREMEFRAICHE:true,FROMAGE:true,OIGNON:true});
     
+
+    const handleSuppChange=(item:any,SuppItems:any,newCount:any)=>
+        {const newCheckedItems:any = {...SuppItems};
+        if (newCheckedItems[item.title] === undefined || newCheckedItems[item.title] >= 0  ) {
+        newCheckedItems[item.title] = newCount;
+        }
+        localStorage.setItem("supList",JSON.stringify(newCheckedItems))}
+        
+
+    const handleValider=()=>{
+        let sup:any=localStorage.getItem("supList")!==null?JSON.parse(localStorage.getItem("supList")??'{}'):{}
+        localStorage.setItem("ItemList",JSON.stringify({sup,checkedItems}))
+        }
     
-    
+
+        
     useEffect(() => {
         
         const handleResize = () => {
@@ -43,13 +57,6 @@ const ProductModalApp: React.FC<ProductModalAppProps> = ({Open,onClose,img,title
         };
     }, []);
 
-    const [count, setCount] = React.useState(0);
-
-    const onCountChanged = (newCount: number) => {
-        setCount(newCount);
-    };
-
-
     return (
         <>
     
@@ -64,7 +71,7 @@ const ProductModalApp: React.FC<ProductModalAppProps> = ({Open,onClose,img,title
                 key="link"
                 href=""
                 disabled={loading}
-                onClick={()=>{}}
+                onClick={handleValider}
             />
             ]}
         >
@@ -83,7 +90,18 @@ const ProductModalApp: React.FC<ProductModalAppProps> = ({Open,onClose,img,title
                         <p>COMPOSITION DE BASE</p>
                         <FormGroup className='flex gap-2'>
                             {Object.values(CompList).map((item:any)=>
-                                <FormControlLabel control={<Checkbox defaultChecked />} label={item.title} className='border-[1px] rounded-lg justify-content' />
+                                <FormControlLabel key={item.title} control={<Checkbox value={item.title} 
+                                                                        onChange={e => {
+                                                                            const newCheckedItems:any = {...checkedItems};
+                                                                            if (newCheckedItems[item.title] === undefined || e.target.checked) {
+                                                                            newCheckedItems[item.title] = true;
+                                                                            } else {
+                                                                            delete newCheckedItems[item.title];
+                                                                            }
+                                                                            setCheckedItems(newCheckedItems);
+                                                                        }}
+                                                                        defaultChecked />}
+                                                                    label={item.title} className='border-[1px] rounded-lg justify-content' />
                                 )}
                         </FormGroup>
                     </div>
@@ -92,11 +110,10 @@ const ProductModalApp: React.FC<ProductModalAppProps> = ({Open,onClose,img,title
                         <p className='text-sm'>Choisissez jusqu'à 9</p>
                         <FormGroup className='flex gap-2'>
                             {Object.values(card.SupplimentComposition)?.map((item:any,index:number)=>
-                                    <div key={index} className='flex justify-content justify-between border-[1px] rounded-lg '>
-                                        <FormControlLabel control={<Checkbox checked={count > 0} />} value={count} label={item.title}  />
-                                        <NumberControl value={count} onChange={onCountChanged} />
-                                        <p className='p-2'>{formatPrice(item.price)}</p>
-                                    </div>
+                                    <InputSupp item={item} 
+                                                index={index}
+                                                onchangeList={handleSuppChange}
+                                                />
                                 
                                 )}
                         </FormGroup>
