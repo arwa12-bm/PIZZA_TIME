@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import MenuCategorie from "../../components/categorie/MenuCategorie";
 import ProductCategorie from "@/app/components/categorie/ProductCategorie";

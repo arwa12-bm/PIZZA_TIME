@@ -21,7 +21,6 @@ export const UserLocationProvider =(props:any)=>{
     const [query,setQuery]=useState("")
     const getUserLocation = ()=>{
         navigator.geolocation.getCurrentPosition(function(pos){ 
-            console.log("pos",pos)
             setUserlocation((prevUserLocation) => ({
                 ...prevUserLocation,
                 lat: pos.coords.latitude,
