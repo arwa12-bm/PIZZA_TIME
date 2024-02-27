@@ -15,21 +15,28 @@ interface Iparams{
 }
 
 const Product= ({params}:{params:Iparams}) => {
+    const[selectedProductId ,setSelectedProductId ]=useState({})
+    const[selectedProductData ,setSelectedProductData ]=useState({})
 
-    const {selectedIdShopList,getSelectedIdShopList,IdShopList} = useCard()
+    const {getSelectedIdShopList} = useCard()
     
     useEffect(()=>{ 
         getSelectedIdShopList(params)
-        
+        setSelectedProductId(localStorage.getItem("selectedProductId")!==null?JSON.parse(localStorage.getItem("selectedProductId")??'{}'):{})
+        setSelectedProductData(localStorage.getItem("selectedProductData")!==null?JSON.parse(localStorage.getItem("selectedProductData")??'{}'):{})
     },[])
+
+    
+
+
 
     return ( 
     <div className="flex flex-col">
-    <HomePhoto  data={selectedIdShopList}  />
-    <MenuCategorie data={selectedIdShopList}  />
+    <HomePhoto  data={selectedProductData }  />
+    <MenuCategorie data={selectedProductData }  />
     <Container>
         <div className="grid grid-cols-1   md:grid-cols-2 sm:grid-cols-2 gap-8 m-8">
-            {Object.values(card.categories).map((item:any)=><div key={item.id}  className="" > <CategorieCart  data={item} Id={IdShopList}  /></div>)}
+            {Object.values(card.categories).map((item:any)=><div key={item.id}  className="" > <CategorieCart  data={item} Id={selectedProductId}  /></div>)}
             
         </div>
     </Container>
