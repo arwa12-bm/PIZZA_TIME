@@ -1453,7 +1453,7 @@ export const card={
             "printers": [
               
             ],
-            "quantity": "1",
+            
             "sizeList": "0",
             "variants": [
               
@@ -1887,7 +1887,7 @@ export const card={
             "color": "#FFFFFF",
             "price": {
               "tva": 0,
-              "default": 0,
+              "default": 20,
               "priceHT": 0,
               "override": [
                 
@@ -2319,7 +2319,6 @@ export const card={
             "printers": [
               
             ],
-            "quantity": "1",
             "sizeList": "0",
             "variants": [
               
@@ -2724,7 +2723,6 @@ export const card={
                 "id": 2,
                 "rank": 1,
                 "title": "m1",
-                "quantity": 1,
                 "isVisible": true,
                 "isObligatory": true
               }
@@ -2953,7 +2951,6 @@ export const card={
             "printers": [
               
             ],
-            "quantity": "1",
             "sizeList": "0",
             "variants": [
               
@@ -3587,7 +3584,6 @@ export const card={
             "printers": [
               
             ],
-            "quantity": "1",
             "sizeList": "0",
             "variants": [
               
@@ -3992,7 +3988,6 @@ export const card={
                 "id": 2,
                 "rank": 1,
                 "title": "m1",
-                "quantity": 1,
                 "isVisible": true,
                 "isObligatory": true
               }
@@ -4221,7 +4216,6 @@ export const card={
             "printers": [
               
             ],
-            "quantity": "1",
             "sizeList": "0",
             "variants": [
               
