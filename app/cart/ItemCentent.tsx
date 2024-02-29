@@ -5,6 +5,7 @@ import Link from "next/link";
 import { formatPrice } from "../utils/formatPrice";
 import NumberControl from "../components/form/InputNumber";
 import { useState } from "react";
+import { divIcon } from "leaflet";
 
 interface ItemCententProps{
     item:any
@@ -39,12 +40,17 @@ const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
                         <div className="flex flex-col justify-between">
                             <p className="font-semibold text-md">Composants de base : </p>
                             <div className="flex ">
-                                {Object.keys(item.checkedItems).map((item)=><p>{item},</p>)}
+                                {Object.keys(item.checkedItems).map((item)=><p key={item}>{item},</p>)}
                             </div>
+                            {item.sup == null? "" :
+                            <div>
                             <p className="font-semibold text-md">composant supplimentaire : </p>
                             <div className="flex ">
                                 {JSON.stringify(item.sup)}
                             </div>
+                            </div>
+                            }
+                            
                         </div> 
                         :""}
                         
