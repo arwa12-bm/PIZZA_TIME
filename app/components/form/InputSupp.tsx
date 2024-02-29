@@ -1,7 +1,9 @@
 "use client"
-import { Checkbox, FormControlLabel } from "@mui/material";
-import NumberControl from "../categorie/InputNumber";
+
 import { useState } from "react";
+
+import { Checkbox, FormControlLabel } from "@mui/material";
+import NumberControl from "./InputNumber";
 import { formatPrice } from "@/app/utils/formatPrice";
 
 
@@ -14,6 +16,7 @@ interface InputSuppProps{
 const InputSupp:React.FC<InputSuppProps> = ( {item,index,onchangeList}) => {
     const [count, setCount] =useState(0);
     const [SuppItems, setSuppItems] = useState({});    
+    
 
     const onCountChanged = (newCount: number) => {
         setCount(newCount);
