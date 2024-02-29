@@ -47,7 +47,6 @@ const CategorieModalApp: React.FC<CategorieModalAppProps>= ({data}) => {
 
     useEffect(()=>{
         setModeRetrait(localStorage.getItem("ModeRetrait")!==null?JSON.parse(localStorage.getItem("ModeRetrait")??'{}'):{})
-        console.log({ModeRetrait});
     },[])
     
     
