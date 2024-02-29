@@ -7,24 +7,25 @@ import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import Button from '../form/Button';
 import { card } from '@/app/utils/products';
 import InputSupp from '../form/InputSupp';
+import useCard from '@/app/hooks/useCard';
 
 
 interface ProductModalAppProps{
     Open:boolean
     onClose:()=>void
     img:any
-    titleP:any
+    data:any
     CompList?:any
     
 }
 
-const ProductModalApp: React.FC<ProductModalAppProps> = ({Open,onClose,img,titleP,CompList}) => {
+const ProductModalApp: React.FC<ProductModalAppProps> = ({Open,onClose,img,data,CompList}) => {
     if (!Open) return null
 
     const [big,setBig]=useState(true)
     const [loading, setLoading] = useState(false);
     const [checkedItems, setCheckedItems] = useState({CREMEFRAICHE:true,FROMAGE:true,OIGNON:true});
-    
+    const{handleAddProductToCart,HandleCartQtyIncrease,cartProducts}=useCard()
 
     const handleSuppChange=(item:any,SuppItems:any,newCount:any)=>
         {const newCheckedItems:any = {...SuppItems};
@@ -36,10 +37,22 @@ const ProductModalApp: React.FC<ProductModalAppProps> = ({Open,onClose,img,title
 
     const handleValider=()=>{
         let sup:any=localStorage.getItem("supList")!==null?JSON.parse(localStorage.getItem("supList")??'{}'):{}
-        localStorage.setItem("ItemList",JSON.stringify({sup,checkedItems}))
+        localStorage.setItem("ItemList",JSON.stringify({sup,checkedItems,data}))
+        const Existingindex =cartProducts?.findIndex((item:any)=>  JSON.stringify(item.data) === JSON.stringify(data))
+        if( Existingindex == -1 || cartProducts == null){
+            handleAddProductToCart({sup,checkedItems,data,quantity:1})
+            localStorage.setItem("supList",JSON.stringify(null))
+            localStorage.setItem("ItemList",JSON.stringify(null))
+        }else{
+            HandleCartQtyIncrease(cartProducts[Existingindex])
+
+        }
+        setLoading(true)
+        onClose()
         }
     
 
+    
         
     useEffect(() => {
         
@@ -63,7 +76,7 @@ const ProductModalApp: React.FC<ProductModalAppProps> = ({Open,onClose,img,title
     
         <Modal
             open={Open}
-            title= {titleP}
+            title= {data.title}
             onCancel={onClose}
             footer={[
         
