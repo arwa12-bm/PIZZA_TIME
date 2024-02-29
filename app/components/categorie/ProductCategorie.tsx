@@ -45,7 +45,7 @@ const ProductCategorie:React.FC<ProductCategorieProps>= ({data}) => {
                     <div className=" text-center ">{formatPrice(selectedProduct.price.default)}</div>
                 </div>
             </div>
-            <ProductModalApp  Open={isOpen} onClose={handleModalClose} titleP={selectedProduct.title} img={selectedProduct.imageUrl.Default.urlDefault} CompList={selectedProduct.basicComposition}/>
+            <ProductModalApp  Open={isOpen} onClose={handleModalClose} data={selectedProduct} img={selectedProduct.imageUrl.Default.urlDefault} CompList={selectedProduct.basicComposition}/>
         </div>
     );
 }
