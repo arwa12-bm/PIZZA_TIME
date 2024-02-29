@@ -170,7 +170,9 @@ export const CardProvider = (props:any)=>{
                 if(cartProducts){
                     updatedCart  = [...cartProducts]
                 
-                    const Existingindex =cartProducts.findIndex((item)=> item.data.id === product.data.id)
+                    const Existingindex =cartProducts.findIndex((item)=> item.data.id === product.data.id 
+                                                                    && item.sup === product.sup 
+                                                                    && item.checkedItems=== product.checkedItems)
                     if(Existingindex > -1 ){
                         updatedCart[Existingindex].quantity = ++updatedCart[Existingindex].quantity
                     }
@@ -209,11 +211,11 @@ export const CardProvider = (props:any)=>{
 
 //clear Cart
             const handleClearCart =useCallback(()=>{
-
-                console.log("clear");
                 
                 setCartProducts(null)
                 setCartTotalQty(0)
+                localStorage.setItem("supList",JSON.stringify(null))
+                localStorage.setItem("ItemList",JSON.stringify(null))
                 localStorage.setItem('CartItem',JSON.stringify(null))
         
             },[cartProducts])
