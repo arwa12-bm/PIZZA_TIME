@@ -6,6 +6,7 @@ import { card } from "../utils/products";
 import toast from "react-hot-toast";
 
 type  CartContextType={
+    selectedProductId:any,
     selectedElCategorie:any,
     selectedIdShopList:any,
     IdShopList:string,
@@ -15,6 +16,7 @@ type  CartContextType={
     cartTotalQty :number;
     cartTotalAmount:number;
     cartProducts:any;
+    dataUser:any;
     setSelectedIdShopList:()=>any
     setSelectedIdCategirie:()=>any
     getSelectedIdShopList:(params:any)=>any
@@ -26,6 +28,9 @@ type  CartContextType={
     handleClearCart:()=>void
     HandleCartQtyIncrease:(product:any)=>void
     HandleCartQtyDecrease:(product:any)=>void
+    handleRemoveProductFromCart :(product:any)=>void
+    getData:()=>any
+
     
 }
 
@@ -42,6 +47,9 @@ export const CardProvider = (props:any)=>{
     const[CategorieObject,setCategorieObject]=useState()
     const [cartTotalQty,setCartTotalQty]=useState(0)
     const [cartTotalAmount,setCartTotalAmount]=useState(0)
+    const [dataUser, setDataUser] = useState(null);
+    const[selectedProductId,setselectedProductId ]=useState()
+
 
 //get List of item in cart
     useEffect(()=>{
@@ -50,6 +58,13 @@ export const CardProvider = (props:any)=>{
     
         setCartProducts(cProducts)
     },[])
+
+    // useEffect(() => {
+    //     const storedProductId = localStorage.getItem("selectedProductId");
+    //     const parsedProductId = storedProductId ? JSON.parse(storedProductId) : null;
+    //     setselectedProductId(parsedProductId);
+    // }, []);
+
 //get  totalAmount and total quantity
     useEffect(()=>{
         
@@ -209,6 +224,24 @@ export const CardProvider = (props:any)=>{
             },[cartProducts])
 
 
+            const handleRemoveProductFromCart = useCallback((product:any) => {
+                setCartProducts((prev:any) => {
+                    // Filter out the product to be removed from the cart
+                    const updatedCart = prev.filter((item:any) => item.data.id !== product.data.id 
+                                                                && item.sup !== product.sup 
+                                                                && item.checkedItems  !== product.checkedItems);
+            
+                    // Notify user and update local storage
+                    toast.success("Product removed from cart");
+                    localStorage.setItem('CartItem', JSON.stringify(updatedCart));
+            
+                    // Update the state with the new cart
+                    return updatedCart;
+                });
+            }, [setCartProducts]);
+
+
+
 //clear Cart
             const handleClearCart =useCallback(()=>{
                 
@@ -219,6 +252,25 @@ export const CardProvider = (props:any)=>{
                 localStorage.setItem('CartItem',JSON.stringify(null))
         
             },[cartProducts])
+
+
+            const getData =useCallback(async()=>{
+                try {
+                    const res = await fetch('http://localhost:8080/api/user/user',{
+                        method:"GET", 
+                        credentials:"include",
+                    });        
+                    if (!res.ok) {
+                        throw new Error('Failed to fetch data');
+                        }
+                    const jsonData = await res.json();
+                    //console.log({jsonData});
+                        
+                    setDataUser( jsonData );
+                } catch (e) {
+                    console.error('Login error', e);
+                    }
+            },[])
         
         
             
@@ -226,6 +278,8 @@ export const CardProvider = (props:any)=>{
         selectedElCategorie,
         selectedIdShopList,
         IdShopList,
+        dataUser,
+        selectedProductId,
         //IdCategorieList,
         CategorieObject,
         IdCategorieEl,
@@ -240,6 +294,8 @@ export const CardProvider = (props:any)=>{
         handleClearCart,
         HandleCartQtyIncrease,
         HandleCartQtyDecrease,
+        handleRemoveProductFromCart,
+        getData,
         };
     return <CardContext.Provider  value={value}  {...props} />
 }
