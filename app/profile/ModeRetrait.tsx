@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { CiCreditCard1 } from "react-icons/ci";
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
-import { TfiLocationPin } from "react-icons/tfi";
+
 import DoubleInputApp from "../components/form/doubleInput";
 import DoubleInputAppDT from "../components/form/doubleInputDT";
 
 const ModeRetrait = () => {
     const [clicked,setClicked]=useState(false)
+
     let ModeRetrait:any=localStorage.getItem("ModeRetrait")!==null?JSON.parse(localStorage.getItem("ModeRetrait")??'{}'):{}
 
     return ( 
