@@ -9,20 +9,21 @@ import CategorieCart from "./CategorieCart";
 
 
 interface MenuCategorieProps{
-    data?:any,
 }
 
 
-const MenuCategorie:React.FC<MenuCategorieProps>= ({data}) => {
+const MenuCategorie:React.FC<MenuCategorieProps>= () => {
     const [n,setN] = useState(4)
     const router = useRouter()
-    const selectedProduct = localStorage.getItem("selectedProductId")!==null?JSON.parse(localStorage.getItem("selectedProductId")??'{}'):{}
+    
+    const selectedProductId =localStorage.getItem("selectedProductId")!==null?JSON.parse(localStorage.getItem("selectedProductId")??'{}'):{}
+    
 
 
     let listCategorie:any[]
     let ListDrop:any[]
 
-    listCategorie =Object.values(card.categories).slice(1, n)
+    listCategorie =Object.values(card.categories).slice(0 , n)
     ListDrop= Object.values(card.categories).filter((item:any)=>listCategorie.findIndex((el:any)=>el.title===item.title)===-1 )
 
     useEffect(() => {
@@ -42,12 +43,13 @@ const MenuCategorie:React.FC<MenuCategorieProps>= ({data}) => {
         };
     }, []);
     
+    console.log(selectedProductId)
 
     return (  
     <div className="flex justify-center justify-between shadow-md shadow-rounded-lg shadow-black gap-2  w-full justify-content p-4 ">
-    <p className="text-xl cursor-pointer " onClick={() => router.push(`/product/${selectedProduct.Id}`)} >Menu</p>
+    <p className="text-xl cursor-pointer " onClick={() => router.push(`/product/${selectedProductId.Id}`)} >Menu</p>
     <div className="flex justify-center gap-2">
-    {listCategorie.map((item)=><div  key={item.id} className=""><CategorieCart  data={item} isTitle={true}  /></div>)}
+    {listCategorie.map((item)=><div  key={item.id} className="" ><CategorieCart  data={item} isTitle={true}  /></div>)}
     </div>
     <DropdownApp items={ListDrop} title=" Voir plus ..."/>
     </div> );

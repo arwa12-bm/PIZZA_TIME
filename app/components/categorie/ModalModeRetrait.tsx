@@ -9,11 +9,11 @@ import Button from '../form/Button';
 import { useRouter } from 'next/navigation';
 
 
-interface CategorieModalAppProps{
+interface ModeRetraitModalProps{
     data:any
 }
 
-const CategorieModalApp: React.FC<CategorieModalAppProps>= ({data}) => {
+const ModeRetraitModal: React.FC<ModeRetraitModalProps>= ({data}) => {
 
     const format = 'HH:mm';
 
@@ -27,7 +27,7 @@ const CategorieModalApp: React.FC<CategorieModalAppProps>= ({data}) => {
     const [ModeRetrait, setModeRetrait] = useState();
     const router = useRouter()
 
-
+  
     const handleEmporter =()=>{
         setEmporter(!emporter)
         setLivrer(false)
@@ -38,9 +38,10 @@ const CategorieModalApp: React.FC<CategorieModalAppProps>= ({data}) => {
     }
 
     const handleValider= ()=>{
-        localStorage.setItem("ModeRetrait",JSON.stringify({"Time":selectedTime.format(format),"emporter":emporter,"livrer":livrer}))
+        localStorage.setItem("ModeRetrait",JSON.stringify({"Time":selectedTime.format(format),"emporter":emporter,"livrer":livrer }))
         router.push(`/menu/${data.id}`)
     }
+    
     const handleTimeChange = (time:any) => {
         setSelectedTime(time);
     };
@@ -105,4 +106,4 @@ const CategorieModalApp: React.FC<CategorieModalAppProps>= ({data}) => {
     );
     };
 
-export default CategorieModalApp;
+export default ModeRetraitModal;

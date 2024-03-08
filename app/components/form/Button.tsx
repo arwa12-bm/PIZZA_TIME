@@ -31,7 +31,7 @@ const Button :React.FC<ButtonProps> = (
             ${outline? "bg-white":"bg-gray-700"}
             ${outline? "text-slate-200": "text-white"} 
             ${small? "text-sm font-light":"text-md font-semibold"}
-            ${small? "py-1 px-2 border-[1px]":"py-3 px-4 border-2"}
+            ${small? "flex py-1 px-2 border-[1px] justify-content ":"py-3 px-4 border-2"}
             ${custom? custom :''}
             `}>
         

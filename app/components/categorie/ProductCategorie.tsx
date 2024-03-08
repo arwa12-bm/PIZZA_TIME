@@ -5,7 +5,7 @@ import Image from "next/image";
 
 import { formatPrice } from "@/app/utils/formatPrice";
 import { card } from "@/app/utils/products";
-import ProductModalApp from "./ProductModal";
+import ModalCommander from "./ModalCommander";
 
 interface ProductCategorieProps{
     data:any
@@ -45,7 +45,7 @@ const ProductCategorie:React.FC<ProductCategorieProps>= ({data}) => {
                     <div className=" text-center ">{formatPrice(selectedProduct.price.default)}</div>
                 </div>
             </div>
-            <ProductModalApp  Open={isOpen} onClose={handleModalClose} data={selectedProduct} img={selectedProduct.imageUrl.Default.urlDefault} CompList={selectedProduct.basicComposition}/>
+            <ModalCommander  Open={isOpen} onClose={handleModalClose} data={selectedProduct} img={selectedProduct.imageUrl.Default.urlDefault} CompList={selectedProduct.basicComposition}/>
         </div>
     );
 }

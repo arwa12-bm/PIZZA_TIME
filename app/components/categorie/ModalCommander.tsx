@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Modal } from 'antd';
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
@@ -10,7 +10,7 @@ import InputSupp from '../form/InputSupp';
 import useCard from '@/app/hooks/useCard';
 
 
-interface ProductModalAppProps{
+interface ModalCommanderProps{
     Open:boolean
     onClose:()=>void
     img:any
@@ -19,7 +19,7 @@ interface ProductModalAppProps{
     
 }
 
-const ProductModalApp: React.FC<ProductModalAppProps> = ({Open,onClose,img,data,CompList}) => {
+const ModalCommander: React.FC<ModalCommanderProps> = ({Open,onClose,img,data,CompList}) => {
     if (!Open) return null
 
     const [loading, setLoading] = useState(false);
@@ -41,10 +41,12 @@ const ProductModalApp: React.FC<ProductModalAppProps> = ({Open,onClose,img,data,
         let sup1:any=localStorage.getItem("supList")!==null?JSON.parse(localStorage.getItem("supList")??'{}'):{}
         let sup: any = {};
         // ignore the item has 0 value
-        for (let item of Object.keys(sup1)) {
+        if (sup1!=null){
+            for (let item of Object.keys(sup1)) {
             if (sup1.hasOwnProperty(item) && sup1[item] !== 0) {
                 sup[item] = sup1[item];
             }
+        }
         }
 
         localStorage.setItem("ItemList",JSON.stringify({sup,checkedItems,data}))
@@ -144,4 +146,4 @@ const ProductModalApp: React.FC<ProductModalAppProps> = ({Open,onClose,img,data,
     );
     };
 
-export default ProductModalApp;
+export default ModalCommander;

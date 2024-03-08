@@ -5,12 +5,13 @@ import Link from "next/link";
 import { formatPrice } from "../utils/formatPrice";
 import NumberControl from "../components/form/InputNumber";
 import { useState } from "react";
-import { divIcon } from "leaflet";
+import useCard from "../hooks/useCard";
 
 interface ItemCententProps{
     item:any
 }
 const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
+    const {handleRemoveProductFromCart} =useCard()
     
     const [showDetail,setShowDetail] =useState(false)
     const [count, setCount] =useState(0);
@@ -32,7 +33,7 @@ const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
                             </div>
                         </Link>
                         <div className="flex gap-2">
-                                <button className="text-slate-500 underline" onClick={()=>{}}>Remove</button>
+                                <button className="text-slate-500 underline" onClick={()=>{handleRemoveProductFromCart(item)}}>Remove</button>
                                 <button className="text-slate-500 underline" onClick={()=>{setShowDetail(!showDetail)}}>{showDetail?"Voir moins" :"Voir plus..."}</button>
                         </div>
                         </div>

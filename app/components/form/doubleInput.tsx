@@ -1,16 +1,18 @@
-import React from 'react';
-import { SettingOutlined } from '@ant-design/icons';
-import { Cascader, Input, Select, Space } from 'antd';
-
-const { Option } = Select;
+"use client"
+import { Input, Space } from 'antd';
 
 interface DoubleInputAppProps {
-    data:any
+    data?:any
 } 
-const DoubleInputApp: React.FC<DoubleInputAppProps>= ({data}) => (
-    <Space direction="vertical">
+const DoubleInputApp: React.FC<DoubleInputAppProps>= ({data}) => {
+
+
+    return(
+        <Space direction="vertical">
         <Input addonBefore={data.PostalCode} defaultValue={data.Address}  className='justify-content'/>
     </Space>
-);
+    )
+    
+    };
 
 export default DoubleInputApp;

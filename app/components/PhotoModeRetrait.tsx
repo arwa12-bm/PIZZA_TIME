@@ -1,30 +1,52 @@
 "use client"
 
-import DoubleInputApp from "./form/doubleInput";
-import DoubleInputAppDT from "./form/doubleInputDT";
+import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface PhotoModeRetraitProps {
-    data:any
+    data?:any
+
 }
 const PhotoModeRetrait: React.FC<PhotoModeRetraitProps> = ({data}) => {
 
+    const [selectedProductData, setSelectedProductData] = useState();
+
+    useEffect(()=>{
+        setSelectedProductData(localStorage.getItem("selectedProductData")!==null?JSON.parse(localStorage.getItem("selectedProductData")??'{}'):{})
+    },[])
     let ModeRetrait:any=localStorage.getItem("ModeRetrait")!==null?JSON.parse(localStorage.getItem("ModeRetrait")??'{}'):{}
     console.log({ModeRetrait});
+    if (Object.keys(ModeRetrait).length === 0) {
+        // ModeRetrait is an empty object
+        return null;
+    }
+
+    const currentDate = new Date();
+    const options:any = { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' };
+    const formattedDate = currentDate.toLocaleDateString('en-GB', options);
+    
     
     return ( 
-    <div className="sticky justify-content  z-30 items-left w-[80%] xs:w-[100%] sm:w-[100%]  md:w-[80%]  m-2    text-slate cursor-pointer border-[1.2px] border-slate-200 bg-white rounded-lg  transition hover:scale-105  "> 
-        <div className="flex  flex-col m-2 px-4  ">
-            <div className="flex  gap-2">
-            <select className="justify-content border-[2px] rounded-md p-1">
-                <option value="emporter"  selected={!ModeRetrait.livrer}>A emporter</option>
-                <option value="livraison" selected={ModeRetrait.livrer} >En livraison</option>
-            </select>
-                <DoubleInputApp data={data}  />
-                <DoubleInputAppDT  ModeRetrait={ModeRetrait} />
-            </div>
+        <>
+            <div className="sticky justify-content  z-30 justify-self-start   text-slate cursor-pointer border-[1.2px] border-slate-200 bg-white rounded-r-lg  transition hover:scale-105  "> 
+            <div className="flex justify-self-start px-8  flex-col m-2  ">
+                <div className="flex  gap-4">
+                    <Link href="/"  className=" flex sticky absolute z-40 " >           
+                    <Image  src="/logo.png"  alt="logo"  width={"80"} height={"80"} />
+                    </Link>
+                    <div className="flex gap-1 p-1">
+                        <div>{!ModeRetrait.livrer? "Commande sur place":" Commande en livraison"}</div>
+                        <div>{formattedDate}</div>
+                        <p>à</p>
+                        <div>{ModeRetrait.Time}</div>
+                    </div>
+                    
+                </div>
+            </div> 
+        </div>
+    </>
 
-        </div> 
-    </div>
 );
 }
 
