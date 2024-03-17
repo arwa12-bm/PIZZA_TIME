@@ -4,7 +4,7 @@ import { IoIosInformationCircleOutline } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { CiMobile3 } from "react-icons/ci";
-import { MdOutlineMarkEmailRead, MdSaveAs } from "react-icons/md";
+import { MdArrowBack, MdOutlineMarkEmailRead, MdSaveAs } from "react-icons/md";
 
 import Container from "../components/Container";
 import HomePhoto from "../components/HomePhoto";
@@ -15,6 +15,9 @@ import Cartes from "./Cartes";
 import { formatPrice } from "../utils/formatPrice";
 import Commandes from "./Commandes";
 import ModeRetraitProfile from "./ModeRetraitProfile";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import InputButton from "../components/form/InputButton";
 
 const Profile = () => {
 const {
@@ -24,6 +27,8 @@ const {
     cartTotalAmount,
     cartProducts,
 } = useCard();
+//console.log({selectedIdShopList});
+
 const [formData, setFormData] = useState(dataUser);
 
 const {
@@ -39,6 +44,7 @@ const {
     },
 });
 
+const router =useRouter()
 
 useEffect(() => {
     getData();
@@ -52,7 +58,6 @@ const onSubmitUpdate: SubmitHandler<FieldValues> = async (formData) => {
     body: JSON.stringify(formData),
     });
     getData();
-    console.log("Updated");
 };
 
 return (
@@ -65,8 +70,8 @@ return (
             <p className="text-xl">Bonjour {dataUser?.nom}</p>
         </div>
         </div>
-        <div className="grid grid-cols-2">
-        <div className="col-span-1 w-[130%]">
+        <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+        <div className="col-span-1  sm:w-[120%]  md:w-[130%] lg:w-[130%] xl:w-[130%]">
             <div className=" border-[1.2px] border-slate-200 bg-white shadow-md  rounded-2xl m-4  ">
             <div className="flex justify-between">
                 <div className="flex p-2 gap-1">
@@ -152,40 +157,41 @@ return (
             <Cartes />
             <ModeRetraitProfile/>
         </div>
-        <div className="col-span-1 w-[70%] justify-self-end">
+        <div className="col-span-1 w-[100%] justify-self-center sm:w-[70%] md:w-[70%] lg:w-[70%] xl:w-[70%] md:justify-self-end lg:justify-self-end xl:justify-self-end ">
             <div className=" relative justify-content border-[1.2px] border-slate-400 bg-gray-700  text-white shadow-md  rounded-xl ml-4 mt-4 mr-4 mt-1  ">
             <div className="flex p-2 justify-between ">
                 <div className="flex gap-1">
-                <p className="">Total Commande</p>
+                <p className="w-[200px]">Total Commande</p>
                 </div>
                 <div>
                 <span>{formatPrice(cartTotalAmount)}</span>
                 </div>
             </div>
+            
             </div>
             <div className=" relative justify-content border-[1.2px] border-slate-400 bg-white  shadow-md  rounded-xl ml-4 mr-4 mt-1">
             <div className="flex p-2 justify-between ">
-                <div className="flex gap-1">
+                <div className="sm:w-[100px] md:w-[100px] lg:w-[100px] xl:w-[100px] ">
                 <p className="">Cart de fidélité</p>
                 </div>
-                <div>cc</div>
+                <div className="w-[250px] sm:w-[200px] md:w-[200px] lg:w-[200px] xl:w-[200px]" ><InputButton  label={"Valider"} placeholder={"123 123 123 123"}/></div>
             </div>
             </div>
             <div className=" relative justify-content border-[1.2px] border-slate-400 bg-white  shadow-md  rounded-xl ml-4 mr-4 mt-1">
             <div className="flex p-2 justify-between ">
-                <div className="flex gap-1">
-                <p className="">Code Promo</p>
+                <div className="sm:w-[100px] md:w-[100px] lg:w-[100px] xl:w-[100px]">
+                <p className="">Code Promo</p> 
                 </div>
-                <div>ccc</div>
+                <div className="w-[250px] sm:w-[200px] md:w-[200px] lg:w-[200px] xl:w-[200px]" ><InputButton  label={"Appliquer"}/></div>
             </div>
             </div>
             <div className=" relative justify-content border-[1.2px] border-slate-400 bg-white  shadow-md  rounded-xl ml-4 mr-4 mt-1">
             <div className="flex p-2 justify-between ">
-                <div className="flex gap-1">
-                <p className="">Reste a payer</p>
+                <div className="">
+                <p className="p-1">Reste a payer</p>
                 </div>
                 <div>
-                <span>{formatPrice(cartTotalAmount)}</span>
+                <span className="p-1">{formatPrice(cartTotalAmount)}</span>
                 </div>
             </div>
             </div>
@@ -198,10 +204,17 @@ return (
             </div>
             <div className=" relative justify-content border-[1.2px] border-slate-400 bg-white  shadow-md  rounded-b-xl ml-4 mr-4 mb-4">
             <div className="grid flex-row p-2 justify-between ">
-                {cartProducts &&
+                {cartProducts?
                 cartProducts.map((item: any) => {
                     return <Commandes item={item} />;
-                })}
+                }):
+                <div className="p-2">
+                    <div onClick={()=>{selectedIdShopList=== undefined?  router.push(`/`) : router.push(`/product/${selectedIdShopList}`)}} className="text-slate-500 cursor-pointer flex items-center gap-1 mt-2">
+                        <MdArrowBack />
+                        <span>Start Ordering</span>
+                    </div>
+                </div> 
+                }
             </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ interface ButtonProps{
     disabled?:boolean,
     outline?:boolean,
     small?:boolean,
+    ModalInfo?:boolean,
     custom?:string,
     type?:string,
     href?:string,
@@ -20,6 +21,7 @@ const Button :React.FC<ButtonProps> = (
     outline,
     href,
     small,
+    ModalInfo,
     custom,
 
     onClick}) => {

@@ -3,6 +3,9 @@ import Image from "next/image";
 import { LuBadgeDollarSign } from "react-icons/lu";
 import { MdOutlinePayments } from "react-icons/md";
 import PhotoModeRetrait from "./PhotoModeRetrait";
+import { useState } from "react";
+import ModalInfoUtiles from "./ModalInfoUtiles";
+import ModalInfo from "./ModalInfo";
 
 interface HomePhotoProps {
 data?: any;
@@ -10,6 +13,10 @@ profile?: boolean;
 }
 
 const HomePhoto: React.FC<HomePhotoProps> = ({ data }) => {
+    const [showModal,setShowModal] =useState(false)
+    const onClose = () => {
+        setShowModal(!showModal);
+    };
 return (
 <div className=" h-[300px] relative z-20 ">
     {data && (
@@ -28,7 +35,8 @@ return (
                 {" "}
                 {data.etat} DE 11:00 à 14:30 ET DE 18:00 à 23:00{" "}
                 </div>
-                <p className="text-xs  underline"> INFORMATION UTILES</p>
+                <p className="text-xs  underline"  onClick={()=>setShowModal(!showModal) }> INFORMATION UTILES</p>
+                <ModalInfo Open={showModal} onClose={onClose} data={data} />
             </div>
             <div className="flex gap-2 px-2 pt-2 ">
                 <MdOutlinePayments

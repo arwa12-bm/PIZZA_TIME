@@ -11,8 +11,7 @@ import useCard from "../hooks/useCard";
 
 
 const CartClient = () => {
-    const {handleClearCart,cartTotalAmount,cartProducts} = useCard()
-    const selectedProductId = localStorage.getItem("selectedProductId")!==null?JSON.parse(localStorage.getItem("selectedProductId")??'{}'):{}
+    const {selectedProductId,handleClearCart,cartTotalAmount,cartProducts} = useCard()
 
     
 
@@ -21,7 +20,7 @@ const CartClient = () => {
             <div className="flex flex-col items-center">
                 <div className="text-2xl">Your cart is empty</div>
                 <div>
-                    <Link href={`/product/${selectedProductId.Id}`} className="text-slate-500 flex items-center gap-1 mt-2">
+                    <Link href={`/product/${selectedProductId}`} className="text-slate-500 flex items-center gap-1 mt-2">
                         <MdArrowBack />
                         <span>Start Ordering</span>
                     </Link>
@@ -43,7 +42,7 @@ const CartClient = () => {
         <div>
         {cartProducts && 
             cartProducts.map((item:any)=>{
-                return <ItemCentent  item={item} />
+                return <ItemCentent  item={item}  />
             })}
         
         
@@ -62,7 +61,7 @@ const CartClient = () => {
                         Taxes and shipping calculate at checkout
                     </p>
                     <Button label="Checkout" onClick={()=>{}} />
-                    <Link href={`/product/${selectedProductId.Id}`} className="text-slate-500 flex items-center gap-1 mt-2">
+                    <Link href={`/product/${selectedProductId}`} className="text-slate-500 flex items-center gap-1 mt-2">
                         <MdArrowBack />
                         <span>Continue Shopping</span>
                     </Link>

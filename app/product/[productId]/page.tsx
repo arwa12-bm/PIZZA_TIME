@@ -14,6 +14,7 @@
 
     const Product = () => {
     const params = useParams();
+    console.log({params})
     const [selectedProductId, setSelectedProductId] = useState({});
     const [selectedProductData, setSelectedProductData] = useState({});
     const [data, setData] = useState(null);

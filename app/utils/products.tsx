@@ -21667,6 +21667,7 @@ export const card={
         "operator": "Administrateur",
         "shoplist": {
           "8502b411-a195-4c6d-a3af-b92619097278": {
+            "id":"8502b411-a195-4c6d-a3af-b92619097278",
             "town": "GUYANCOURT",
             "image": "https://www.commande-pizzatime.fr/CESARWEB_WEB//repimage/83bbc4350c114000b0e2d6c4ff204215/2/PromoWeb.webp",
             "Nature": "boutique",
@@ -21677,10 +21678,22 @@ export const card={
             "PostalCode": "78280",
             "latitude":48.765830,
             "longitude":2.078870,
+            "tel":"01.81.80.80.10",
+            "villelivraison": {
+              "ville1": {
+                "nom": "BUC",
+                "fraislivraison": "0.00€",
+                "mincommande": "15.00€"
+              },
+            },
+            "horaire": {
+              "lundi": "11h00-14h30 et 18h00-23h00",
+              },
             "Responsible": "",
             "etat" :"OUVERT",
           },
           "8502b411-a195-4c6d-a3af-b92619097279": {
+              "id":"8502b411-a195-4c6d-a3af-b92619097279",
               "town": "MEAUX",
               "image": "https://www.commande-pizzatime.fr/CESARWEB_WEB//repimage/83bbc4350c114000b0e2d6c4ff204215/3/PromoWeb.webp",
               "Nature": "boutique",
@@ -21691,10 +21704,22 @@ export const card={
               "PostalCode": "77100",
               "latitude":48.957748,
               "longitude":2.881860,
+              "tel":"01.81.80.80.10",
+            "villelivraison": {
+              "ville1": {
+                "nom": "BUC",
+                "fraislivraison": "0.00€",
+                "mincommande": "15.00€"
+              },
+            },
+            "horaire": {
+              "lundi": "11h00-14h30 et 18h00-23h00",
+              },
               "Responsible": "",
               "etat" :"OUVERT",
             },
             "8502b411-a195-4c6d-a3af-b92619097280": {
+              "id":"8502b411-a195-4c6d-a3af-b92619097280",
               "town": "AMIENS",
               "image": "https://www.commande-pizzatime.fr/CESARWEB_WEB//repimage/83bbc4350c114000b0e2d6c4ff204215/8/PromoWeb.webp",
               "Nature": "boutique",
@@ -21705,10 +21730,22 @@ export const card={
               "PostalCode": "80000",
               "latitude":48.809130,
               "longitude":2.062800,
+              "tel":"01.81.80.80.10",
+            "villelivraison": {
+              "ville1": {
+                "nom": "BUC",
+                "fraislivraison": "0.00€",
+                "mincommande": "15.00€"
+              },
+            },
+            "horaire": {
+              "lundi": "11h00-14h30 et 18h00-23h00",
+              },
               "Responsible": "",
               "etat" :"OUVERT",
             },
             "8502b411-a195-4c6d-a3af-b92619097281": {
+              "id":"8502b411-a195-4c6d-a3af-b92619097281",
               "town": "AMIENS",
               "image": "https://www.commande-pizzatime.fr/CESARWEB_WEB//repimage/83bbc4350c114000b0e2d6c4ff204215/7/PromoWeb.webp",
               "Nature": "boutique",
@@ -21719,6 +21756,23 @@ export const card={
               "PostalCode": "80000",
               "latitude":44.620720,
               "longitude":4.390880,
+              "tel":"01.81.80.80.10",
+            "villelivraison": {
+              "ville1": {
+                "nom": "BUC",
+                "fraislivraison": "0.00€",
+                "mincommande": "15.00€"
+              },
+            },
+            "horaire": {
+              "LUNDI": "11h00-14h30 et 18h00-23h00",
+              "MARDI": "11h00-14h30 et 18h00-23h00",
+              "MERCREDI": "11h00-14h30 et 18h00-23h00",
+              "JEUDI": "11h00-14h30 et 18h00-23h00",
+              "VENDREDI": "11h00-13h30 et 18h00-23h00",
+              "SAMEDI" : "11h00-23h00",
+              "DIMANCHE": "11h00-23h00",
+              },
               "Responsible": "",
               "etat" :"OUVERT",
             },

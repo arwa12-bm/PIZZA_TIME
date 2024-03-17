@@ -17,6 +17,7 @@ const Commandes:React.FC<ItemCententProps>= ({item}) => {
     const {handleRemoveProductFromCart} =useCard()
     
     const [showDetail,setShowDetail] =useState(false)
+    
 
     return (
 
@@ -48,12 +49,13 @@ const Commandes:React.FC<ItemCententProps>= ({item}) => {
                             <div className="flex ">
                                 {Object.keys(item.checkedItems).map((item)=><p key={item}>{item},</p>)}
                             </div>
-                            {item.sup == null || (item.sup).length === 0 ? "" :
+                            {item.sup == null|| Object.keys(item.sup).length === 0 ? "" :
                             <div>
                             <p className="font-semibold text-md">composant supplimentaire : </p>
-                            <div className="flex ">
-                                
-                                {JSON.stringify(item.sup)}
+                            <div className="flex  ">
+                            {Object.keys(item.sup).map(key => (
+                                    <p key={key}>{key} x {item.sup[key]} ,</p>
+                                ))}
                             </div>
                             </div>
                             }

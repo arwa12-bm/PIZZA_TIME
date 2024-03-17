@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { card } from "@/app/utils/products";
-import { DropdownApp } from "../product/dropDown";
+import { DropdownApp } from "../form/dropDown";
 import CategorieCart from "./CategorieCart";
 
 

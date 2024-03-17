@@ -6,18 +6,11 @@ import { MdOutlinePayments } from "react-icons/md";
 import { LuBadgeDollarSign } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 
-import useCard from "@/app/hooks/useCard";
-
 interface ProductCartProps {
   data: any;
 }
 const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
   const router = useRouter();
-  const {IdShopList,getIdShopList} = useCard()
-  useEffect(() => {
-    getIdShopList(data)
-  }, []);
-  
 
   return (
     <div
@@ -30,7 +23,7 @@ const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
             fill
             src={data.image}
             alt=""
-            onClick={() => router.push(`/product/${IdShopList}`)}
+            onClick={() => router.push(`/product/${data.id}`)}
           />
         </div>
         <div className="grid grid-cols-2  justify-between  text-[15px] font-semibold px-1  w-full  text-green-600">

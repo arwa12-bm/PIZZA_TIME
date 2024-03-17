@@ -28,11 +28,11 @@ const HandleLogout = async () => {
 return (
     <div className="grid flex-row-6  gap-5 p-4">
     <div
+        className="flex gap-4 cursor-pointer"
         onClick={() => {
-        handleMenu();
         router.push("/profile");
+        handleMenu();
         }}
-        className="flex gap-4"
     >
         <LuUserCircle2 size={30} />
         <p className="text-2xl">Profile</p>

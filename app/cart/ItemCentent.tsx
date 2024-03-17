@@ -33,7 +33,7 @@ const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
                             </div>
                         </Link>
                         <div className="flex gap-2">
-                                <button className="text-slate-500 underline" onClick={()=>{handleRemoveProductFromCart(item)}}>Remove</button>
+                                <button className="text-slate-500 underline" onClick={()=>{handleRemoveProductFromCart(item);}}>Remove</button>
                                 <button className="text-slate-500 underline" onClick={()=>{setShowDetail(!showDetail)}}>{showDetail?"Voir moins" :"Voir plus..."}</button>
                         </div>
                         </div>
@@ -43,7 +43,7 @@ const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
                             <div className="flex ">
                                 {Object.keys(item.checkedItems).map((item)=><p key={item}>{item},</p>)}
                             </div>
-                            {item.sup == null? "" :
+                            {item.sup == null|| Object.keys(item.sup).length === 0 ? "" :
                             <div>
                             <p className="font-semibold text-md">composant supplimentaire : </p>
                             <div className="flex ">

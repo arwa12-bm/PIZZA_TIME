@@ -17,6 +17,7 @@ type  CartContextType={
     cartTotalAmount:number;
     cartProducts:any;
     dataUser:any;
+    ModeRetrait:any;
     setSelectedIdShopList:()=>any
     setSelectedIdCategirie:()=>any
     getSelectedIdShopList:(params:any)=>any
@@ -40,8 +41,6 @@ export const CardContext = createContext<CartContextType| null >(null);
 export const CardProvider = (props:any)=>{
     const [selectedElCategorie,setSelectedElCategorie]=useState()
     const [selectedIdShopList,setSelectedIdShopList]=useState()
-    const [IdShopList,setIdShopList]=useState<string|undefined>()
-    const [IdCategorieList,setIdCategorieList]=useState<string|undefined>()
     const [IdCategorieEl,setIdCategorieEl]=useState<string|undefined>()
     const [cartProducts,setCartProducts]=useState<any[] | null>(null)
     const[CategorieObject,setCategorieObject]=useState()
@@ -49,6 +48,7 @@ export const CardProvider = (props:any)=>{
     const [cartTotalAmount,setCartTotalAmount]=useState(0)
     const [dataUser, setDataUser] = useState(null);
     const[selectedProductId,setselectedProductId ]=useState()
+    const [ModeRetrait,setModeRetrait]=useState()
 
 
 //get List of item in cart
@@ -57,6 +57,10 @@ export const CardProvider = (props:any)=>{
         const cProducts: any[] | null = JSON.parse(cartItems)
     
         setCartProducts(cProducts)
+    },[])
+
+    useEffect(()=>{
+        setModeRetrait(localStorage.getItem("ModeRetrait")!==null?JSON.parse(localStorage.getItem("ModeRetrait")??'{}'):{})
     },[])
 
     // useEffect(() => {
@@ -96,7 +100,6 @@ export const CardProvider = (props:any)=>{
                         localStorage.setItem("selectedProductData",JSON.stringify(selectedProduct))
                     }
                 }
-                setIdShopList(params.productId)
                 localStorage.setItem("selectedProductId",JSON.stringify({"Id":params.productId}))
             },[selectedIdShopList]) 
 
@@ -110,34 +113,10 @@ export const CardProvider = (props:any)=>{
                         localStorage.setItem("selectedCategorieData",JSON.stringify(selectedCategorie))
                     }
                 }
-                setIdCategorieList(params.productId)
                 localStorage.setItem("selectedCategorieId",JSON.stringify({"Id":params.productId}))
             },[selectedElCategorie]) 
 
-// get id from object (shopList)
-        const getIdShopList=useCallback((el:any)=>{
-                let id:string
-                for (let item of Object.keys(card.shoplist)) {
-                    if (JSON.stringify((card.shoplist as any)[item]) === JSON.stringify(el)) {
-                    id = item;
-                    setIdShopList(id)
-                    }
-                }
-                
-            },[IdShopList])
 
-
-        // const getIdCategorieList=useCallback((el:any)=>{
-        //         console.log({el});
-        //         let id:string
-        //         for (let item of Object.keys(card.categories)) {
-        //             if (JSON.stringify((card.categories as any)[item]) === JSON.stringify(el)) {
-        //             setIdCategorieEl(item)
-        //             console.log("id",item);
-        //             }
-        //         }
-                
-        //     },[IdCategorieList])
 
 //getObject from Id
             const getCategorieById=useCallback((id:any)=>{
@@ -225,20 +204,15 @@ export const CardProvider = (props:any)=>{
 
 
             const handleRemoveProductFromCart = useCallback((product:any) => {
-                setCartProducts((prev:any) => {
+                if(cartProducts){
                     // Filter out the product to be removed from the cart
-                    const updatedCart = prev.filter((item:any) => item.data.id !== product.data.id 
-                                                                && item.sup !== product.sup 
-                                                                && item.checkedItems  !== product.checkedItems);
-            
+                    const updatedCart = cartProducts.filter((item:any) => item !== product );
+                    setCartProducts(updatedCart)
                     // Notify user and update local storage
                     toast.success("Product removed from cart");
-                    localStorage.setItem('CartItem', JSON.stringify(updatedCart));
-            
-                    // Update the state with the new cart
-                    return updatedCart;
-                });
-            }, [setCartProducts]);
+                    localStorage.setItem('CartItem', JSON.stringify(updatedCart))
+                };
+            }, [cartProducts]);
 
 
 
@@ -277,17 +251,15 @@ export const CardProvider = (props:any)=>{
     const value = { 
         selectedElCategorie,
         selectedIdShopList,
-        IdShopList,
         dataUser,
         selectedProductId,
-        //IdCategorieList,
         CategorieObject,
         IdCategorieEl,
         cartTotalQty ,
         cartTotalAmount,
         cartProducts,
+        ModeRetrait,
         getCategorieById,
-        getIdShopList,
         getSelectedIdShopList,
         getSelectedIdCategorieList,
         handleAddProductToCart,

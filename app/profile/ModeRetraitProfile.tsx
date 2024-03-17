@@ -6,18 +6,17 @@ import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 
 import DoubleInputApp from "../components/form/doubleInput";
 import DoubleInputAppDT from "../components/form/doubleInputDT";
+import useCard from "../hooks/useCard";
 
 const ModeRetraitProfile = () => {
-    
+
     const [clicked,setClicked]=useState(false)
     const [selectedProductData, setSelectedProductData] = useState();
 
     useEffect(()=>{
         setSelectedProductData(localStorage.getItem("selectedProductData")!==null?JSON.parse(localStorage.getItem("selectedProductData")??'{}'):{})
-    },[selectedProductData])
-    console.log({selectedProductData})
-    let ModeRetrait:any=localStorage.getItem("ModeRetrait")!==null?JSON.parse(localStorage.getItem("ModeRetrait")??'{}'):{}
-
+    },[])
+    const{ModeRetrait}=useCard()
     return ( 
     <div className=" relative justify-content border-[1.2px] border-slate-200 bg-white shadow-md  rounded-2xl m-4 ">
         <div className="flex p-1 justify-between">
