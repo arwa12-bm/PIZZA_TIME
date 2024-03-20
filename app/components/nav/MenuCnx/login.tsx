@@ -8,6 +8,7 @@ import { PiLockKeyThin } from "react-icons/pi";
 import Button from "../../form/Button";
 import Input from "../../form/Input";
 import useCard from "@/app/hooks/useCard";
+import { useEffect } from "react";
 
 interface LoginProps {
 handleMenu: () => void;
@@ -39,7 +40,7 @@ setIsSignup(true);
 setIsLoading(false);
 setType("Inscription");
 }
-const { getData } = useCard();
+const { getData,dataUser,getCommandes } = useCard();
 const onSubmit: SubmitHandler<FieldValues> = async (data) => {
 setIsLoading(true);
 await fetch("http://localhost:8080/api/user/login", {
@@ -51,6 +52,19 @@ await fetch("http://localhost:8080/api/user/login", {
 getData();
 handleMenu();
 };
+
+
+useEffect(()=>{
+    getData(); 
+
+},[])
+
+useEffect(()=>{
+    if(dataUser!==null)
+{ getCommandes(dataUser)
+    console.log("ddd",dataUser);}
+    
+},[dataUser])
 
 return (
 <>
