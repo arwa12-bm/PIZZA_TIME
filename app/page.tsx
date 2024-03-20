@@ -11,12 +11,23 @@ import useCard from "./hooks/useCard";
 
 
 export default function Home() {
-  const{getData} =useCard()
 
-  useEffect(() => {
-    getData();
-    }, []);
-  
+  const {dataUser,getData,getCommandes,dataPanier}=useCard()
+
+
+  useEffect(()=>{
+      getData(); 
+      
+  },[])
+
+  useEffect(()=>{
+      if(dataUser!==null)
+  { getCommandes(dataUser?.id)
+      console.log("ddd",dataUser?.id);}
+      
+
+  },[dataUser])
+
   return (
     <div className="">
     <HomePhoto />
