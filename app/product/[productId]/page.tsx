@@ -20,7 +20,8 @@
     const [data, setData] = useState(null);
 
 
-    const { getSelectedIdShopList,getData } = useCard();
+    const { getSelectedIdShopList,getData ,dataUser,getCommandes,dataPanier} = useCard();
+
 
     useEffect(() => {
         getSelectedIdShopList(params);
@@ -37,6 +38,24 @@
         
     }, []);
 
+
+    useEffect(()=>{
+        getData(); 
+
+    },[])
+
+    useEffect(()=>{
+        if(dataUser!==null)
+    { getCommandes(dataUser?.id)
+        console.log("ddd",dataUser?.id);}
+        
+
+    },[dataUser])
+
+
+    
+
+    console.log("dataPanier",dataPanier)
     console.log("dataBd",data);
     
 
