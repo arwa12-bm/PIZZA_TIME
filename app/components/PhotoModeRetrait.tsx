@@ -4,9 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import ModalInfoUtiles from "./ModalInfoUtiles";
-import { MdDeleteForever, MdDeleteSweep, MdOutlineIndeterminateCheckBox } from "react-icons/md";
-import { FaPenClip, FaRegPenToSquare } from "react-icons/fa6";
-import { CiSquareMinus } from "react-icons/ci";
+import { MdDeleteForever} from "react-icons/md";
+import { FaPenClip } from "react-icons/fa6";
+import useCard from "../hooks/useCard";
+import ModeRetraitModal from "./categorie/ModalModeRetrait";
 
 interface PhotoModeRetraitProps {
     data?:any
@@ -14,14 +15,8 @@ interface PhotoModeRetraitProps {
 }
 const PhotoModeRetrait: React.FC<PhotoModeRetraitProps> = ({data}) => {
 
-    const [selectedProductData, setSelectedProductData] = useState();
-
-    useEffect(()=>{
-        setSelectedProductData(localStorage.getItem("selectedProductData")!==null?JSON.parse(localStorage.getItem("selectedProductData")??'{}'):{})
-    },[])
-    let ModeRetrait:any=localStorage.getItem("ModeRetrait")!==null?JSON.parse(localStorage.getItem("ModeRetrait")??'{}'):{}
-    console.log({ModeRetrait});
-    if (Object.keys(ModeRetrait).length === 0 ) {
+    const{ModeRetrait}=useCard()
+    if (ModeRetrait === undefined || ModeRetrait=== null ) {
         // ModeRetrait is an empty object
         return null;
     }
@@ -29,7 +24,13 @@ const PhotoModeRetrait: React.FC<PhotoModeRetraitProps> = ({data}) => {
     const currentDate = new Date();
     const options:any = { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' };
     const formattedDate = currentDate.toLocaleDateString('en-GB', options);
-    
+    const [isOpen,setIsOpen]=useState(false)
+    const handleOpenModal =()=>{
+        setIsOpen(true)
+    }
+    const handleModalClose = () => {
+        setIsOpen(false);
+    };
     
     return ( 
         <>
@@ -48,10 +49,10 @@ const PhotoModeRetrait: React.FC<PhotoModeRetraitProps> = ({data}) => {
                     </div>
                     </div>
                     <div className="flex justify-self-end p-1">
-                    <FaPenClip size={18} className="text-slate-800 "/>
+                    <FaPenClip size={18} className="text-slate-800 " onClick={handleOpenModal}/>
                     <MdDeleteForever  size={25} className="text-red-800" onClick={()=>{localStorage.removeItem("ModeRetrait"); window.location.reload();}}/>
                     </div>
-                    
+                    <ModeRetraitModal Open={isOpen} onClose={handleModalClose} />
                     
                 </div>
             </div> 
