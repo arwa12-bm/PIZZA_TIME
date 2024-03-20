@@ -1,33 +1,29 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import DropIn from "braintree-web-drop-in-react";
+import Button from '../components/form/Button';
+import useCard from '../hooks/useCard';
 
-export default class Subscriptions extends Component {
-    instance: any;
-    state = {
-        clientToken: null,
-        purchaseComplete: false  
-    };
+const Subscriptions = () => {
+    const [purchaseComplete, setPurchaseComplete] = useState(false);
+    const { cartTotalAmount,handleClearCart } = useCard();
+    let instance:any;
 
-    async buy() {
+
+    const buy = async () => {
         try {
-            // Send the nonce to your server
-            const { nonce } = await this.instance.requestPaymentMethod();
-            console.log({nonce})
+            const { nonce } = await instance.requestPaymentMethod();
             const res = await fetch('http://localhost:8080/api/user/checkout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ paymentMethodNonce: nonce, user_id: "1234" })
+                body: JSON.stringify({ paymentMethodNonce: nonce, user_id: "1234", TotalAmount: cartTotalAmount })
             });
 
             const result = await res.json();
-            console.log({result})
-            console.log("cc",result.result.result)
             if (result.result.result === "success") {
-                this.setState({
-                    purchaseComplete: true
-                });
+                setPurchaseComplete(true);
+                handleClearCart()
             } else {
                 // Handle other result cases as needed
             }
@@ -35,25 +31,25 @@ export default class Subscriptions extends Component {
             console.error('Error during checkout:', error);
             // Handle error, e.g., show an error message to the user
         }
-    }
-        
-    render() {
-        if (this.state.purchaseComplete) {
-            return (
+    };
+
+    return (
+        <div>
+            {purchaseComplete ? (
                 <div>
                     <h1>Completed.</h1>
                 </div>
-            );
-        } else {
-            return (
+            ) : (
                 <div>
                     <DropIn
-                        options={{ authorization: "sandbox_q7nc2w95_6hjmcbvghc9srkkf"}}
-                        onInstance={(instance) => (this.instance = instance)}
+                        options={{ authorization: "sandbox_q7nc2w95_6hjmcbvghc9srkkf" }}
+                        onInstance={(inst) => (instance = inst)}
                     />
-                    <button onClick={this.buy.bind(this)}>Submit</button>
+                    <Button label={"Submit"} outline small onClick={buy} />
                 </div>
-            );
-        }
-    }
-}
+            )}
+        </div>
+    );
+};
+
+export default Subscriptions;
