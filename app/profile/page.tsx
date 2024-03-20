@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { CiMobile3 } from "react-icons/ci";
 import { MdArrowBack, MdOutlineMarkEmailRead, MdSaveAs } from "react-icons/md";
+import { useRouter } from "next/navigation";
+
 
 import Container from "../components/Container";
 import HomePhoto from "../components/HomePhoto";
@@ -14,9 +16,6 @@ import Address from "./Address";
 import Cartes from "./Cartes";
 import { formatPrice } from "../utils/formatPrice";
 import Commandes from "./Commandes";
-import ModeRetraitProfile from "./ModeRetraitProfile";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import InputButton from "../components/form/InputButton";
 
 const Profile = () => {
@@ -26,8 +25,9 @@ const {
     getData,
     cartTotalAmount,
     cartProducts,
+    getCommandes,
 } = useCard();
-//console.log({selectedIdShopList});
+console.log("profile",dataUser);
 
 const [formData, setFormData] = useState(dataUser);
 
@@ -49,6 +49,15 @@ const router =useRouter()
 useEffect(() => {
     getData();
 }, []);
+
+useEffect(()=>{
+    if(dataUser!==null)
+{ getCommandes(dataUser?.id)
+    console.log("ddd",dataUser?.id);}
+    
+
+},[dataUser])
+
 
 
 const onSubmitUpdate: SubmitHandler<FieldValues> = async (formData) => {
@@ -155,7 +164,6 @@ return (
             </div>
             <Address />
             <Cartes />
-            <ModeRetraitProfile/>
         </div>
         <div className="col-span-1 w-[100%] justify-self-center sm:w-[70%] md:w-[70%] lg:w-[70%] xl:w-[70%] md:justify-self-end lg:justify-self-end xl:justify-self-end ">
             <div className=" relative justify-content border-[1.2px] border-slate-400 bg-gray-700  text-white shadow-md  rounded-xl ml-4 mt-4 mr-4 mt-1  ">
@@ -206,7 +214,7 @@ return (
             <div className="grid flex-row p-2 justify-between ">
                 {cartProducts?
                 cartProducts.map((item: any) => {
-                    return <Commandes item={item} />;
+                    return <div key={item}><Commandes item={item} /></div>;
                 }):
                 <div className="p-2">
                     <div onClick={()=>{selectedIdShopList=== undefined?  router.push(`/`) : router.push(`/product/${selectedIdShopList}`)}} className="text-slate-500 cursor-pointer flex items-center gap-1 mt-2">
