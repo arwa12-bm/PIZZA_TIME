@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { card } from "@/app/utils/products";
 import { DropdownApp } from "../form/dropDown";
 import CategorieCart from "./CategorieCart";
+import useCard from "@/app/hooks/useCard";
 
 
 interface MenuCategorieProps{
@@ -14,10 +15,8 @@ interface MenuCategorieProps{
 
 const MenuCategorie:React.FC<MenuCategorieProps>= () => {
     const [n,setN] = useState(4)
-    const router = useRouter()
     
-    const selectedProductId =localStorage.getItem("selectedProductId")!==null?JSON.parse(localStorage.getItem("selectedProductId")??'{}'):{}
-    
+    const {selectedProductData}= useCard()    
 
 
     let listCategorie:any[]
@@ -43,11 +42,10 @@ const MenuCategorie:React.FC<MenuCategorieProps>= () => {
         };
     }, []);
     
-    console.log(selectedProductId)
 
     return (  
     <div className="flex justify-center justify-between shadow-md shadow-rounded-lg shadow-black gap-2  w-full justify-content p-4 ">
-    <p className="text-xl cursor-pointer " onClick={() => router.push(`/product/${selectedProductId.Id}`)} >Menu</p>
+    <p className="text-xl cursor-pointer " onClick={() => window.location.href = `/product/${selectedProductData.id}`} >Menu</p>
     <div className="flex justify-center gap-2">
     {listCategorie.map((item)=><div  key={item.id} className="" ><CategorieCart  data={item} isTitle={true}  /></div>)}
     </div>
