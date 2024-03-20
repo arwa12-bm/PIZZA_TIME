@@ -4,7 +4,6 @@ import { LuBadgeDollarSign } from "react-icons/lu";
 import { MdOutlinePayments } from "react-icons/md";
 import PhotoModeRetrait from "./PhotoModeRetrait";
 import { useState } from "react";
-import ModalInfoUtiles from "./ModalInfoUtiles";
 import ModalInfo from "./ModalInfo";
 
 interface HomePhotoProps {
@@ -12,14 +11,15 @@ data?: any;
 profile?: boolean;
 }
 
-const HomePhoto: React.FC<HomePhotoProps> = ({ data }) => {
+const HomePhoto: React.FC<HomePhotoProps> = ({data}) => {
     const [showModal,setShowModal] =useState(false)
     const onClose = () => {
         setShowModal(!showModal);
     };
+
 return (
 <div className=" h-[300px] relative z-20 ">
-    {data && (
+    { data && (
     <div className="h-[300px]  absolute grid grid-rows-2 sticky z-30 w-[100%] ">
         <div className="px-10 p-1">
         <div className="items-center w-[350px]  xs:w-[100%] sm:w-[100%]  md:w-[350px]  m-2    text-slate cursor-pointer border-[1.2px] border-slate-200 bg-white rounded-3xl  transition hover:scale-105  ">
