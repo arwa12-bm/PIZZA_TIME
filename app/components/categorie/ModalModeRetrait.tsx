@@ -3,31 +3,32 @@ import { Modal } from 'antd';
 import { HiOutlineShoppingBag } from 'react-icons/hi2';
 import { TbTruckDelivery } from 'react-icons/tb';
 import dayjs from 'dayjs';
-
-import TimePickerApp from '../product/TimePicker';
-import Button from '../form/Button';
 import { useRouter } from 'next/navigation';
 
 
+import TimePickerApp from '../form/TimePicker';
+import Button from '../form/Button';
+import useCard from '@/app/hooks/useCard';
+
+
 interface ModeRetraitModalProps{
-    data:any
+    Open:boolean
+    onClose:()=>void
+    data?:any
 }
 
-const ModeRetraitModal: React.FC<ModeRetraitModalProps>= ({data}) => {
+const ModeRetraitModal: React.FC<ModeRetraitModalProps>= ({ Open,onClose,data}) => {
+    if (!Open) return null
 
+    const {selectedProductData}= useCard()
     const format = 'HH:mm';
-
-
     const [big,setBig]=useState(true)
     const[emporter,setEmporter]=useState(true)
     const[livrer,setLivrer]=useState(false)
     const [loading, setLoading] = useState(false);
-    const [open, setOpen] = useState(false);
     const [selectedTime, setSelectedTime] = useState(dayjs('12:00', format));
     const [ModeRetrait, setModeRetrait] = useState();
     const router = useRouter()
-
-  
     const handleEmporter =()=>{
         setEmporter(!emporter)
         setLivrer(false)
@@ -36,10 +37,13 @@ const ModeRetraitModal: React.FC<ModeRetraitModalProps>= ({data}) => {
         setLivrer(!livrer)
         setEmporter(false)
     }
+    console.log({selectedTime})
 
     const handleValider= ()=>{
         localStorage.setItem("ModeRetrait",JSON.stringify({"Time":selectedTime.format(format),"emporter":emporter,"livrer":livrer }))
-        router.push(`/menu/${data.id}`)
+        {data && router.push(`/menu/${data.id}`)}
+        onClose()
+        window.location.href = `/product/${selectedProductData.Id}`
     }
     
     const handleTimeChange = (time:any) => {
@@ -71,11 +75,10 @@ const ModeRetraitModal: React.FC<ModeRetraitModalProps>= ({data}) => {
 
     return (
         <>
-        <Button label='Commander'  onClick={()=>setOpen(true)}   />
         <Modal
-            open={open}
+            open={Open}
             title="Modes de retrait"
-            onCancel={()=>setOpen(false)}
+            onCancel={onClose}
             footer={[
         
             <Button
@@ -99,7 +102,7 @@ const ModeRetraitModal: React.FC<ModeRetraitModalProps>= ({data}) => {
             </div>
             <div className={big? "flex flex-col gap-8 mt-10 mb-8" : "flex flex-col" }>
                 <label htmlFor="" className="relative mb-2 border-[1px] text-center p-2">Aujourd'hui</label>
-                <TimePickerApp ModeRetrait={ModeRetrait}  handleTimeChange={handleTimeChange}/>
+                <TimePickerApp  handleTimeChange={handleTimeChange}/>
             </div>
         </Modal>
         </>
