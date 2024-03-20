@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Modal } from 'antd';
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
@@ -25,7 +25,12 @@ const ModalCommander: React.FC<ModalCommanderProps> = ({Open,onClose,img,data,Co
     const [loading, setLoading] = useState(false);
     const [checkedItems, setCheckedItems] = useState({CREMEFRAICHE:true,FROMAGE:true,OIGNON:true});
 
-    const{handleAddProductToCart,HandleCartQtyIncrease,cartProducts}=useCard()
+    const{handleAddProductToCart,HandleCartQtyIncrease,cartProducts,dataUser,getData }=useCard()
+
+    useEffect(()=>{
+        getData(); 
+
+    },[])
 
 //created suppList in localStorage
     const handleSuppChange=(item:any,SuppItems:any,newCount:any)=>
@@ -37,7 +42,7 @@ const ModalCommander: React.FC<ModalCommanderProps> = ({Open,onClose,img,data,Co
         
     
 //on validate modal create ItemList{sup,checkedItems,data}  
-    const handleValider=()=>{
+    const handleValider=async()=>{
         let sup1:any=localStorage.getItem("supList")!==null?JSON.parse(localStorage.getItem("supList")??'{}'):{}
         let sup: any = {};
         // ignore the item has 0 value
@@ -56,14 +61,15 @@ const ModalCommander: React.FC<ModalCommanderProps> = ({Open,onClose,img,data,Co
         
         //add to cart new item 
         if( Existingindex == -1 || cartProducts == null){
-            handleAddProductToCart({sup,checkedItems,data,quantity:1})
+            handleAddProductToCart({sup,checkedItems,data,quantity:1},dataUser)
             localStorage.setItem("supList",JSON.stringify(null))
             localStorage.setItem("ItemList",JSON.stringify(null))
         }else{
         //increase quantity
-            HandleCartQtyIncrease(cartProducts[Existingindex])
+            HandleCartQtyIncrease(cartProducts[Existingindex],dataUser)
 
         }
+    
         setLoading(true)
         onClose()
         }
