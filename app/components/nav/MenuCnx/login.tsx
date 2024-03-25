@@ -40,7 +40,8 @@ setIsSignup(true);
 setIsLoading(false);
 setType("Inscription");
 }
-const { getData,dataUser,getCommandes } = useCard();
+const { getData,getCartProducts } = useCard();
+
 const onSubmit: SubmitHandler<FieldValues> = async (data) => {
 setIsLoading(true);
 await fetch("http://localhost:8080/api/user/login", {
@@ -50,21 +51,11 @@ await fetch("http://localhost:8080/api/user/login", {
     body: JSON.stringify(data),
 });
 getData();
+getCartProducts()
 handleMenu();
 };
 
 
-useEffect(()=>{
-    getData(); 
-
-},[])
-
-useEffect(()=>{
-    if(dataUser!==null)
-{ getCommandes(dataUser)
-    console.log("ddd",dataUser);}
-    
-},[dataUser])
 
 return (
 <>

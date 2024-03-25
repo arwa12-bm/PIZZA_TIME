@@ -20,8 +20,7 @@ const HandleLogout = async () => {
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     });
-    handleClearCart()
-    localStorage.removeItem("ModeRetrait")
+    localStorage.setItem("CartItem",JSON.stringify(null))        
     await getData();
     handleMenu();
     router.push("/");
@@ -39,7 +38,11 @@ return (
         <LuUserCircle2 size={30} />
         <p className="text-2xl">Profile</p>
     </div>
-    <div className="flex gap-4">
+    <div className="flex gap-4 cursor-pointer"
+        onClick={() => {
+            router.push("/commandes");
+            handleMenu();
+            }}>
         <TbShoppingBagCheck size={30} />
         <p className="text-2xl">Commandes</p>
     </div>
