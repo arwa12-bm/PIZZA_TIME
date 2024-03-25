@@ -11,7 +11,7 @@ interface ItemCententProps{
     item:any
 }
 const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
-    const {handleRemoveProductFromCart} =useCard()
+    const {handleRemoveProductFromCart,dataUser} =useCard()
     
     const [showDetail,setShowDetail] =useState(false)
     const [count, setCount] =useState(0);
@@ -33,12 +33,12 @@ const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
                             </div>
                         </Link>
                         <div className="flex gap-2">
-                                <button className="text-slate-500 underline" onClick={()=>{handleRemoveProductFromCart(item);}}>Remove</button>
+                                <button className="text-slate-500 underline" onClick={()=>{handleRemoveProductFromCart(item,dataUser);}}>Remove</button>
                                 <button className="text-slate-500 underline" onClick={()=>{setShowDetail(!showDetail)}}>{showDetail?"Voir moins" :"Voir plus..."}</button>
                         </div>
                         </div>
                         {showDetail?
-                        <div className="flex flex-col justify-between">
+                        <div className="flex flex-col gap-2 px-2">
                             <p className="font-semibold text-md">Composants de base : </p>
                             <div className="flex ">
                                 {Object.keys(item.checkedItems).map((item)=><p key={item}>{item},</p>)}
@@ -47,7 +47,9 @@ const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
                             <div>
                             <p className="font-semibold text-md">composant supplimentaire : </p>
                             <div className="flex ">
-                                {JSON.stringify(item.sup)}
+                            {Object.keys(item.sup).map(key => (
+                                    <p key={key}>{key} x {item.sup[key]} ,</p>
+                                ))}
                             </div>
                             </div>
                             }
@@ -64,7 +66,7 @@ const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
                 <div className="justify-self-center">
                 <NumberControl  value={item.quantity} onChange={onCountChanged} data = {item} />
                 </div>
-                <div className="justify-self-end font-semibold"> {formatPrice(item.data.price.default)}</div>
+                <div className="justify-self-end font-semibold"> {formatPrice(item.data.price.default*item.quantity)}</div>
 
         </div>
     );

@@ -7,20 +7,28 @@ import Button from "../components/form/Button";
 import { formatPrice } from "../utils/formatPrice";
 import ItemCentent from "./ItemCentent";
 import useCard from "../hooks/useCard";
+import { useEffect, useState } from "react";
+import Subscriptions from "../profile/Braintree";
 
 
+interface CartClientProps{
+    data:any
+}
+const CartClient:React.FC<CartClientProps>= ({data}) => {
+    const {handleClearCart,cartTotalAmount,cartProducts,dataUser} = useCard()
+    const [showPay,setShowPay] =useState(false)
 
-const CartClient = () => {
-    const {selectedProductId,handleClearCart,cartTotalAmount,cartProducts} = useCard()
-
-    
+    //console.log("xx",data)
+    const handleCheckout =async()=>{
+        setShowPay(true)
+    }
 
     if (!cartProducts || cartProducts.length === 0){
         return (
             <div className="flex flex-col items-center">
                 <div className="text-2xl">Your cart is empty</div>
                 <div>
-                    <Link href={`/product/${selectedProductId}`} className="text-slate-500 flex items-center gap-1 mt-2">
+                    <Link href={`/product/${data.id}`} className="text-slate-500 flex items-center gap-1 mt-2">
                         <MdArrowBack />
                         <span>Start Ordering</span>
                     </Link>
@@ -29,6 +37,9 @@ const CartClient = () => {
         );
     }
 
+    if(showPay){
+        return (   <div className="p-4"><Subscriptions /></div> )
+    }
     
     return ( 
     <>
@@ -49,7 +60,7 @@ const CartClient = () => {
         </div>
         <div className=" border-t-[1.5px] border-slate-200 py-4 flex justify-between gap-4">
             <div className="w-[90px]">
-                <Button  label="Clear Cart"  onClick={()=>{handleClearCart()}} small  />
+                <Button  label="Clear Cart"  onClick={()=>{handleClearCart(dataUser)}} small  />
 
             </div>
             <div className="text-sm flex flex-col gap-1 items-start">
@@ -60,8 +71,9 @@ const CartClient = () => {
                     <p className="text-slate-500">
                         Taxes and shipping calculate at checkout
                     </p>
-                    <Button label="Checkout" onClick={()=>{}} />
-                    <Link href={`/product/${selectedProductId}`} className="text-slate-500 flex items-center gap-1 mt-2">
+                    {/* setShowPay(true) */}
+                    <Button label="Checkout" onClick={handleCheckout} />
+                    <Link href={`/product/${data.id}`} className="text-slate-500 flex items-center gap-1 mt-2">
                         <MdArrowBack />
                         <span>Continue Shopping</span>
                     </Link>
@@ -69,6 +81,9 @@ const CartClient = () => {
             </div>
     </>
     );
+
+
+
 }
 
 export default CartClient;
