@@ -14,7 +14,7 @@ interface ItemCententProps{
 
 const Commandes:React.FC<ItemCententProps>= ({item}) => {
     
-    const {handleRemoveProductFromCart} =useCard()
+    const {handleRemoveProductFromCart, dataUser} =useCard()
     
     const [showDetail,setShowDetail] =useState(false)
     
@@ -40,7 +40,7 @@ const Commandes:React.FC<ItemCententProps>= ({item}) => {
                 </div>
                 <div className="justify-self-end font-semibold"> {formatPrice(item.data.price.default)}</div>
                 <div className="justify-self-center">
-                    <MdRemoveCircleOutline  onClick={()=>{handleRemoveProductFromCart(item)}} size={25} />
+                    <MdRemoveCircleOutline  onClick={()=>{handleRemoveProductFromCart(item, dataUser)}} size={25} />
                 </div>
                 <div>
                     {showDetail?
