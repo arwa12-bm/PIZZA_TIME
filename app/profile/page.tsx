@@ -19,17 +19,18 @@ import Commandes from "./Commandes";
 import InputButton from "../components/form/InputButton";
 
 const Profile = () => {
-const {
-    selectedIdShopList,
-    dataUser,
-    getData,
-    cartTotalAmount,
-    cartProducts,
-    getCommandes,
-} = useCard();
-console.log("profile",dataUser);
+    const {
+        selectedIdShopList,
+        dataUser,
+        getData,
+        cartProducts,
+        cartTotalAmount
+    
+    } = useCard();
+
 
 const [formData, setFormData] = useState(dataUser);
+const [selectedProductData, setSelectedProductData] = useState({});
 
 const {
     register: registerSignup,
@@ -45,18 +46,14 @@ const {
 });
 
 const router =useRouter()
-
 useEffect(() => {
-    getData();
-}, []);
-
-useEffect(()=>{
-    if(dataUser!==null)
-{ getCommandes(dataUser?.id)
-    console.log("ddd",dataUser?.id);}
+    setSelectedProductData(
+    localStorage.getItem("selectedProductData") !== null
+        ? JSON.parse(localStorage.getItem("selectedProductData") ?? "{}")
+        : {}
+    );
     
-
-},[dataUser])
+}, []);
 
 
 
@@ -69,9 +66,10 @@ const onSubmitUpdate: SubmitHandler<FieldValues> = async (formData) => {
     getData();
 };
 
+//console.log("prof",selectedProductData)
 return (
     <div>
-    <HomePhoto data={selectedIdShopList} />
+    <HomePhoto data={selectedProductData} />
     <Container>
         <div className="flex justify-between">
         <div className="flex  items-center gap-2 p-2">
