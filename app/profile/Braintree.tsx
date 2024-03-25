@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import DropIn from "braintree-web-drop-in-react";
 import Button from '../components/form/Button';
 import useCard from '../hooks/useCard';
+import { formatPrice } from '../utils/formatPrice';
 
 const Subscriptions = () => {
     const [purchaseComplete, setPurchaseComplete] = useState(false);
     const { cartTotalAmount,handleClearCart } = useCard();
+    console.log("cc", cartTotalAmount.toFixed(2))
     let instance:any;
 
 
@@ -17,14 +19,25 @@ const Subscriptions = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ paymentMethodNonce: nonce, user_id: "1234", TotalAmount: cartTotalAmount })
+                body: JSON.stringify({ paymentMethodNonce: nonce, user_id: "1234", TotalAmount: cartTotalAmount.toFixed(2) })
             });
 
             const result = await res.json();
             if (result.result.result === "success") {
-                setPurchaseComplete(true);
-                handleClearCart()
-            } else {
+                try {
+                    const response = await fetch('http://localhost:8080/api/panier/18', {
+                        method: 'PUT',
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to update shopping cart');
+                    }
+                    setPurchaseComplete(true);
+                    //handleClearCart();
+                } catch (error) {
+                    console.error('Error updating shopping cart:', error);
+                    // Handle the error
+                }
+            }else {
                 // Handle other result cases as needed
             }
         } catch (error) {
