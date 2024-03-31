@@ -12,7 +12,7 @@ import ItemCentent from "./ItemCommande";
 const CartCommande= () => {
     const {dataCommande} = useCard()
     const [showPay,setShowPay] =useState(false)
-    console.log({dataCommande});
+    //console.log({dataCommande});
     
 
 

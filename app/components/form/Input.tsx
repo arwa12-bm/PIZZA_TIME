@@ -36,7 +36,6 @@ const Input :React.FC<InputProps>= ({
                 className={` border-b-[2px] border-b-gray-200 pl-8 text-m w-full p-4 text-gray-200 mb-4 
                 ${errors[id]? 'focus:border-rose-400':'border-slate-300'}`}
                 
-
             />    
             </div>
         </div>

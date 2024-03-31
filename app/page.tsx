@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import Container from "./components/Container";
 import HomePhoto from "./components/HomePhoto";
@@ -10,6 +10,10 @@ import SearchInput from "./components/form/SearchInput";
 import useCard from "./hooks/useCard";
 
 export default function Home() {
+const {card} =useCard()
+    
+
+
 
   return (
     <div className="">
@@ -19,7 +23,7 @@ export default function Home() {
           <h1 className="text-[20px] ">Nos magasins à proximité</h1>
           <SearchInput />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {Object.values(card.shoplist).map((item: any) => (
+            {card && card.shoplist.map((item: any) => (
               <div key={item.Company}>
                 {" "}
                 <ProductCart data={item} />

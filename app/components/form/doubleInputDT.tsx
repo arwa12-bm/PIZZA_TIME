@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Select, Space } from 'antd';
-import TimePickerApp from '../product/TimePicker';
+import TimePickerApp from './TimePicker';
 import dayjs from 'dayjs';
 
 const { Option } = Select;

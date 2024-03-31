@@ -9,66 +9,47 @@
     import CategorieCart from "@/app/components/categorie/CategorieCart";
     import MenuCategorie from "@/app/components/categorie/MenuCategorie";
     import useCard from "@/app/hooks/useCard";
-    import { card } from "@/app/utils/products";
 
 
     const Product = () => {
     const params = useParams();
-    console.log({params})
-    const [selectedProductId, setSelectedProductId] = useState({});
-    const [selectedProductData, setSelectedProductData] = useState({});
+    //console.log({params})
     const [data, setData] = useState(null);
 
 
-    const { getSelectedIdShopList,getData ,dataUser,getCommandes,dataPanier} = useCard();
+    const {card ,selectedShoplist} = useCard();
 
-
-    useEffect(() => {
-        getSelectedIdShopList(params);
-        setSelectedProductId(
-        localStorage.getItem("selectedProductId") !== null
-            ? JSON.parse(localStorage.getItem("selectedProductId") ?? "{}")
-            : {}
+    let selectedProduct:any;
+useEffect(()=>{
+    if(card){
+        selectedProduct = card.shoplist?.filter((item:any)=> item.id === params.productId);
+        //console.log({selectedProduct})
+        setData(selectedProduct);
+        localStorage.setItem(
+            "selectedShoplist",
+            JSON.stringify(selectedProduct)
         );
-        setSelectedProductData(
-        localStorage.getItem("selectedProductData") !== null
-            ? JSON.parse(localStorage.getItem("selectedProductData") ?? "{}")
-            : {}
-        );
-        
-    }, []);
+    }
+},[card])
 
 
-    useEffect(()=>{
-        getData(); 
-
-    },[])
-
-    useEffect(()=>{
-        if(dataUser!==null)
-    { getCommandes(dataUser?.id)
-        console.log("ddd",dataUser?.id);}
-        
-
-    },[dataUser])
 
 
-    
 
-    console.log("dataPanier",dataPanier)
-    console.log("dataBd",data);
-    
+    //console.log("dataPanier",dataPanier)
+    // console.log("dataBdxxxx",data);
+    // console.log({selectedShoplist})
 
     return (
         <div className="flex flex-col">
-        <HomePhoto data={selectedProductData} />
+        {selectedShoplist  && <HomePhoto data={selectedShoplist} />}
         <MenuCategorie  />
         <Container>
             <div className="grid grid-cols-1   md:grid-cols-2 sm:grid-cols-2 gap-8 m-8">
-            {Object.values(card.categories).map((item: any) => (
+            {card  && card.categories.map((item: any) => (
                 <div key={item.id} className="">
                 {" "}
-                <CategorieCart data={item} Id={selectedProductId} />
+                <CategorieCart data={item} />
                 </div>
             ))}
             </div>

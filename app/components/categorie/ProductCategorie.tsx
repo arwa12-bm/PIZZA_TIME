@@ -1,24 +1,35 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import { formatPrice } from "@/app/utils/formatPrice";
 import { card } from "@/app/utils/products";
 import ModalCommander from "./ModalCommander";
+import useCard from "@/app/hooks/useCard";
 
 interface ProductCategorieProps{
     data:any
 }
 
 const ProductCategorie:React.FC<ProductCategorieProps>= ({data}) => {
-    let  selectedProduct:any
 
-    for (let item in Object.keys(card.items)) {
-        if (JSON.stringify((Object.keys(card.items)as any)[item]) === JSON.stringify(data) ) {
-            selectedProduct  =  Object.values(card.items as any)[item]
+    const {selectedCategorie,getselectedCategorie} = useCard()
+    useEffect(()=>{
+        getselectedCategorie()
+        //console.log({selectedCategorie});
+
+    },[])
+
+    let  selectedProduct :any
+    // selectedProduct  = card?.items?.map((item:any)=>JSON.stringify(item) === JSON.stringify(data))
+    for (let item in card.items) {
+        if (JSON.stringify(item) === JSON.stringify(data) ) {
+            selectedProduct  =  (card.items as any)[item]
         }
     }
+
+    //console.log("xx",data)
 
     const [isOpen,setIsOpen]=useState(false)
     const handleOpenModal =()=>{

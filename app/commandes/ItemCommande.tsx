@@ -22,7 +22,7 @@ const ItemCommande:React.FC<ItemCententProps>= ({item,index}) => {
     //     itemTotalPrice += totalPriceForItem; // Add the total price for the current item to itemTotalPrice
     // });
     
-    console.log({item});
+    //console.log({item});
     return ( 
     <div className=" relative justify-content border-[1.2px] border-slate-200 bg-white shadow-md  rounded-2xl m-4 p-2">
         <div className="flex p-1 justify-between">
@@ -50,13 +50,12 @@ const ItemCommande:React.FC<ItemCententProps>= ({item,index}) => {
             <div className="justify-self-end">TOTAl</div>
         </div>
     <div className="">
-    {dataCommande && dataCommande.map((commande:any, index:any) => (
-    <div key={index}> {/* Assuming you have a unique identifier for each commande */}
-        {commande.cartItem.map((item:any, itemIndex:any) => (
+    <div > {/* Assuming you have a unique identifier for each commande */}
+        {item.cartItem.map((item:any, itemIndex:any) => (
             <ItemCententCmd key={itemIndex} item={item}  />
         ))}
     </div>
-))}
+
     
     
     </div>

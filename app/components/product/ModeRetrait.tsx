@@ -1,6 +1,5 @@
 "use client"
 
-import { FaChevronLeft, FaRegWindowClose } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 
 interface ModeRetraitProps{

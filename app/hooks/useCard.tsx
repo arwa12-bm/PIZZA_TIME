@@ -8,14 +8,14 @@ useEffect,
 useState,
 } from "react";
 
-import { card } from "../utils/products";
+//import { card } from "../utils/products";
 import toast from "react-hot-toast";
 
 type CartContextType = {
 selectedProductData: any;
 selectedProductId: any;
-selectedElCategorie: any;
-selectedIdShopList: any;
+selectedCategorie: any;
+selectedShoplist: any;
 IdShopList: string;
 IdCategorieList: string;
 IdCategorieEl: string;
@@ -27,13 +27,9 @@ dataUser: any;
 dataPanier: any;
 dataCommande:any;
 ModeRetrait: any;
-setSelectedIdShopList: () => any;
-setSelectedIdCategirie: () => any;
-getSelectedIdShopList: (params: any) => any;
-getIdShopList: (el: any) => any;
-getIdCategorieList: (el: any) => any;
-getSelectedIdCategorieList: (params: any) => any;
-getCategorieById: (id: any) => any;
+card:any;
+getselectedShoplist: () => any;
+getselectedCategorie: () => any;
 handleAddProductToCart: (product: any, dataUser: any) => void;
 handleClearCart: (dataUser: any) => void;
 HandleCartQtyIncrease: (product: any, dataUser: any) => void;
@@ -47,13 +43,24 @@ getCartProducts: () => any;
 getProductData: () => any;
 handleAddPanier: (cartProducts: any, dataUser: any) => void;
 handleDelPanier: (dataUser: any) => void;
+getDataCard: () => any;
 };
+
+export interface card{
+    id?:number;
+    title:string;
+    items?:any[];
+    SupplimentComposition?:any[];
+    shoplist?:any[];
+    categories?:any[];
+    createdAt?:Date;
+}
 
 export const CardContext = createContext<CartContextType | null>(null);
 
 export const CardProvider = (props: any) => {
-const [selectedElCategorie, setSelectedElCategorie] = useState();
-const [selectedIdShopList, setSelectedIdShopList] = useState();
+const [selectedCategorie, setSelectedCategorie] = useState();
+const [selectedShoplist, setSelectedShoplist] = useState({});
 const [IdCategorieEl, setIdCategorieEl] = useState<string | undefined>();
 const [cartProducts, setCartProducts] = useState<any[] | null | undefined>(
     null
@@ -71,6 +78,28 @@ const [selectedProductId, setselectedProductId] = useState<
 >();
 const [dataPanier, setDataPanier] = useState<any | null>();
 const [dataCommande, setDataCommande] = useState<any | null>();
+const [card,setcard]=useState<card| undefined>()
+
+const getselectedShoplist = useCallback(()=>{
+
+    setSelectedShoplist(
+        localStorage.getItem("selectedShoplist") !== null
+            ? JSON.parse(localStorage.getItem("selectedShoplist") ?? "{}")
+            : {}
+        );
+
+},[])
+
+
+const getselectedCategorie = useCallback(()=>{
+
+    setSelectedCategorie(
+        localStorage.getItem("selectedCategorie") !== null
+            ? JSON.parse(localStorage.getItem("selectedCategorie") ?? "{}")
+            : {}
+        );
+
+},[])
 
 useEffect(() => {
     getData();
@@ -114,6 +143,11 @@ const getCartProducts = useCallback(() => {
         setCartProducts(cProducts);
     }
     }
+
+}, []);
+useEffect(() => {
+    getCartProducts();
+    console.log({cartProducts})
 
 }, []);
 
@@ -169,7 +203,7 @@ const getTotals = useCallback(() => {
 
 const handleAddPanier = async (cartItem: any, dataUser: any) => {
     await getTotals()
-    console.log("panier Total",cartTotalAmount.toFixed(2))
+    //console.log("panier Total",cartTotalAmount.toFixed(2))
     await fetch("http://localhost:8080/api/panier/AddPanier", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -185,69 +219,6 @@ const handleDelPanier = async (dataUser: any) => {
     });
 };
 
-//get id and product from params (shoplist)
-const getSelectedIdShopList = useCallback(
-    (params: any) => {
-    for (let item in Object.keys(card.shoplist)) {
-        let selectedProduct: any;
-        if (
-        JSON.stringify((Object.keys(card.shoplist) as any)[item]) ===
-        JSON.stringify(params.productId)
-        ) {
-        selectedProduct = Object.values(card.shoplist as any)[item];
-        setSelectedIdShopList(selectedProduct);
-        localStorage.setItem(
-            "selectedProductData",
-            JSON.stringify(selectedProduct)
-        );
-        }
-    }
-    localStorage.setItem(
-        "selectedProductId",
-        JSON.stringify({ Id: params.productId })
-    );
-    },
-    [selectedIdShopList]
-);
-
-//get id and product from params (categorielist)
-const getSelectedIdCategorieList = useCallback(
-    (params: any) => {
-    for (let item in Object.keys(card.categories)) {
-        let selectedCategorie: any;
-        if (
-        JSON.stringify((Object.keys(card.categories) as any)[item]) ===
-        JSON.stringify(params?.productId)
-        ) {
-        selectedCategorie = Object.values(card.categories as any)[item];
-        setSelectedElCategorie(selectedCategorie);
-        localStorage.setItem(
-            "selectedCategorieData",
-            JSON.stringify(selectedCategorie)
-        );
-        }
-    }
-    localStorage.setItem(
-        "selectedCategorieId",
-        JSON.stringify({ Id: params.productId })
-    );
-    },
-    [selectedElCategorie]
-);
-
-//getObject from Id
-const getCategorieById = useCallback(
-    (id: any) => {
-    let el: any;
-    for (let item of Object.keys(card.categories)) {
-        if (item === id) {
-        el = (card.categories as any)[item];
-        setCategorieObject(el);
-        }
-    }
-    },
-    [CategorieObject]
-);
 
 //add product to cart
 
@@ -265,9 +236,10 @@ const handleAddProductToCart = useCallback(
         localStorage.setItem("CartItem", JSON.stringify(updatedCart));
         return updatedCart;
     });
+    
     const cartItems: any = localStorage.getItem("CartItem");
     const cProducts: any[] | null = JSON.parse(cartItems);
-    console.log({ cProducts });
+    //console.log({ cProducts });
     await handleDelPanier(dataUser);
     await handleAddPanier(cProducts, dataUser);
     },
@@ -313,7 +285,6 @@ const HandleCartQtyIncrease = useCallback(
 const HandleCartQtyDecrease = useCallback(
     async (product: any, dataUser: any) => {
     let updatedCart;
-    console.log({ product });
 
     if (product.quantity === 1) {
         return toast.error("Ooop! Manimum reached");
@@ -321,8 +292,11 @@ const HandleCartQtyDecrease = useCallback(
 
     if (cartProducts) {
         updatedCart = [...cartProducts];
+
         const Existingindex = cartProducts.findIndex(
-        (item) => item.data.id === product.data.id
+        (item) => item.data.id === product.data.id 
+        && item.sup === product.sup 
+        && item.checkedItems === product.checkedItems
         );
         if (Existingindex > -1) {
         updatedCart[Existingindex].quantity = --updatedCart[Existingindex]
@@ -431,9 +405,31 @@ const getCommandes = async (dataUserId: any) => {
 };
 
 
+const getDataCard =  async () => {
+    try {
+    const res = await fetch("http://localhost:8080/api/card/card", {
+        method: "GET",
+        credentials: "include",
+    });
+    if (!res.ok) {
+        throw new Error("Failed to fetch data : shoplist");
+    }
+    const jsonData = await res.json();
+    setcard(jsonData);
+    } catch (e) {
+    console.error("get shoplist error", e);
+    }
+}
+
+useEffect(() => {
+    getDataCard(); 
+}, [card]);
+
+
 const value = {
-    selectedElCategorie,
-    selectedIdShopList,
+    selectedCategorie,
+    selectedShoplist,
+    card,
     dataUser,
     dataPanier,
     dataCommande,
@@ -445,9 +441,8 @@ const value = {
     cartTotalAmount,
     cartProducts,
     ModeRetrait,
-    getCategorieById,
-    getSelectedIdShopList,
-    getSelectedIdCategorieList,
+    getselectedShoplist,
+    getselectedCategorie,
     handleAddProductToCart,
     handleClearCart,
     HandleCartQtyIncrease,
@@ -460,6 +455,7 @@ const value = {
     getCommandes,
     getCartProducts,
     getTotals,
+    getDataCard,
     // getProductData
 };
 return <CardContext.Provider value={value} {...props} />;

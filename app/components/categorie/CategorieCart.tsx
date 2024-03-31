@@ -10,10 +10,9 @@ import useCard from "@/app/hooks/useCard";
     interface CategorieCartProps{
         data:any
         isTitle?:boolean
-        Id?:any
         
     }
-    const CategorieCart:React.FC <CategorieCartProps> = ({data,isTitle,Id}) => {
+    const CategorieCart:React.FC <CategorieCartProps> = ({data,isTitle}) => {
         const {ModeRetrait}=useCard()
         const [isOpen,setIsOpen]=useState(false)
         const handleOpenModal =()=>{

@@ -55,7 +55,8 @@ const ModalCommander: React.FC<ModalCommanderProps> = ({Open,onClose,img,data,Co
         }
 
         localStorage.setItem("ItemList",JSON.stringify({sup,checkedItems,data}))
-        const Existingindex =cartProducts?.findIndex((item:any)=>  JSON.stringify(item.data) === JSON.stringify(data) //same item
+        console.log({cartProducts})
+        const Existingindex =cartProducts?.findIndex((item:any)=>  JSON.stringify(item.data.id) === JSON.stringify(data.id) //same item
                                                                     && JSON.stringify(item.sup) === JSON.stringify(sup)  //same suppliment List
                                                                     && JSON.stringify(item.checkedItems) === JSON.stringify(checkedItems) ) //same (composant de base )
         
@@ -67,7 +68,8 @@ const ModalCommander: React.FC<ModalCommanderProps> = ({Open,onClose,img,data,Co
         }else{
         //increase quantity
             HandleCartQtyIncrease(cartProducts[Existingindex],dataUser)
-
+            localStorage.setItem("supList",JSON.stringify(null))
+            localStorage.setItem("ItemList",JSON.stringify(null))
         }
     
         setLoading(true)
