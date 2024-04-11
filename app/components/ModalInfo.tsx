@@ -4,9 +4,6 @@ import { GoPencil } from "react-icons/go";
 import { GiTakeMyMoney } from "react-icons/gi";
 import { CiMobile1 } from 'react-icons/ci';
 import { TfiLocationPin } from 'react-icons/tfi';
-
-import { card } from '@/app/utils/products';
-import useCard from '@/app/hooks/useCard';
 import { MdAccessTime } from 'react-icons/md';
 
 
@@ -24,10 +21,6 @@ const [selectedVille, setSelectedVille] = useState(1);
 const handleVilleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedVille(parseInt(event.target.value)); // Mettre à jour l'état avec la nouvelle valeur sélectionnée
 };
-const { selectedIdShopList } = useCard();
-const infocart: any = Object.values(card.shoplist).filter(
-    (el: any) => el.shopid === selectedIdShopList
-);
 
 const [activeTab, setActiveTab] = useState("general");
 
@@ -46,8 +39,6 @@ console.log({ModeRetrait});
 const currentDate = new Date();
 const options:any = { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' };
 const formattedDate = currentDate.toLocaleDateString('en-GB', options);
-
-
 
     return (
         <>

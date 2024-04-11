@@ -12,15 +12,19 @@ interface InputProps{
     disabled?:boolean,
     required?:boolean,
     register: UseFormRegister<FieldValues>,
-    errors :FieldErrors
+    errors :FieldErrors,
     Icon?:IconType,
+    value?:any,
+    onChange?:(e:any)=>void
 }
 const Input :React.FC<InputProps>= ({
     id,type,placeholder,label, disabled,
     required,
     register,
     errors,
-    Icon}) => {
+    Icon,
+    value,
+    onChange}) => {
     return ( 
         <div className=" px-2">
             <label  className="p-2 text-sm">{label}</label>
@@ -32,8 +36,10 @@ const Input :React.FC<InputProps>= ({
                 disabled={disabled}
                 {...register(id,{required})}
                 type={type}
+                value={value}
                 placeholder={placeholder}
-                className={` border-b-[2px] border-b-gray-200 pl-8 text-m w-full p-4 text-gray-200 mb-4 
+                onChange={onChange}
+                className={` border-b-[2px] border-b-gray-200 pl-8 text-m w-full p-4 text-gray-500 mb-4 
                 ${errors[id]? 'focus:border-rose-400':'border-slate-300'}`}
                 
             />    

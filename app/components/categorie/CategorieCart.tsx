@@ -48,7 +48,7 @@ import useCard from "@/app/hooks/useCard";
                         <div className="aspect-square overflow-hidden relative  rounded-md h-[280px] w-[300px]">
                             <Image
                                 fill
-                                src={data.imageUrl.Default.urlDefault}
+                                src={data.imageUrl}
                                 alt=""
                                 
                             />

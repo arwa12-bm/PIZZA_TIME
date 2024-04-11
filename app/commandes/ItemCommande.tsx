@@ -13,9 +13,7 @@ interface ItemCententProps{
     index:number
 }
 const ItemCommande:React.FC<ItemCententProps>= ({item,index}) => {
-    const {cartProducts,cartTotalAmount,dataCommande}=useCard()
     const [clicked,setClicked]=useState(false)
-    let itemTotalPrice: number = 0; // Initialize itemTotalPrice to 0
 
     // item.cartItem.map((cartItem: any, itemIndex: any) => {
     //     const totalPriceForItem = cartItem.data.price.default * cartItem.quantity; // Calculate total price for each item

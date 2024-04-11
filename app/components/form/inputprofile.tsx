@@ -26,7 +26,6 @@ const InputProfile :React.FC<InputProps>= ({
     Icon,
     value,
     onChange}) => {
-        const [val ,setVal]=useState(value)
     
     return ( 
         <div className=" flex flex-col px-2">

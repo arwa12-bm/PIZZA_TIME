@@ -29,7 +29,7 @@ const ItemCententCmd:React.FC<ItemCententProps>= ({item}) => {
                         <Link href={`/product/${item.id}`}>
                         <Link href={``} className="font-bold text-md">{item.data.title}</Link>
                             <div className="relative w-[80px] aspect-square">
-                                <Image  src={item.data.imageUrl.Default.urlDefault} alt={""} fill className="object-contain"/>
+                                <Image  src={item.data.imageUrl} alt={""} fill className="object-contain"/>
                             </div>
                         </Link>
                         <div className="flex gap-2">
@@ -60,11 +60,11 @@ const ItemCententCmd:React.FC<ItemCententProps>= ({item}) => {
                         }
                         
                 </div>
-                <div className="justify-self-end">{formatPrice(item.data.price.default)}</div>
+                <div className="justify-self-end">{formatPrice(item.data.price)}</div>
                 <div className="justify-self-end">
                 X {item.quantity}
                 </div>
-                <div className="justify-self-end font-semibold"> {formatPrice(item.data.price.default*item.quantity)}</div>
+                <div className="justify-self-end font-semibold"> {formatPrice(item.data.price*item.quantity)}</div>
 
         </div>
     );

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "../utils/formatPrice";
 import NumberControl from "../components/form/InputNumber";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useCard from "../hooks/useCard";
 
 interface ItemCententProps{
@@ -19,6 +19,7 @@ const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
     const onCountChanged = (newCount: number) => {
         setCount(newCount);       
     };
+  
     return (
 
         <div  className="grid grid-cols-4 text-xs md:text-sm
@@ -29,7 +30,7 @@ const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
                         <Link href={`/product/${item.id}`}>
                         <Link href={``} className="font-bold text-md">{item.data.title}</Link>
                             <div className="relative w-[80px] aspect-square">
-                                <Image  src={item.data.imageUrl.Default.urlDefault} alt={""} fill className="object-contain"/>
+                                <Image  src={item.data.imageUrl} alt={""} fill className="object-contain"/>
                             </div>
                         </Link>
                         <div className="flex gap-2">
@@ -62,11 +63,11 @@ const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
                     
                     
                 </div>
-                <div className="justify-self-center">{formatPrice(item.data.price.default)}</div>
+                <div className="justify-self-center">{formatPrice(item.data.price)}</div>
                 <div className="justify-self-center">
                 <NumberControl  value={item.quantity} onChange={onCountChanged} data = {item} />
                 </div>
-                <div className="justify-self-end font-semibold"> {formatPrice(item.data.price.default*item.quantity)}</div>
+                <div className="justify-self-end font-semibold"> {formatPrice(item.data.price*item.quantity)}</div>
 
         </div>
     );

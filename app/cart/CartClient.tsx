@@ -15,11 +15,9 @@ interface CartClientProps{
     data:any
 }
 const CartClient:React.FC<CartClientProps>= ({data}) => {
-    const {handleClearCart,cartTotalAmount,cartProducts,dataUser,getCartProducts} = useCard()
+    const {handleClearCart,cartTotalAmount,cartProducts,dataUser,selectedShoplist} = useCard()
     const [showPay,setShowPay] =useState(false)
-useEffect(()=>{
-    getCartProducts()
-},[])
+
     //console.log("xx",data)
     const handleCheckout =async()=>{
         setShowPay(true)
