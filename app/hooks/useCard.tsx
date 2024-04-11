@@ -1,5 +1,6 @@
 "use client";
 
+import { diff } from "deep-object-diff";
 import {
 createContext,
 useCallback,
@@ -26,6 +27,7 @@ cartProducts: any;
 dataUser: any;
 dataPanier: any;
 dataCommande:any;
+AllCommande:any;
 ModeRetrait: any;
 card:any;
 getselectedShoplist: () => any;
@@ -38,8 +40,7 @@ handleRemoveProductFromCart: (product: any, dataUser: any) => void;
 getData: () => any;
 getPanier: (dataUserId: any) => any;
 getCommandes: (dataUserId: any) => any;
-getTotals: () => any;
-getCartProducts: () => any;
+getAllCommandes:()=>any;
 getProductData: () => any;
 handleAddPanier: (cartProducts: any, dataUser: any) => void;
 handleDelPanier: (dataUser: any) => void;
@@ -78,6 +79,7 @@ const [selectedProductId, setselectedProductId] = useState<
 >();
 const [dataPanier, setDataPanier] = useState<any | null>();
 const [dataCommande, setDataCommande] = useState<any | null>();
+const [AllCommande, setAllCommande] = useState<any | null>();
 const [card,setcard]=useState<card| undefined>()
 
 const getselectedShoplist = useCallback(()=>{
@@ -110,46 +112,34 @@ useEffect(() => {
         if (dataUser !== null ) {
                 await getPanier(dataUser);
             await getCommandes(dataUser);
-            //console.log("dddc", dataUser.id);
-
-            
+            console.log("dddc", dataUser);
         }
     };
-
     fetchData();
-
 }, [dataUser]);
 
-useEffect(() => {
-    getCartProducts()
-    console.log({ cartProducts });
-
-}, [dataPanier]);
-
-
 
 useEffect(() => {
-    if (cartProducts !== null) {
-    getTotals();
-    }
-}, [cartProducts]);
+        if (cartProducts !== null) {  
+            getPanier(dataUser)
+        }
+    }, [dataPanier]);
 
 //get List of item in cart
-const getCartProducts = useCallback(() => {
-    if (dataPanier !== null) {
-    const cartItems: any = localStorage.getItem("CartItem");
-    if (cartItems !== "undefined") {
-        const cProducts = JSON.parse(cartItems);
-        setCartProducts(cProducts);
+useEffect(()=>{
+    const getCartProducts =()=>{
+        if (dataPanier !== null) {
+            const cartItems: any = localStorage.getItem("CartItem");
+            if (cartItems !== "undefined") {
+                const cProducts = JSON.parse(cartItems);
+                setCartProducts(cProducts);
+            }
+            }
     }
-    }
+    getCartProducts()
+},[])
 
-}, []);
-useEffect(() => {
-    getCartProducts();
-    console.log({cartProducts})
 
-}, []);
 
 useEffect(() => {
     const ModRetrait: any = localStorage.getItem("ModeRetrait");
@@ -158,14 +148,6 @@ useEffect(() => {
     console.log({ ModeRetrait });
 }, []);
 
-// const getProductData = useCallback(() => {
-//     const storedProduct = localStorage.getItem("selectedProductData");
-//     const parsedProduct = storedProduct ? JSON.parse(storedProduct) : null;
-//     setselectedProductData(parsedProduct);
-//         console.log(selectedProductData.id)
-
-
-// }, []);
 
 
 
@@ -177,32 +159,32 @@ useEffect(() => {
     setselectedProductId(parsedProductId);
 }, []);
 
+
+
 //get  totalAmount and total quantity
-
-const getTotals = useCallback(() => {
-    if (cartProducts !== null) {
-    const { total, qty } = cartProducts?.reduce(
-        (acc, item) => {
-        const itemTotal = item.data.price.default * item.quantity;
-        acc.total += itemTotal;
-        acc.qty += item.quantity;
-        return acc;
-        },
-        {
-        total: 0,
-        qty: 0,
-        }
-    );
-    setCartTotalQty(qty);
-    setCartTotalAmount(total);
+useEffect(()=>{
+        
+    const getTotals =()=>{
+        if(cartProducts!==null ){
+            const {total,qty} = cartProducts?.reduce((acc, item)=>{
+            const itemTotal = item.data.price.default * item.quantity
+            acc.total += itemTotal 
+            acc.qty +=item.quantity
+            return acc
+        },{
+            total:0,
+            qty:0
+        })
+        setCartTotalQty(qty)
+        setCartTotalAmount(total)
+    }    
     }
-}, [cartProducts]);
-
+    getTotals()
+},[cartProducts])
 
 //Add panier
 
 const handleAddPanier = async (cartItem: any, dataUser: any) => {
-    await getTotals()
     //console.log("panier Total",cartTotalAmount.toFixed(2))
     await fetch("http://localhost:8080/api/panier/AddPanier", {
     method: "POST",
@@ -243,8 +225,7 @@ const handleAddProductToCart = useCallback(
     await handleDelPanier(dataUser);
     await handleAddPanier(cProducts, dataUser);
     },
-    []
-);
+    [cartProducts]);
 
 // Increase quantity
 const HandleCartQtyIncrease = useCallback(
@@ -263,8 +244,8 @@ const HandleCartQtyIncrease = useCallback(
         const Existingindex = cartProducts.findIndex(
         (item) =>
             item.data.id === product.data.id &&
-            item.sup === product.sup &&
-            item.checkedItems === product.checkedItems
+            Object.keys(diff(item.sup, product.sup)).length === 0 &&
+            Object.keys(diff(item.checkedItems, product.checkedItems)).length === 0
         );
         if (Existingindex > -1) {
         updatedCart[Existingindex].quantity = ++updatedCart[Existingindex]
@@ -278,8 +259,7 @@ const HandleCartQtyIncrease = useCallback(
     localStorage.setItem("CartItem", JSON.stringify(updatedCart));
     return updatedCart;
     },
-    [cartProducts]
-);
+    [cartProducts]);
 
 // Decrease quantity
 const HandleCartQtyDecrease = useCallback(
@@ -294,9 +274,10 @@ const HandleCartQtyDecrease = useCallback(
         updatedCart = [...cartProducts];
 
         const Existingindex = cartProducts.findIndex(
-        (item) => item.data.id === product.data.id 
-        && item.sup === product.sup 
-        && item.checkedItems === product.checkedItems
+        (item) => item.data.id === product.data.id &&
+        Object.keys(diff(item.sup, product.sup )).length === 0 &&
+        Object.keys(diff(item.checkedItems, product.checkedItems)).length === 0
+    
         );
         if (Existingindex > -1) {
         updatedCart[Existingindex].quantity = --updatedCart[Existingindex]
@@ -309,8 +290,7 @@ const HandleCartQtyDecrease = useCallback(
     localStorage.setItem("CartItem", JSON.stringify(updatedCart));
     return updatedCart;
     },
-    [cartProducts]
-);
+    [cartProducts]);
 
 const handleRemoveProductFromCart = useCallback(
     async (product: any, dataUser: any) => {
@@ -323,12 +303,13 @@ const handleRemoveProductFromCart = useCallback(
         // Notify user and update local storage
         toast.success("Product removed from cart");
         localStorage.setItem("CartItem", JSON.stringify(updatedCart));
+        const cartItems: any = localStorage.getItem("CartItem");
+        const cProducts: any[] | null = JSON.parse(cartItems);
         await handleDelPanier(dataUser);
-        await handleAddPanier(updatedCart, dataUser);
+        await handleAddPanier(cProducts, dataUser);
     }
     },
-    [cartProducts]
-);
+    [cartProducts]);
 
 //clear Cart
 const handleClearCart = useCallback(async( dataUser: any) => {
@@ -360,9 +341,9 @@ const getData = useCallback(async () => {
 }, []);
 
 const getPanier = async (dataUser:any) => {
-    if(dataUser.error){return;}
+    if(dataUser?.error){return;}
     try {
-    console.log({ dataUser });
+        
     const res = await fetch(
         `http://localhost:8080/api/panier/${dataUser.id}`,
         {
@@ -373,7 +354,6 @@ const getPanier = async (dataUser:any) => {
     if (!res.ok) {
         throw new Error("Failed to fetch data");
     }
-    console.log({res})
     const jsonData = await res.json();
     //console.log({jsonData});
     localStorage.setItem("CartItem", JSON.stringify(jsonData[0].cartItem));
@@ -401,6 +381,27 @@ const getCommandes = async (dataUserId: any) => {
     setDataCommande(jsonData);
     } catch (e) {
     console.error("getCommande error", e);
+    }
+};
+const getAllCommandes = async () => {
+    try {
+    const res = await fetch(
+        `http://localhost:8080/api/panier`,
+        {
+        method: "GET",
+        credentials: "include",
+        }
+    );
+    if (!res.ok) {
+        throw new Error("Failed to fetch data");
+    }
+    //console.log({res})
+    const jsonData = await res.json();
+    //console.log("cc",jsonData);
+    //localStorage.setItem("CartItemCommande", JSON.stringify(jsonData.cartItem));
+    setAllCommande(jsonData);
+    } catch (e) {
+    console.error("getAllCommande error", e);
     }
 };
 
@@ -433,6 +434,7 @@ const value = {
     dataUser,
     dataPanier,
     dataCommande,
+    AllCommande,
     selectedProductData,
     selectedProductId,
     CategorieObject,
@@ -453,8 +455,7 @@ const value = {
     getData,
     getPanier,
     getCommandes,
-    getCartProducts,
-    getTotals,
+    getAllCommandes,
     getDataCard,
     // getProductData
 };
