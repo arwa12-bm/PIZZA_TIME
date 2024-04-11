@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { MdRemoveCircleOutline, MdRemoveShoppingCart } from "react-icons/md";
+import { MdRemoveCircleOutline } from "react-icons/md";
 
 
 import { formatPrice } from "../utils/formatPrice";
@@ -38,7 +38,7 @@ const Commandes:React.FC<ItemCententProps>= ({item}) => {
                         </div>
                     </div>
                 </div>
-                <div className="justify-self-end font-semibold"> {formatPrice(item.data.price.default)}</div>
+                <div className="justify-self-end font-semibold"> {formatPrice(item.data.price)}</div>
                 <div className="justify-self-center">
                     <MdRemoveCircleOutline  onClick={()=>{handleRemoveProductFromCart(item, dataUser)}} size={25} />
                 </div>
