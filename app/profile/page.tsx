@@ -7,7 +7,6 @@ import { CiMobile3 } from "react-icons/ci";
 import { MdArrowBack, MdOutlineMarkEmailRead, MdSaveAs } from "react-icons/md";
 import { useRouter } from "next/navigation";
 
-
 import Container from "../components/Container";
 import HomePhoto from "../components/HomePhoto";
 import useCard from "../hooks/useCard";
@@ -17,76 +16,107 @@ import Cartes from "./Cartes";
 import { formatPrice } from "../utils/formatPrice";
 import Commandes from "./Commandes";
 import InputButton from "../components/form/InputButton";
+import { DropdownAppProfile } from "../components/form/dropDownProfile";
+import ItemCommande from "../commandes/ItemCommande";
 
 const Profile = () => {
-    const {
-        selectedIdShopList,
-        dataUser,
-        getData,
-        cartProducts,
-        cartTotalAmount
-    
-    } = useCard();
-
+const {
+selectedShoplist,
+dataUser,
+getData,
+getAllCommandes,
+AllCommande,
+cartProducts,
+dataCommande,
+cartTotalAmount,
+} = useCard();
+useEffect(() => {
+getAllCommandes();
+}, []);
 
 const [formData, setFormData] = useState(dataUser);
+const [profile, setProfile] = useState(true);
+const [commande, setCommande] = useState(false);
+
 const [selectedProductData, setSelectedProductData] = useState({});
 
 const {
-    register: registerSignup,
-    handleSubmit: handleSubmitUpdate,
-    formState: { errors: errorsSignup },
+register: registerSignup,
+handleSubmit: handleSubmitUpdate,
+formState: { errors: errorsSignup },
 } = useForm<FieldValues>({
-    defaultValues: {
+defaultValues: {
     nom: "",
     prénom: "",
     télephone: "",
     email: "",
-    },
+},
 });
 
-const router =useRouter()
+const router = useRouter();
 useEffect(() => {
-    setSelectedProductData(
+setSelectedProductData(
     localStorage.getItem("selectedProductData") !== null
-        ? JSON.parse(localStorage.getItem("selectedProductData") ?? "{}")
-        : {}
-    );
-    
+    ? JSON.parse(localStorage.getItem("selectedProductData") ?? "{}")
+    : {}
+);
 }, []);
 
-
+const handleCommande = () => {
+setProfile(false);
+setCommande(true);
+};
 
 const onSubmitUpdate: SubmitHandler<FieldValues> = async (formData) => {
-    await fetch(`http://localhost:8080/api/user/${dataUser?.id}`, {
+await fetch(`http://localhost:8080/api/user/${dataUser?.id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
-    });
-    getData();
+});
+getData();
 };
 
-//console.log("prof",selectedProductData)
 return (
-    <div>
+<div>
     <HomePhoto data={selectedProductData} />
     <Container>
-        <div className="flex justify-between">
-        <div className="flex  items-center gap-2 p-2">
-            <LuUserCircle2 size={30} />
-            <p className="text-xl">Bonjour {dataUser?.nom}</p>
+    <div className="flex justify-between p-2">
+        <div className="flex  items-center gap-2 ">
+        <LuUserCircle2 size={30} />
+        <p className="text-xl">Bonjour {dataUser?.nom} </p>
         </div>
+        <div className="flex gap-1 ">
+        {dataUser?.role === "admin" && (
+            <DropdownAppProfile
+            title="Espace Admin"
+            handleCommande={handleCommande}
+            />
+        )}
         </div>
+    </div>
+    {commande && (
+        <>
+        {AllCommande &&
+            AllCommande.map((item: any, index: number) => {
+            return <ItemCommande index={index + 1} item={item} />;
+            })}
+        </>
+    )}
+    {profile && (
         <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
         <div className="col-span-1  sm:w-[120%]  md:w-[130%] lg:w-[130%] xl:w-[130%]">
             <div className=" border-[1.2px] border-slate-200 bg-white shadow-md  rounded-2xl m-4  ">
             <div className="flex justify-between">
                 <div className="flex p-2 gap-1">
-                    <IoIosInformationCircleOutline size={25} />
-                    <p className="">Informations générales</p>
+                <IoIosInformationCircleOutline size={25} />
+                <p className="">Informations générales</p>
                 </div>
                 <div className="p-2">
-                    <MdSaveAs onClick={handleSubmitUpdate(onSubmitUpdate)} size={30} className="bg-white text-gray-600 rounded-md"/>
+                <MdSaveAs
+                    onClick={handleSubmitUpdate(onSubmitUpdate)}
+                    size={30}
+                    className="bg-white text-gray-600 rounded-md"
+                />
                 </div>
             </div>
             <div className="p-2 grid md:grid-cols-2  gap-2">
@@ -173,22 +203,28 @@ return (
                 <span>{formatPrice(cartTotalAmount)}</span>
                 </div>
             </div>
-            
             </div>
             <div className=" relative justify-content border-[1.2px] border-slate-400 bg-white  shadow-md  rounded-xl ml-4 mr-4 mt-1">
             <div className="flex p-2 justify-between ">
                 <div className="sm:w-[100px] md:w-[100px] lg:w-[100px] xl:w-[100px] ">
                 <p className="">Cart de fidélité</p>
                 </div>
-                <div className="w-[250px] sm:w-[200px] md:w-[200px] lg:w-[200px] xl:w-[200px]" ><InputButton  label={"Valider"} placeholder={"123 123 123 123"}/></div>
+                <div className="w-[250px] sm:w-[200px] md:w-[200px] lg:w-[200px] xl:w-[200px]">
+                <InputButton
+                    label={"Valider"}
+                    placeholder={"123 123 123 123"}
+                />
+                </div>
             </div>
             </div>
             <div className=" relative justify-content border-[1.2px] border-slate-400 bg-white  shadow-md  rounded-xl ml-4 mr-4 mt-1">
             <div className="flex p-2 justify-between ">
                 <div className="sm:w-[100px] md:w-[100px] lg:w-[100px] xl:w-[100px]">
-                <p className="">Code Promo</p> 
+                <p className="">Code Promo</p>
                 </div>
-                <div className="w-[250px] sm:w-[200px] md:w-[200px] lg:w-[200px] xl:w-[200px]" ><InputButton  label={"Appliquer"}/></div>
+                <div className="w-[250px] sm:w-[200px] md:w-[200px] lg:w-[200px] xl:w-[200px]">
+                <InputButton label={"Appliquer"} />
+                </div>
             </div>
             </div>
             <div className=" relative justify-content border-[1.2px] border-slate-400 bg-white  shadow-md  rounded-xl ml-4 mr-4 mt-1">
@@ -210,23 +246,36 @@ return (
             </div>
             <div className=" relative justify-content border-[1.2px] border-slate-400 bg-white  shadow-md  rounded-b-xl ml-4 mr-4 mb-4">
             <div className="grid flex-row p-2 justify-between ">
-                {cartProducts?
+                {cartProducts ? (
                 cartProducts.map((item: any) => {
-                    return <div key={item}><Commandes item={item} /></div>;
-                }):
-                <div className="p-2">
-                    <div onClick={()=>{selectedIdShopList=== undefined?  router.push(`/`) : router.push(`/product/${selectedIdShopList}`)}} className="text-slate-500 cursor-pointer flex items-center gap-1 mt-2">
-                        <MdArrowBack />
-                        <span>Start Ordering</span>
+                    return (
+                    <div key={item}>
+                        <Commandes item={item} />
                     </div>
-                </div> 
-                }
+                    );
+                })
+                ) : (
+                <div className="p-2">
+                    <div
+                    onClick={() => {
+                        selectedShoplist === undefined
+                        ? router.push(`/`)
+                        : router.push(`/product/${selectedShoplist}`);
+                    }}
+                    className="text-slate-500 cursor-pointer flex items-center gap-1 mt-2"
+                    >
+                    <MdArrowBack />
+                    <span>Start Ordering</span>
+                    </div>
+                </div>
+                )}
             </div>
             </div>
         </div>
         </div>
+    )}
     </Container>
-    </div>
+</div>
 );
 };
 
