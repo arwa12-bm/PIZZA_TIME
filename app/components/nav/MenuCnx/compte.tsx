@@ -12,7 +12,7 @@ handleMenu: () => void;
 }
 
 const Compte: React.FC<CompteProps> = ({ handleMenu }) => {
-const { getData,handleClearCart } = useCard();
+const { getData,handleClearCart,dataUser } = useCard();
 const router = useRouter();
 const HandleLogout = async () => {
     await fetch("http://localhost:8080/api/user/logout", {
@@ -23,6 +23,7 @@ const HandleLogout = async () => {
     localStorage.setItem("CartItem",JSON.stringify(null))        
     await getData();
     handleMenu();
+    handleClearCart(dataUser)
     router.push("/");
 };
 
