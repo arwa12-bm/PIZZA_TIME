@@ -8,13 +8,17 @@ import { PiLockKeyThin } from "react-icons/pi";
 import Button from "../../form/Button";
 import Input from "../../form/Input";
 import useCard from "@/app/hooks/useCard";
-import { useEffect } from "react";
+import { useState } from "react";
 
 interface LoginProps {
 handleMenu: () => void;
 isLoading: boolean;
 setIsLoading: (val: boolean) => void;
 setIsSignup: (val: boolean) => void;
+setIsMotdepasseoublié: (val: boolean) => void;
+setIsConditionsGénéralesUtilisation: (val: boolean) => void;
+setIsConditionsGénéralesVente: (val: boolean) => void;
+setIsPolitiqueConfidentialité: (val: boolean) => void;
 setType: (val: string) => void;
 }
 const Login: React.FC<LoginProps> = ({
@@ -22,8 +26,14 @@ handleMenu,
 isLoading,
 setIsLoading,
 setIsSignup,
+setIsMotdepasseoublié,
+setIsConditionsGénéralesUtilisation,
+setIsConditionsGénéralesVente,
+setIsPolitiqueConfidentialité,
 setType,
 }) => {
+
+
 const {
 register,
 handleSubmit,
@@ -40,19 +50,50 @@ setIsSignup(true);
 setIsLoading(false);
 setType("Inscription");
 }
-const { getData,getCartProducts } = useCard();
+
+function handleMotdepasseoublié() {
+    setIsMotdepasseoublié(true);
+    setIsLoading(false);
+    setType("Mot de passe oublié");
+    }
+
+function handleConditionsGénéralesUtilisation() {
+    setIsConditionsGénéralesUtilisation(true);
+    setIsLoading(false);
+    setType("Conditions Générales d’Utilisation (CGU)");
+    }
+
+function handleConditionsGénéralesVente() {
+    setIsConditionsGénéralesVente(true);
+    setIsLoading(false);
+    setType("Conditions Générales de vente (CGV)");
+    }
+function handlePolitiqueConfidentialité() {
+    setIsPolitiqueConfidentialité(true);
+    setIsLoading(false);
+    setType("Politique de confidentialité");
+    }
+const { getData,dataUser,getCartProducts } = useCard();
+const[jsonData,setjsonData]=useState<any>(null)
 
 const onSubmit: SubmitHandler<FieldValues> = async (data) => {
 setIsLoading(true);
-await fetch("http://localhost:8080/api/user/login", {
+const res = await fetch("http://localhost:8080/api/user/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     body: JSON.stringify(data),
 });
-getData();
-getCartProducts()
-handleMenu();
+console.log({res})
+const jsonData = await res.json();
+setjsonData(jsonData)
+console.log({jsonData})
+if(jsonData.message === "success"){
+    getData();
+    getCartProducts()
+    handleMenu();
+}
+    
 };
 
 
@@ -63,7 +104,6 @@ return (
     <Input
     id="email"
         required
-        disabled={isLoading}
         register={register}
         errors={errors}
         type="email"
@@ -74,7 +114,6 @@ return (
     <Input
         id="password"
         required
-        disabled={isLoading}
         register={register}
         errors={errors}
         type="password"
@@ -82,10 +121,12 @@ return (
         label="Mot de passe"
         Icon={PiLockKeyThin}
     />
+    {jsonData?.error  &&  <p className="text-red-500 px-2">{jsonData?.error.message}</p>}
     </div>
-
     <div className=" text-right  text-m text-black underline w-full">
-    <Link href="">Mot de passe oublié !</Link>
+    <button onClick={handleMotdepasseoublié} className="underline">
+    Mot de passe oublié !
+    </button>
     </div>
     <div className="w-full p-5">
     <Button
@@ -105,13 +146,20 @@ return (
     </p>
     <div className=" h-20 p-4  ">
     <p className="text-m text-black underline mt-2">
-        <Link href="">Conditions Générales d'Utilisation</Link>
+    <button onClick={handleConditionsGénéralesUtilisation} className="underline">
+    Conditions Générales d'Utilisation
+    </button>
+        
     </p>
     <p className="text-m text-black underline mt-2">
-        <Link href="">Conditions Générales de Vente</Link>
+    <button onClick={handleConditionsGénéralesVente} className="underline">
+    Conditions Générales de Vente
+    </button>
     </p>
     <p className="text-m text-black underline mt-2 mb-2">
-        <Link href="">Politiques de Confidentialité</Link>
+    <button onClick={handlePolitiqueConfidentialité} className="underline">
+    Politiques de Confidentialité
+    </button>
     </p>
     </div>
 </>
