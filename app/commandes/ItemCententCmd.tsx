@@ -19,6 +19,8 @@ const ItemCententCmd:React.FC<ItemCententProps>= ({item}) => {
     const onCountChanged = (newCount: number) => {
         setCount(newCount);       
     };
+    console.log( "xxx",item.data.price);
+    
     return (
 
         <div  className="grid grid-cols-5 text-xs md:text-sm

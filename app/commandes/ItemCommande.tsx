@@ -11,10 +11,55 @@ import ItemCententCmd from "./ItemCententCmd";
 interface ItemCententProps{
     item:any
     index:number
+    profile?:boolean
 }
-const ItemCommande:React.FC<ItemCententProps>= ({item,index}) => {
+const ItemCommande:React.FC<ItemCententProps>= ({item,index,profile}) => {
+    if(item.etat_Commande===''){ return null; }
     const [clicked,setClicked]=useState(false)
+    const {dataUser}= useCard()
 
+
+   // {item.ModeRetrait.livrer && console.log("xx",item.ModeRetrait)}
+
+    const handleValide =(id:any)=>{
+        const url = `http://localhost:8080/api/panier/Encours/${id}`;
+        const requestOptions:any = {
+            method: 'PUT',
+        };
+        fetch(url, requestOptions)
+            .then(response => {
+            //console.log({response})
+            })
+            .catch(error => {
+                console.log(error)
+            });
+    }
+    const handleLivrer =(id:any)=>{
+        const url = `http://localhost:8080/api/panier/livrer/${id}`;
+        const requestOptions:any = {
+            method: 'PUT',
+        };
+        fetch(url, requestOptions)
+            .then(response => {
+            console.log({response})
+            })
+            .catch(error => {
+                console.log(error)
+            });
+    }
+    const handlePasser =(id:any)=>{
+        const url = `http://localhost:8080/api/panier/passer/${id}`;
+        const requestOptions:any = {
+            method: 'PUT',
+        };
+        fetch(url, requestOptions)
+            .then(response => {
+            console.log({response})
+            })
+            .catch(error => {
+                console.log(error)
+            });
+    }
     // item.cartItem.map((cartItem: any, itemIndex: any) => {
     //     const totalPriceForItem = cartItem.data.price.default * cartItem.quantity; // Calculate total price for each item
     //     itemTotalPrice += totalPriceForItem; // Add the total price for the current item to itemTotalPrice
@@ -31,9 +76,50 @@ const ItemCommande:React.FC<ItemCententProps>= ({item,index}) => {
             <div className="text- p-2">
             {formatPrice(item.prix)}
             </div>
+
             <div className="text- p-2">
-            {item.createdAt.toLocaleString().split('T')[0]}
+            {profile && <p> {item.etat}</p>}
             </div>
+
+            <div className="text- p-2">
+
+            
+            {profile && 
+                <div className="flex gap-4 "> 
+                <p>{item.etat_Commande}</p> 
+                {item.etat_Commande === "En attente" &&
+                <div className="bg-green-500 p-1 -m-1 rounded-xl text-center justify-content cursor-pointer hover:scale-105 "
+                    onClick={()=>handleValide(item.id)}
+                > valider</div>}
+                {item.etat_Commande === "En cours de préparation" &&
+                    <div className="bg-green-500 p-1 -m-1 rounded-xl text-center justify-content cursor-pointer hover:scale-105 "
+                    onClick={()=>handlePasser(item.id)}
+                > passer</div>}
+                </div>
+                }
+            </div>
+
+            <div className="text- p-2">
+            {item.ModeRetrait?.livrer ? 
+            <div className="flex gap-4 ">
+                <div>
+                    <p>En livraison</p> <p>à l'heure de {item.ModeRetrait.Time}</p>
+                </div>
+                
+                {item.etat_Commande ==='En cours de livraison' && 
+                <div className="bg-green-500 p-1 -m-1 rounded-xl text-center justify-content cursor-pointer hover:scale-105 "
+                    onClick={()=>handleLivrer(item.id)}
+                >livrer</div>}
+            </div>
+            : <div><p>En emporter</p> <p>à l'heure de{item.ModeRetrait.Time}</p></div>}
+            </div>
+            
+            <div className="text- p-2">
+            <p>{item.createdAt.toLocaleString().split('T')[0] }  </p>
+            <p>{item.createdAt.toLocaleString().split('T')[1].split(':')[0] }:{item.createdAt.toLocaleString().split('T')[1].split(':')[1] }</p>
+            </div>
+
+
             {clicked?
             <RiArrowDropUpLine size={50} onClick={()=>setClicked(!clicked)}  />
             : <RiArrowDropDownLine size={50} onClick={()=>setClicked(!clicked)} />            }

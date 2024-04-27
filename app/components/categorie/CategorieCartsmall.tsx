@@ -12,9 +12,9 @@ import useCard from "@/app/hooks/useCard";
         isTitle?:boolean
         
     }
-    const CategorieCart:React.FC <CategorieCartProps> = ({data,isTitle}) => {
+    const CategorieCartsmall:React.FC <CategorieCartProps> = ({data,isTitle}) => {
         const {ModeRetrait}=useCard()
-        const [isOpen,setIsOpen]=useState(true)
+        const [isOpen,setIsOpen]=useState(false)
         const handleOpenModal =()=>{
             setIsOpen(true)
         }
@@ -42,10 +42,9 @@ import useCard from "@/app/hooks/useCard";
         :<>
 
             <div className=" ">
-                <div  className="flex flex-col gap-2 justify-center items-center  text-[15px] cursor-pointer hover:scale-105">
-                    <div onClick={handle } >
-                        <div className="col-span-1 text-center font-semibold">{data.title} </div>
-                        <div className="aspect-square overflow-hidden relative  rounded-md h-[280px] w-[300px]">
+                <div  className=" text-[15px] cursor-pointer hover:scale-105">
+                    <div onClick={()=>router.push(`/menu/${data.id}`)} className="flex gap-2 p-1 border-b-[1px]" >
+                        <div className=" overflow-hidden relative aspect-square h-[60px] w-[60px]">
                             <Image
                                 fill
                                 src={data.imageUrl}
@@ -53,9 +52,10 @@ import useCard from "@/app/hooks/useCard";
                                 
                             />
                         </div>
+                        <div className="font-semibold pt-5">{data.title} </div>
                     </div>
                     
-                    <ModeRetraitModal Open={isOpen} onClose={handleModalClose} data={data} />
+                    {/* <ModeRetraitModal Open={isOpen} onClose={handleModalClose} data={data} /> */}
                 </div>
             </div>
             
@@ -67,4 +67,4 @@ import useCard from "@/app/hooks/useCard";
         );
     }
     
-    export default CategorieCart;
+    export default CategorieCartsmall;

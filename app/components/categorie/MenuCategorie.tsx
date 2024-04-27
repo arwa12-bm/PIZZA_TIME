@@ -17,13 +17,13 @@ const MenuCategorie:React.FC<MenuCategorieProps>= ({data}) => {
     
     const {selectedShoplist,card,getDataCard} = useCard()  
     
-useEffect(()=>{
-    if(card === "undefined"){
-        getDataCard()
-    console.log({card});
-    }
+// useEffect(()=>{
+//     if(card === "undefined"){
+//         getDataCard()
+//     console.log({card});
+//     }
     
-},[])
+// },[])
 
     let listCategorie:any[]
     let ListDrop:any[]

@@ -20,7 +20,7 @@ interface ModeRetraitModalProps{
 const ModeRetraitModal: React.FC<ModeRetraitModalProps>= ({ Open,onClose,data}) => {
     if (!Open) return null
 
-    const {selectedProductData}= useCard()
+    const {selectedCategorie}= useCard()
     const format = 'HH:mm';
     const [big,setBig]=useState(true)
     const[emporter,setEmporter]=useState(true)
@@ -37,13 +37,14 @@ const ModeRetraitModal: React.FC<ModeRetraitModalProps>= ({ Open,onClose,data}) 
         setLivrer(!livrer)
         setEmporter(false)
     }
-    console.log({selectedTime})
+    // console.log({selectedTime})
 
     const handleValider= ()=>{
         localStorage.setItem("ModeRetrait",JSON.stringify({"Time":selectedTime.format(format),"emporter":emporter,"livrer":livrer }))
-        {data && router.push(`/menu/${data.id}`)}
+        //{data && router.push(`/menu/${data.id}`)}
         onClose()
-        window.location.href = `/product/${selectedProductData.Id}`
+        // console.log({data})
+        window.location.href = `/menu/1`
     }
     
     const handleTimeChange = (time:any) => {

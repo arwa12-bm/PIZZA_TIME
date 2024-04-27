@@ -8,6 +8,8 @@ useContext,
 useEffect,
 useState,
 } from "react";
+import Cookies from 'js-cookie';
+
 
 //import { card } from "../utils/products";
 import toast from "react-hot-toast";
@@ -30,6 +32,7 @@ dataCommande:any;
 AllCommande:any;
 ModeRetrait: any;
 card:any;
+logWithGoogle:boolean;
 getselectedShoplist: () => any;
 getselectedCategorie: () => any;
 handleAddProductToCart: (product: any, dataUser: any) => void;
@@ -38,6 +41,7 @@ HandleCartQtyIncrease: (product: any, dataUser: any) => void;
 HandleCartQtyDecrease: (product: any, dataUser: any) => void;
 handleRemoveProductFromCart: (product: any, dataUser: any) => void;
 getData: () => any;
+getDataGoogle: () => any;
 getPanier: (dataUserId: any) => any;
 getCommandes: (dataUserId: any) => any;
 getAllCommandes:()=>any;
@@ -69,7 +73,7 @@ const [cartProducts, setCartProducts] = useState<any[] | null | undefined>(
 const [CategorieObject, setCategorieObject] = useState();
 const [cartTotalQty, setCartTotalQty] = useState(0);
 const [cartTotalAmount, setCartTotalAmount] = useState(0);
-const [dataUser, setDataUser] = useState(null);
+const [dataUser, setDataUser] = useState<any>(null);
 const [ModeRetrait, setModeRetrait] = useState<any[] | null>();
 const [selectedProductData, setselectedProductData] = useState<
     any | null
@@ -81,6 +85,42 @@ const [dataPanier, setDataPanier] = useState<any | null>();
 const [dataCommande, setDataCommande] = useState<any | null>();
 const [AllCommande, setAllCommande] = useState<any | null>();
 const [card,setcard]=useState<card| undefined>()
+const [logWithGoogle,setLogWithGoogle]=useState(false)
+
+
+
+
+const getDataGoogle = useCallback(async () => {
+    const myCookieValue:any = Cookies.get('jwt')
+
+//console.log({myCookieValue});
+const tokenJSON = myCookieValue.substring(2);
+
+// Decode the JSON portion
+const decodedToken = JSON.parse(tokenJSON);
+// Check if the token contains an email property
+if (decodedToken && decodedToken.email) {
+        // Access email and first name
+    const email = decodedToken.email;
+    const firstName = decodedToken.firstName;
+    const lastName = decodedToken.lastNAme;
+    setDataUser({email,nom:`${firstName} ${lastName}`})
+    console.log({dataUser});
+    setLogWithGoogle(true)
+    
+  } else {
+    console.log('Token does not contain email');
+  }
+
+},[])
+
+
+
+
+// console.log("Email:", email);
+// console.log("First Name:", firstName);
+// console.log("lastName:", lastName);
+
 
 const getselectedShoplist = useCallback(()=>{
 
@@ -104,12 +144,19 @@ const getselectedCategorie = useCallback(()=>{
 },[])
 
 useEffect(() => {
-    getData();
+    if(!logWithGoogle){
+        getData();
+    }else{
+        getDataGoogle
+    }
+    
 }, []);
 
 useEffect(() => {
+    console.log("ddd", dataUser);
+
     const fetchData = async () => {
-        if (dataUser !== null ) {
+        if (dataUser !== null || dataUser?.error?.length < 0 ) {
                 await getPanier(dataUser);
             await getCommandes(dataUser);
             console.log("dddc", dataUser);
@@ -146,7 +193,7 @@ useEffect(() => {
     const MRetrait: any[] | null = JSON.parse(ModRetrait);
     setModeRetrait(MRetrait);
     console.log({ ModeRetrait });
-}, []);
+}, []);  
 
 
 
@@ -159,46 +206,59 @@ useEffect(() => {
     setselectedProductId(parsedProductId);
 }, []);
 
+const getTotals =async()=>{
+    console.log({cartProducts});
+    
+    if(cartProducts!==null ){
+        const {total,qty} = cartProducts?.reduce((acc, item)=>{
+        const itemTotal = item.data.price * item.quantity
+        acc.total += itemTotal 
+        acc.qty +=item.quantity
+        return acc
+    },{
+        total:0,
+        qty:0
+    })
+    setCartTotalQty(qty)
+    console.log({total});
+    setCartTotalAmount(total)
+    return total
 
+}
+}
 
-//get  totalAmount and total quantity
-useEffect(()=>{
-        
-    const getTotals =()=>{
-        if(cartProducts!==null ){
-            const {total,qty} = cartProducts?.reduce((acc, item)=>{
-            const itemTotal = item.data.price.default * item.quantity
-            acc.total += itemTotal 
-            acc.qty +=item.quantity
-            return acc
-        },{
-            total:0,
-            qty:0
-        })
-        setCartTotalQty(qty)
-        setCartTotalAmount(total)
-    }    
-    }
+// get  totalAmount and total quantity
+useEffect(() => {
     getTotals()
-},[cartProducts])
+}, [cartProducts]);
 
 //Add panier
 
 const handleAddPanier = async (cartItem: any, dataUser: any) => {
-    //console.log("panier Total",cartTotalAmount.toFixed(2))
+    let total= await getTotals();
+    console.log("panier Total",total?.toFixed(2))
     await fetch("http://localhost:8080/api/panier/AddPanier", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ cartItem: cartItem, id_user: dataUser.id,prix: cartTotalAmount.toFixed(2) }),
+    body: JSON.stringify({ cartItem: cartItem, id_user: dataUser.id, prix: total?.toFixed(2) , ModeRetrait: ModeRetrait}),
     });
 };
 
 //Del panier
 const handleDelPanier = async (dataUser: any) => {
     if(dataUser.error){return}
-    await fetch(`http://localhost:8080/api/panier/${dataUser.id}`, {
-    method: "DELETE",
-    });
+    const url = `http://localhost:8080/api/panier/${dataUser.id}`;
+    const requestOptions:any = {
+        method: 'DELETE',
+    };
+    fetch(url, requestOptions)
+        .then(response => {
+        // Handle response
+        })
+        .catch(error => {
+            console.log(error)
+        });
+        
 };
 
 
@@ -220,12 +280,12 @@ const handleAddProductToCart = useCallback(
     });
     
     const cartItems: any = localStorage.getItem("CartItem");
-    const cProducts: any[] | null = JSON.parse(cartItems);
+    const cProducts: any[] | null |undefined = JSON.parse(cartItems);
     //console.log({ cProducts });
     await handleDelPanier(dataUser);
-    await handleAddPanier(cProducts, dataUser);
+    await handleAddPanier(cProducts,dataUser);
     },
-    [cartProducts]);
+    []);
 
 // Increase quantity
 const HandleCartQtyIncrease = useCallback(
@@ -253,6 +313,7 @@ const HandleCartQtyIncrease = useCallback(
         }
         setCartProducts(updatedCart);
     }
+console.log({updatedCart});
 
     await handleDelPanier(dataUser);
     await handleAddPanier(updatedCart, dataUser);
@@ -324,6 +385,8 @@ const handleClearCart = useCallback(async( dataUser: any) => {
 
 const getData = useCallback(async () => {
     try {
+        if(!logWithGoogle){
+
     const res = await fetch("http://localhost:8080/api/user/user", {
         method: "GET",
         credentials: "include",
@@ -335,6 +398,7 @@ const getData = useCallback(async () => {
     //console.log({jsonData});
 
     setDataUser(jsonData);
+}
     } catch (e) {
     console.error("get panier error", e);
     }
@@ -355,8 +419,8 @@ const getPanier = async (dataUser:any) => {
         throw new Error("Failed to fetch data");
     }
     const jsonData = await res.json();
-    //console.log({jsonData});
-    localStorage.setItem("CartItem", JSON.stringify(jsonData[0].cartItem));
+//console.log({jsonData});
+    localStorage.setItem("CartItem", JSON.stringify(jsonData[0]?.cartItem));
     setDataPanier(jsonData[0]);
     } catch (e) {
     console.error("getPanier error", e);
@@ -424,10 +488,11 @@ const getDataCard =  async () => {
 
 useEffect(() => {
     getDataCard(); 
-}, [card]);
+}, []);
 
 
 const value = {
+    logWithGoogle,
     selectedCategorie,
     selectedShoplist,
     card,
@@ -453,6 +518,7 @@ const value = {
     handleAddPanier,
     handleDelPanier,
     getData,
+    getDataGoogle,
     getPanier,
     getCommandes,
     getAllCommandes,

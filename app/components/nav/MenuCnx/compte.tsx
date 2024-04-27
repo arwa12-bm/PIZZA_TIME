@@ -45,8 +45,17 @@ return (
             handleMenu();
             }}>
         <TbShoppingBagCheck size={30} />
-        <p className="text-2xl">Commandes</p>
+        <p className="text-2xl">Mes Commandes</p>
     </div>
+    {dataUser?.role === "admin" &&
+    <div className="flex gap-4 cursor-pointer"
+        onClick={() => {
+            router.push("/admin");
+            handleMenu();
+            }}>
+        <TbShoppingBagCheck size={30} />
+        <p className="text-2xl">Espace Admin</p>
+    </div>}
     <div className="flex gap-4">
         <CiStar size={30} />
         <p className="text-2xl">Fidélité</p>

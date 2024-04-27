@@ -15,12 +15,15 @@ const FormCnx = () => {
 const [type, setType] = useState("Connexion");
 const [isSignup, setIsSignup] = useState(false);
 const [isMotdepasseoublié, setIsMotdepasseoublié] = useState(false);
+const [isModifierMotdepass, setIsModifierMotdepass] = useState(false);
 const [isConditionsGénéralesUtilisation, setIsConditionsGénéralesUtilisation] = useState(false);
 const [isConditionsGénéralesVente, setIsConditionsGénéralesVente] = useState(false);
 const [isPolitiquesConfidentialité, setIsPolitiquesConfidentialité] = useState(false);
 const [isLoading, setIsLoading] = useState(false);
 const [isClicked, setIsClicked] = useState(true);
-const { dataUser } = useCard();
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const { dataUser,logWithGoogle } = useCard();
 
 useEffect(() => {
 if (dataUser) {
@@ -32,12 +35,19 @@ if (dataUser) {
 function handleMenuCnx() {
 setIsSignup(false);
 setIsMotdepasseoublié(false)
+setIsModifierMotdepass(false)
 setIsConditionsGénéralesUtilisation(false)
 setIsConditionsGénéralesVente(false)
 setIsPolitiquesConfidentialité(false)
 setIsLoading(false);
 setType("Connexion");
 }
+
+function handleSignup() {
+    setIsSignup(true);
+    setIsLoading(false);
+    setType("Inscription");
+    }
 
 //close connex menu
 function handleMenu() {
@@ -49,7 +59,7 @@ return (
     <div className="fixed  flex flex-col min-h-screen top-0 right-0 bg-white  h-screen z-30 w-[350px]  ">
         <div className="flex w-full justify-content  py-3">
         <button
-            onClick={type === "Inscription" || type === "Mot de passe oublié" || type === "Conditions Générales d’Utilisation (CGU)" || type === "Conditions Générales de vente (CGV)"
+            onClick={type === "Inscription" || type === "Mot de passe oublié" || type === "Conditions Générales d’Utilisation (CGU)" || type === "Conditions Générales de vente (CGV)"|| type === "Modifier votre Mot de passe"
             ? handleMenuCnx : handleMenu}
         >
             <FaChevronLeft size={20} className="pt-1 mt-1" />
@@ -60,7 +70,7 @@ return (
         </div>
         <hr className="w-[100%] my-2 " />
         <div className="flex-grow overflow-y-auto justify-content-between">
-        {!dataUser?.error ? (
+        {!dataUser?.error || logWithGoogle ? (
             <Compte handleMenu={handleMenu} />
         ) : (
             <>
@@ -73,9 +83,13 @@ return (
             )} 
             {!isSignup && !isMotdepasseoublié &&  !isConditionsGénéralesUtilisation && !isConditionsGénéralesVente && !isPolitiquesConfidentialité && (
                 <Login
+                email={email}
+                setEmail={setEmail}
+
                 handleMenu={handleMenu}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
+                handleSignup={handleSignup}
                 setIsSignup={setIsSignup}
                 setIsMotdepasseoublié={setIsMotdepasseoublié}
                 setIsConditionsGénéralesUtilisation={setIsConditionsGénéralesUtilisation}
@@ -86,6 +100,12 @@ return (
             )}
             {isMotdepasseoublié && (
                 <Motdepasseoublié
+                handleSignup={handleSignup}
+                handleMenuCnx={handleMenuCnx}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+                setemail={setEmail}
+                setPassword={setPassword}
                 />
             )}
             {isConditionsGénéralesUtilisation && (<ConditionsGénéralesUtilisation />)}

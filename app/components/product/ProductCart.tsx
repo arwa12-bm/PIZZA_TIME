@@ -14,29 +14,30 @@ const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
 
   return (
     <div
-      className="relative col-span-1 h-full cursor-pointer border-[1.2px] border-slate-200 bg-slate-50 rounded-sm
-    transition hover:scale-105  text-sm "
+      className="relative col-span-1 h-full cursor-pointer border-[1.2px] border-black rounded-md bg-white 
+    transition hover:scale-105  text-sm  "
     >
-      <div className="flex flex-col gap-2">
-        <div className="aspect-square overflow-hidden relative w-full rounded-md h-[260px]">
+      <div className="flex flex-col gap-2 p-1">
+        <div className="aspect-square overflow-hidden relative w-full rounded-md h-[260px] ">
           <Image
             fill
             src={data.image}
             alt=""
-            onClick={() => router.push(`/product/${data.id}`)}
+            onClick={() => {localStorage.setItem("selectedShoplist",JSON.stringify(data));
+                            router.push(`/menu/1`)}}
           />
         </div>
         <div className="grid grid-cols-2  justify-between  text-[15px] font-semibold px-1  w-full  text-green-600">
-          <div className="col-span-1 w-[200%]">{data.Company}</div>
-          <div className="flex flex-col text-right">{data.etat}</div>
         </div>
-        <div className=" px-1 text-[15px] flex gap-1 ">
-          <div>{data.Address},</div>
-          <div>{data.PostalCode}</div>
-          <div>{data.town}</div>
+        <div className="text-[15px] font-semibold px-1  text-center">{data.Company}</div>
+
+        <div className={data.etat==="OUVERT"? `text-[15px] font-semibold px-1 text-center text-green-600`: 'text-[15px] font-semibold px-1 text-center'}>{data.etat}</div>
+
+        <div className=" px-1 text-[15px]  text-center">
+          <div>{data.Address}, {data.PostalCode} {data.town}</div>
         </div>
-        <div>
-          <div className="flex gap-2 p-2">
+        {/* <div>
+          <div className="flex gap-2 p-2 items-center">
             <MdOutlinePayments
               size={40}
               className="rounded-3xl p-1 bg-green-600 text-white "
@@ -50,7 +51,7 @@ const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
               className="rounded-3xl p-1 bg-green-600 text-white"
             />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

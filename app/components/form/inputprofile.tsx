@@ -12,10 +12,11 @@ interface InputProps{
     label?:string,
     disabled?:boolean,
     required?:boolean,
-    register: UseFormRegister<FieldValues>,
+    register?: UseFormRegister<FieldValues>,
     errors :FieldErrors
     Icon?:IconType,
     value?:any,
+    none?:boolean,
     onChange?:(e:any)=>void
 }
 const InputProfile :React.FC<InputProps>= ({
@@ -25,6 +26,7 @@ const InputProfile :React.FC<InputProps>= ({
     errors,
     Icon,
     value,
+    none,
     onChange}) => {
     
     return ( 
@@ -37,7 +39,7 @@ const InputProfile :React.FC<InputProps>= ({
                 autoComplete="off"
                 id={id}
                 disabled={disabled}
-                {...register(id,{required})}
+                {...(register ? register(id, { required }) : {})} 
                 type={type}
                 value={value}
                 placeholder={placeholder}

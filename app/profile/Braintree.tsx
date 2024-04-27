@@ -6,14 +6,15 @@ import { formatPrice } from '../utils/formatPrice';
 
 const Subscriptions = () => {
     const [purchaseComplete, setPurchaseComplete] = useState(false);
-    const { cartTotalAmount,handleClearCart } = useCard();
-    console.log("cc", cartTotalAmount.toFixed(2))
+    const { cartTotalAmount,handleClearCart,dataUser } = useCard();
+    const [inst,setInst]=useState<any>()
     let instance:any;
 
 
     const buy = async () => {
         try {
-            const { nonce } = await instance.requestPaymentMethod();
+            // console.log("cc", cartTotalAmount.toFixed(2))
+            const { nonce } = await inst.requestPaymentMethod();
             const res = await fetch('http://localhost:8080/api/user/checkout', {
                 method: 'POST',
                 headers: {
@@ -24,21 +25,20 @@ const Subscriptions = () => {
 
             const result = await res.json();
             if (result.result.result === "success") {
-                try {
-                    const response = await fetch('http://localhost:8080/api/panier/18', {
+                
+                    const url = `http://localhost:8080/api/panier/${dataUser.id}`;
+                    const requestOptions:any = {
                         method: 'PUT',
-                    });
-                    if (!response.ok) {
-                        throw new Error('Failed to update shopping cart');
-                    }
-                    setPurchaseComplete(true);
-                    //handleClearCart();
-                } catch (error) {
-                    console.error('Error updating shopping cart:', error);
-                    // Handle the error
-                }
-            }else {
-                // Handle other result cases as needed
+                    };
+                    fetch(url, requestOptions)
+                        .then(response => {
+                            setPurchaseComplete(true);
+                            handleClearCart(dataUser);
+                        })
+                        .catch(error => {
+                            throw new Error('Failed to update shopping cart');
+                        });
+                        
             }
         } catch (error) {
             console.error('Error during checkout:', error);
@@ -56,7 +56,7 @@ const Subscriptions = () => {
                 <div>
                     <DropIn
                         options={{ authorization: "sandbox_q7nc2w95_6hjmcbvghc9srkkf" }}
-                        onInstance={(inst) => (instance = inst)}
+                        onInstance={(inst) => {(instance = inst);setInst(inst)}}
                     />
                     <Button label={"Submit"} outline small onClick={buy} />
                 </div>

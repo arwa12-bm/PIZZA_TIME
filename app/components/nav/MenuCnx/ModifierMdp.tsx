@@ -1,39 +1,42 @@
 "use client";
-import { TiTick } from "react-icons/ti";
+
+import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { FaUserCircle } from "react-icons/fa";
-import { CiMobile3 } from "react-icons/ci";
-import { MdOutlineMarkEmailRead } from "react-icons/md";
 import { PiLockKeyThin } from "react-icons/pi";
 
 import Button from "../../form/Button";
 import Input from "../../form/Input";
 import { useState } from "react";
+import { TbCircleNumber1} from "react-icons/tb";
+import { TiTick } from "react-icons/ti";
 
-interface SignupProps {
-handleMenuCnx: () => void;
-isLoading: boolean;
-setIsLoading: (val: boolean) => void;
-}
+interface ModifierMdpProps {
+    handleMenuCnx: () => void;
+    isLoading: boolean;
+    setIsLoading: (val: boolean) => void;
+    email:string
+    setEmail:Function
+    }
+    
+const ModifierMdp:React.FC<ModifierMdpProps>= ({
+    handleMenuCnx,
+    isLoading,
+    setIsLoading,
+    email,
+    setEmail,
+    }) => {
 
-const Signup: React.FC<SignupProps> = ({
-handleMenuCnx,
-isLoading,
-setIsLoading,
-}) => {
-const {
-register: registerSignup,
-handleSubmit: handleSubmitSignup,
-formState: { errors: errorsSignup },
-} = useForm<FieldValues>({
-defaultValues: {
-    nom: "",
-    prénom: "",
-    télephone: "",
-    email: "",
-    password: "",
-},
-});
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        } = useForm<FieldValues>({
+        defaultValues: {
+            email: "",
+        },
+        });
+
+
 const [jsonData, setjsonData] = useState<any>(null);
 const [password, setPassword] = useState("");
 const [password1, setPassword1] = useState("");
@@ -57,69 +60,42 @@ const isPasswordValid = isValidPasswordLowerAndUpper && isValidPasswordDigit && 
 
 const isButtonDisabled = !isPasswordValid;
 
-const onSubmitSignup: SubmitHandler<FieldValues> = async (data) => {
-setIsLoading(true);
-const { password1, ...result } = data;
-const res = await fetch("http://localhost:8080/api/user/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(result),
-});
-console.log({ res });
-const jsonData = await res.json();
-setjsonData(jsonData);
-console.log({ jsonData });
-if (jsonData.message === "success") {
+
+const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    
     handleMenuCnx();
-}
-};
+    data.email = email
+    console.log({email});
+    console.log(data)
+    setIsLoading(true);
+    const { password1, ...result } = data;
+    const res = await fetch("http://localhost:8080/api/user/password", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(result),
+    });
+    console.log({ res });
+    const jsonData = await res.json();
+    setjsonData(jsonData);
+    console.log({ jsonData });
+    if (jsonData.message === "success") {
+        setEmail(email)
+        handleMenuCnx();
+    }
+    };
+    
+
 return (
-<>
-    <Input
-    id="nom"
-    required
-    register={registerSignup}
-    errors={errorsSignup}
-    type="text"
-    placeholder="Saisissez votre nom"
-    label="Nom"
-    Icon={FaUserCircle}
-    />
-    <Input
-    id="prénom"
-    required
-    register={registerSignup}
-    errors={errorsSignup}
-    type="text"
-    placeholder="Saisissez votre prénom"
-    label="Prénom"
-    Icon={FaUserCircle}
-    />
-    <Input
-    id="télephone"
-    required
-    register={registerSignup}
-    errors={errorsSignup}
-    type="text"
-    placeholder="06 12 34 56 78"
-    label="Télephone"
-    Icon={CiMobile3}
-    />
-    <Input
-    id="email"
-    required
-    register={registerSignup}
-    errors={errorsSignup}
-    type="email"
-    placeholder="Saisissez votre e-mail"
-    label="E-mail"
-    Icon={MdOutlineMarkEmailRead}
-    />
+<div>
+<div className="p-2 text-sm flex gap-1 ">
+        <TbCircleNumber1 size={25}  className="bg-black text-white rounded-full"/>
+        <p className="pt-1">Réinitialiser mon mot de passe</p>
+    </div>
     <Input
     id="password"
     required
-    register={registerSignup}
-    errors={errorsSignup}
+    register={register}
+    errors={errors}
     type="password"
     placeholder="Saisissez votre mot de passe"
     label="Password"
@@ -129,8 +105,8 @@ return (
     />
     <Input
     id="password1"
-    register={registerSignup}
-    errors={errorsSignup}
+    register={register}
+    errors={errors}
     type="password"
     placeholder="Comfirmez votre mot de passe"
     value={password1}
@@ -141,7 +117,7 @@ return (
     {password1 !== "" && password1 !== password && (
         <p className="text-red-500">Les mots de passe ne correspondent pas</p>
     )}
-    {password1 === password  && password.length >0 && (
+    {password1 === password  && password.length >0 &&(
         <p className="text-green-500 px-4">Les mots de passe correspondent</p>
     )}{" "}
     {password && (
@@ -175,16 +151,15 @@ return (
         <p className="text-red-500 px-2">{jsonData?.message}</p>
     )}
     </div>
-
-    <div className="w-full p-5">
     <Button
-        label={isLoading ? "Loading" : "Je crée mon compte"}
-        onClick={handleSubmitSignup(onSubmitSignup)}
+        label="réinitialisez votre mot de passe"
+        onClick={handleSubmit(onSubmit)} 
         disabled={isButtonDisabled}
     />
-    </div>
-</>
+        
+</div> 
+
 );
 };
 
-export default Signup;
+export default ModifierMdp;

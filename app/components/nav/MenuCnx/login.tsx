@@ -4,14 +4,20 @@ import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { MdOutlineMarkEmailRead } from "react-icons/md";
 import { PiLockKeyThin } from "react-icons/pi";
+import { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
+import { SiFacebook } from "react-icons/si";
 
+
+import useCard from "@/app/hooks/useCard";
 import Button from "../../form/Button";
 import Input from "../../form/Input";
-import useCard from "@/app/hooks/useCard";
-import { useState } from "react";
+
+
 
 interface LoginProps {
 handleMenu: () => void;
+handleSignup: () => void;
 isLoading: boolean;
 setIsLoading: (val: boolean) => void;
 setIsSignup: (val: boolean) => void;
@@ -20,9 +26,12 @@ setIsConditionsGénéralesUtilisation: (val: boolean) => void;
 setIsConditionsGénéralesVente: (val: boolean) => void;
 setIsPolitiqueConfidentialité: (val: boolean) => void;
 setType: (val: string) => void;
+email:string;
+setEmail:Function
 }
 const Login: React.FC<LoginProps> = ({
 handleMenu,
+handleSignup,
 isLoading,
 setIsLoading,
 setIsSignup,
@@ -31,7 +40,11 @@ setIsConditionsGénéralesUtilisation,
 setIsConditionsGénéralesVente,
 setIsPolitiqueConfidentialité,
 setType,
+email,
+setEmail
 }) => {
+
+
 
 
 const {
@@ -45,11 +58,27 @@ defaultValues: {
 },
 });
 
-function handleSignup() {
-setIsSignup(true);
-setIsLoading(false);
-setType("Inscription");
+async function handleGoogle(){
+    try {
+        const response = await fetch('http://localhost:8080/api/user/auth/google/callback', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any additional headers if needed
+            },
+            credentials: 'include', // Include cookies in the request
+            });
+        
+            const data = await response.json();
+        
+            console.log(data);
+        } catch (error) {
+            console.error("get panier error", error);
+        }
 }
+
+
+
 
 function handleMotdepasseoublié() {
     setIsMotdepasseoublié(true);
@@ -73,7 +102,7 @@ function handlePolitiqueConfidentialité() {
     setIsLoading(false);
     setType("Politique de confidentialité");
     }
-const { getData,dataUser,getCartProducts } = useCard();
+const { getData,dataUser ,getDataGoogle,logWithGoogle} = useCard();
 const[jsonData,setjsonData]=useState<any>(null)
 
 const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -90,9 +119,13 @@ setjsonData(jsonData)
 console.log({jsonData})
 if(jsonData.message === "success"){
     getData();
-    getCartProducts()
     handleMenu();
 }
+if(logWithGoogle){
+    getDataGoogle
+    handleMenu();
+}
+
     
 };
 
@@ -100,13 +133,25 @@ if(jsonData.message === "success"){
 
 return (
 <>
-    <div className="">
+    <div>
+    <div  className="p-2 border-b-[1px] items-center">
+        <p className="text-center text-md" onClick={handleGoogle}>se connecter avec</p>
+        <div className="flex gap-4 justify-center justify-content">
+        <Link href="http://localhost:8080/api/user/google">
+        <FcGoogle size={30} className="rounded-full m-4 cursor-pointer transition hover:scale-105" />
+        </Link>
+        <p className="pt-4">ou</p>
+        <SiFacebook  size={30} className="rounded-full bg-bleu-200 m-4 cursor-pointer transition hover:scale-105 "/>
+        </div>
+    </div>
     <Input
     id="email"
         required
         register={register}
         errors={errors}
         type="email"
+        value={email}
+        onChange={(e:any)=>setEmail(e.target.value)}
         placeholder="Saisissez votre e-mail"
         label="E-mail"
         Icon={MdOutlineMarkEmailRead}

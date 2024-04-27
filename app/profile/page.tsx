@@ -18,40 +18,31 @@ import Commandes from "./Commandes";
 import InputButton from "../components/form/InputButton";
 import { DropdownAppProfile } from "../components/form/dropDownProfile";
 import ItemCommande from "../commandes/ItemCommande";
+import Heading from "../cart/Heading";
+import FormAddPlat from "../admin/formAddPlat";
+import InfoUser from "./InfoUser";
+import FormAddCategorie from "../admin/formAddCategorie";
 
 const Profile = () => {
 const {
 selectedShoplist,
 dataUser,
-getData,
 getAllCommandes,
-AllCommande,
 cartProducts,
-dataCommande,
 cartTotalAmount,
 } = useCard();
-useEffect(() => {
-getAllCommandes();
-}, []);
 
-const [formData, setFormData] = useState(dataUser);
-const [profile, setProfile] = useState(true);
-const [commande, setCommande] = useState(false);
+
+getAllCommandes();
+
+
+
+
+
 
 const [selectedProductData, setSelectedProductData] = useState({});
 
-const {
-register: registerSignup,
-handleSubmit: handleSubmitUpdate,
-formState: { errors: errorsSignup },
-} = useForm<FieldValues>({
-defaultValues: {
-    nom: "",
-    prénom: "",
-    télephone: "",
-    email: "",
-},
-});
+
 
 const router = useRouter();
 useEffect(() => {
@@ -62,19 +53,8 @@ setSelectedProductData(
 );
 }, []);
 
-const handleCommande = () => {
-setProfile(false);
-setCommande(true);
-};
+console.log({dataUser});
 
-const onSubmitUpdate: SubmitHandler<FieldValues> = async (formData) => {
-await fetch(`http://localhost:8080/api/user/${dataUser?.id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formData),
-});
-getData();
-};
 
 return (
 <div>
@@ -85,111 +65,13 @@ return (
         <LuUserCircle2 size={30} />
         <p className="text-xl">Bonjour {dataUser?.nom} </p>
         </div>
-        <div className="flex gap-1 ">
-        {dataUser?.role === "admin" && (
-            <DropdownAppProfile
-            title="Espace Admin"
-            handleCommande={handleCommande}
-            />
-        )}
-        </div>
+   
     </div>
-    {commande && (
-        <>
-        {AllCommande &&
-            AllCommande.map((item: any, index: number) => {
-            return <ItemCommande index={index + 1} item={item} />;
-            })}
-        </>
-    )}
-    {profile && (
+
+    
         <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
         <div className="col-span-1  sm:w-[120%]  md:w-[130%] lg:w-[130%] xl:w-[130%]">
-            <div className=" border-[1.2px] border-slate-200 bg-white shadow-md  rounded-2xl m-4  ">
-            <div className="flex justify-between">
-                <div className="flex p-2 gap-1">
-                <IoIosInformationCircleOutline size={25} />
-                <p className="">Informations générales</p>
-                </div>
-                <div className="p-2">
-                <MdSaveAs
-                    onClick={handleSubmitUpdate(onSubmitUpdate)}
-                    size={30}
-                    className="bg-white text-gray-600 rounded-md"
-                />
-                </div>
-            </div>
-            <div className="p-2 grid md:grid-cols-2  gap-2">
-                <InputProfile
-                id="nom"
-                required
-                register={registerSignup}
-                errors={errorsSignup}
-                type="text"
-                placeholder="Saisissez votre nom"
-                label="Nom"
-                Icon={LuUserCircle2}
-                value={formData?.nom}
-                onChange={(e: any) =>
-                    setFormData({
-                    ...formData,
-                    nom: e.target.value,
-                    })
-                }
-                />
-                <InputProfile
-                id="prénom"
-                required
-                register={registerSignup}
-                errors={errorsSignup}
-                type="text"
-                placeholder="Saisissez votre prénom"
-                label="Prénom"
-                Icon={LuUserCircle2}
-                value={formData?.prénom}
-                onChange={(e: any) =>
-                    setFormData({
-                    ...formData,
-                    prénom: e.target.value,
-                    })
-                }
-                />
-                <InputProfile
-                id="télephone"
-                required
-                register={registerSignup}
-                errors={errorsSignup}
-                type="text"
-                placeholder="06 12 34 56 78"
-                label="Télephone"
-                Icon={CiMobile3}
-                value={formData?.télephone}
-                onChange={(e: any) =>
-                    setFormData({
-                    ...formData,
-                    télephone: e.target.value,
-                    })
-                }
-                />
-                <InputProfile
-                id="email"
-                required
-                register={registerSignup}
-                errors={errorsSignup}
-                type="email"
-                placeholder="Saisissez votre e-mail"
-                label="E-mail"
-                Icon={MdOutlineMarkEmailRead}
-                value={formData?.email}
-                onChange={(e: any) =>
-                    setFormData({
-                    ...formData,
-                    email: e.target.value,
-                    })
-                }
-                />
-            </div>
-            </div>
+            <InfoUser />
             <Address />
             <Cartes />
         </div>
@@ -273,7 +155,6 @@ return (
             </div>
         </div>
         </div>
-    )}
     </Container>
 </div>
 );
