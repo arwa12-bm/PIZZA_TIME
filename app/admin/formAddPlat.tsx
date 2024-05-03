@@ -213,7 +213,7 @@ const FormAddPlat = () => {
 
     {basicCompositions.map((composition:any, index:any) => (
         
-        <div className="flex">
+        <div className="flex" key={index}>
             <div className="w-[100%]">
                 <InputProfile
                 key={index}

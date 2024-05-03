@@ -12,10 +12,8 @@ const [selectedVille, setSelectedVille] = useState(1);
 const handleVilleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedVille(parseInt(event.target.value)); // Mettre à jour l'état avec la nouvelle valeur sélectionnée
 };
-const { selectedIdShopList } = useCard();
-const infocart: any = Object.values(card.shoplist).filter(
-    (el: any) => el.shopid === selectedIdShopList
-);
+const { selectedShoplist } = useCard();
+
 const toggleModal = () => {
     setShowModal(!showModal);
 };
@@ -29,8 +27,7 @@ const renderTabContent = () => {
     if (activeTab === "general") {
     return (
         <div className="tab-content active">
-        {infocart.map((item: any, id: number) => (
-            <div key={id}>
+            <div >
             <div style={{ display: "flex" }}>
                 <img
                 src="https://www.commande-pizzatime.fr/CESARWEB_WEB/address_icon.svg"
@@ -40,16 +37,14 @@ const renderTabContent = () => {
                 &nbsp;&nbsp;&nbsp;
                 <div className="text-capitalize">
                 <p>
-                    {item.Address}, {item.PostalCode} {item.town}
+                    {selectedShoplist.Address}, {selectedShoplist.PostalCode} {selectedShoplist.town}
                 </p>
                 </div>
             </div>
             </div>
-        ))}
         <br />
         <br />
-        {infocart.map((item: any, id: number) => (
-            <div key={id}>
+            <div >
             <div style={{ display: "flex" }}>
                 <img
                 src="https://www.commande-pizzatime.fr/CESARWEB_WEB/phone_icon.svg"
@@ -57,10 +52,9 @@ const renderTabContent = () => {
                 alt="ADRESSE"
                 />{" "}
                 &nbsp;&nbsp;&nbsp;
-                <p>{item.tel}</p>
+                <p>{selectedShoplist.tel}</p>
             </div>
             </div>
-        ))}
         <div className="text-capitalize">
             <div style={{ display: "flex" }}>
             <img
@@ -95,8 +89,7 @@ const renderTabContent = () => {
     } else if (activeTab === "horaires") {
     return (
         <div className="tab-content active">
-        {infocart.map((item: any, id: number) => (
-            <div key={id}>
+            <div >
             <p>
                 <img
                 src="https://www.commande-pizzatime.fr/CESARWEB_WEB/ext/click.svg"
@@ -124,7 +117,6 @@ const renderTabContent = () => {
             <br /> */}
             </ul>
             </div>
-        ))}
         </div>
     );
     } else if (activeTab === "livraison") {
@@ -135,8 +127,7 @@ const renderTabContent = () => {
         role="tabpanel"
         aria-labelledby="third-tab"
         >
-        {infocart.map((item: any, id: number) => (
-            <div key={id}>
+            <div >
             <div className="col-12 d-flex justify-content align-items-center">
                 <select
                 id="selectville"
@@ -148,25 +139,24 @@ const renderTabContent = () => {
                 }}
                 >
                 <option selected value="1">
-                    {item.villelivraison.ville1.nom}
+                    {selectedShoplist.villelivraison.ville1.nom}
                 </option>
-                <option value="2">{item.villelivraison.ville2.nom}</option>
-                <option value="3">{item.villelivraison.ville3.nom}</option>
-                <option value="4">{item.villelivraison.ville4.nom}</option>
-                <option value="5">{item.villelivraison.ville5.nom}</option>
-                <option value="6">{item.villelivraison.ville6.nom}</option>
-                <option value="7">{item.villelivraison.ville7.nom}</option>
-                <option value="8">{item.villelivraison.ville8.nom}</option>
+                <option value="2">{selectedShoplist.villelivraison.ville2.nom}</option>
+                <option value="3">{selectedShoplist.villelivraison.ville3.nom}</option>
+                <option value="4">{selectedShoplist.villelivraison.ville4.nom}</option>
+                <option value="5">{selectedShoplist.villelivraison.ville5.nom}</option>
+                <option value="6">{selectedShoplist.villelivraison.ville6.nom}</option>
+                <option value="7">{selectedShoplist.villelivraison.ville7.nom}</option>
+                <option value="8">{selectedShoplist.villelivraison.ville8.nom}</option>
                 </select>
             </div>
             <p>
-                Frais de livraison : {item.villelivraison.ville1.fraislivraison}
+                Frais de livraison : {selectedShoplist.villelivraison.ville1.fraislivraison}
             </p>
             <p>
-                Minimum de commande :{item.villelivraison.ville1.mincommande}{" "}
+                Minimum de commande :{selectedShoplist.villelivraison.ville1.mincommande}{" "}
             </p>
             </div>
-        ))}
         </div>
     );
     }

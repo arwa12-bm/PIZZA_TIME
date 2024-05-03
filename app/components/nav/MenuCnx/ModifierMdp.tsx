@@ -16,6 +16,7 @@ interface ModifierMdpProps {
     setIsLoading: (val: boolean) => void;
     email:string
     setEmail:Function
+    setPassword:Function
     }
     
 const ModifierMdp:React.FC<ModifierMdpProps>= ({
@@ -24,6 +25,7 @@ const ModifierMdp:React.FC<ModifierMdpProps>= ({
     setIsLoading,
     email,
     setEmail,
+    setPassword,
     }) => {
 
     const {
@@ -38,7 +40,7 @@ const ModifierMdp:React.FC<ModifierMdpProps>= ({
 
 
 const [jsonData, setjsonData] = useState<any>(null);
-const [password, setPassword] = useState("");
+const [password, setpassword] = useState("");
 const [password1, setPassword1] = useState("");
 
 const containsLowerAndUpper = (str:any) => {
@@ -66,9 +68,9 @@ const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     handleMenuCnx();
     data.email = email
     console.log({email});
-    console.log(data)
     setIsLoading(true);
     const { password1, ...result } = data;
+    console.log({data})
     const res = await fetch("http://localhost:8080/api/user/password", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -80,6 +82,7 @@ const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     console.log({ jsonData });
     if (jsonData.message === "success") {
         setEmail(email)
+        setPassword(password)
         handleMenuCnx();
     }
     };
@@ -100,7 +103,7 @@ return (
     placeholder="Saisissez votre mot de passe"
     label="Password"
     value={password}
-    onChange={(e:any) => setPassword(e.target.value)}
+    onChange={(e:any) => setpassword(e.target.value)}
     Icon={PiLockKeyThin}
     />
     <Input

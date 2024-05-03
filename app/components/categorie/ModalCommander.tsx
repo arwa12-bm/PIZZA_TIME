@@ -8,6 +8,8 @@ import Button from "../form/Button";
 import { card } from "@/app/utils/products";
 import InputSupp from "../form/InputSupp";
 import useCard from "@/app/hooks/useCard";
+import { setIsValidation ,store} from "@/app/hooks/store";
+import { useSnapshot } from "valtio";
 
 interface ModalCommanderProps {
 Open: boolean;
@@ -25,6 +27,7 @@ data,
 CompList,
 }) => {
 if (!Open) return null;
+const {isValidation}=useSnapshot(store)
 
 const [loading, setLoading] = useState(false);
 const [checkedItems, setCheckedItems] = useState({
@@ -105,8 +108,9 @@ if (Existingindex === -1 || cartProducts === null) {
     localStorage.setItem("ItemList", JSON.stringify(null));
 }
 
-setLoading(true);
-onClose();
+setLoading(true)
+onClose()
+setIsValidation(!isValidation)
 };
 
 return (

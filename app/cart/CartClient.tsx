@@ -9,6 +9,8 @@ import ItemCentent from "./ItemCentent";
 import useCard from "../hooks/useCard";
 import { useEffect, useState } from "react";
 import Subscriptions from "../profile/Braintree";
+import FormCnx from "../components/nav/MenuCnx/FormCnx";
+import toast from "react-hot-toast";
 
 interface CartClientProps {
 data: any;
@@ -23,6 +25,7 @@ selectedCategorie,
 getselectedCategorie,
 } = useCard();
 const [showPay, setShowPay] = useState(false);
+const [showMenuCnx, setShowMenuCnx] = useState(false);
 const [cartshow, setCartshow] = useState(false);
 const [cmdPass, setCmdPass] = useState(false);
 
@@ -33,6 +36,7 @@ getselectedCategorie();
 //console.log("xx",data)
 const handleCheckout = async () => {
 setShowPay(true);
+setShowMenuCnx(true)
 };
 const handleEnAttente =async()=>{
     const url = `http://localhost:8080/api/panier/EnAttente/${dataUser.id}`;
@@ -49,6 +53,7 @@ const handleEnAttente =async()=>{
 }
 
 if (!cartProducts || cartProducts.length === 0) {
+
 return (
     <div className="flex flex-col items-center">
     <div className="text-2xl">Your cart is empty</div>
@@ -66,8 +71,10 @@ return (
 }
 
 if (showPay) {
+    toast.success('Hello, world!')
 return (
     <div className="p-4">
+        {showMenuCnx && <FormCnx setShowMenuCnx={setShowMenuCnx} showMenuCnx={showMenuCnx}/>}
         <div className="flex gap-8">
             <Button label="Espace" small outline onClick={ () =>{ handleEnAttente(); setCmdPass(true) ;handleClearCart(dataUser)  }} />
             <Button label="Cart" small outline onClick={() => setCartshow(true)} />

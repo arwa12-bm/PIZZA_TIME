@@ -12,7 +12,7 @@ import Cookies from 'js-cookie';
 
 
 //import { card } from "../utils/products";
-import toast from "react-hot-toast";
+import toast from 'react-hot-toast';
 
 type CartContextType = {
 selectedProductData: any;
@@ -166,16 +166,16 @@ useEffect(() => {
 }, [dataUser]);
 
 
-useEffect(() => {
-        if (cartProducts !== null) {  
-            getPanier(dataUser)
-        }
-    }, [dataPanier]);
+// useEffect(() => {
+//         if (cartProducts !== null  && dataUser!==null && dataUser?.error?.lenth > 0) {  
+//             getPanier(dataUser)
+//         }
+//     }, [dataUser]);
 
 //get List of item in cart
 useEffect(()=>{
     const getCartProducts =()=>{
-        if (dataPanier !== null) {
+        if (dataPanier !== null ) {
             const cartItems: any = localStorage.getItem("CartItem");
             if (cartItems !== "undefined") {
                 const cProducts = JSON.parse(cartItems);
@@ -183,8 +183,13 @@ useEffect(()=>{
             }
             }
     }
-    getCartProducts()
-},[])
+    if( !dataUser?.error && dataUser !== null ){
+        getCartProducts()
+
+    }
+    
+    
+},[dataPanier])
 
 
 
@@ -229,7 +234,9 @@ const getTotals =async()=>{
 
 // get  totalAmount and total quantity
 useEffect(() => {
-    getTotals()
+    if(cartProducts !== null){
+        getTotals()
+    }
 }, [cartProducts]);
 
 //Add panier
@@ -242,6 +249,7 @@ const handleAddPanier = async (cartItem: any, dataUser: any) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ cartItem: cartItem, id_user: dataUser.id, prix: total?.toFixed(2) , ModeRetrait: ModeRetrait}),
     });
+    toast.success("Votre produit est ajouter avec succés");
 };
 
 //Del panier
@@ -375,26 +383,34 @@ const handleRemoveProductFromCart = useCallback(
 //clear Cart
 const handleClearCart = useCallback(async( dataUser: any) => {
     setCartProducts(null);
+    setDataPanier(null)
     setCartTotalQty(0);
     setCartTotalAmount(0);
     localStorage.setItem("supList", JSON.stringify(null));
     localStorage.setItem("ItemList", JSON.stringify(null));
     localStorage.setItem("CartItem", JSON.stringify(null));
-    await handleDelPanier(dataUser);
+    // await handleDelPanier(dataUser);
 }, [cartProducts]);
 
 const getData = useCallback(async () => {
     try {
+        let jsonData :any
         if(!logWithGoogle){
+            const url = `http://localhost:8080/api/user/user`;
+            const requestOptions:any = {
+                method: 'GET',
+                credentials: "include",
+    
+            };
+            await fetch(url, requestOptions)
+                .then(async(res )=> {
+                    jsonData = await res.json();
+                })
+                .catch(error => {
+                    throw new Error("Failed to fetch data",error);
+                });
 
-    const res = await fetch("http://localhost:8080/api/user/user", {
-        method: "GET",
-        credentials: "include",
-    });
-    if (!res.ok) {
-        throw new Error("Failed to fetch data");
-    }
-    const jsonData = await res.json();
+    
     //console.log({jsonData});
 
     setDataUser(jsonData);
@@ -405,41 +421,49 @@ const getData = useCallback(async () => {
 }, []);
 
 const getPanier = async (dataUser:any) => {
-    if(dataUser?.error){return;}
+    let jsonData:any
+    if( !dataUser?.error || dataUser === null) {
     try {
-        
-    const res = await fetch(
-        `http://localhost:8080/api/panier/${dataUser.id}`,
-        {
-        method: "GET",
-        credentials: "include",
-        }
-    );
-    if (!res.ok) {
-        throw new Error("Failed to fetch data");
-    }
-    const jsonData = await res.json();
+        const url = `http://localhost:8080/api/panier/${dataUser.id}`;
+        const requestOptions:any = {
+            method: 'GET',
+            credentials: "include",
+
+        };
+        await fetch(url, requestOptions)
+            .then(async(res )=> {
+                jsonData = await res.json();
+            })
+            .catch(error => {
+                throw new Error("Failed to fetch data",error);
+            });
+
 //console.log({jsonData});
     localStorage.setItem("CartItem", JSON.stringify(jsonData[0]?.cartItem));
     setDataPanier(jsonData[0]);
     } catch (e) {
     console.error("getPanier error", e);
     }
+}
 };
 const getCommandes = async (dataUserId: any) => {
     try {
-    const res = await fetch(
-        `http://localhost:8080/api/panier/commande/${dataUserId.id}`,
-        {
-        method: "GET",
-        credentials: "include",
-        }
-    );
-    if (!res.ok) {
-        throw new Error("Failed to fetch data");
-    }
+    let jsonData:any
+        const url = `http://localhost:8080/api/panier/commande/${dataUserId.id}`;
+        const requestOptions:any = {
+            method: 'GET',
+            credentials: "include",
+
+        };
+        await fetch(url, requestOptions)
+            .then(async(res )=> {
+                jsonData = await res.json();
+            })
+            .catch(error => {
+                throw new Error("Failed to fetch data",error);
+            }); 
+
     //console.log({res})
-    const jsonData = await res.json();
     //console.log("cc",jsonData);
     //localStorage.setItem("CartItemCommande", JSON.stringify(jsonData.cartItem));
     setDataCommande(jsonData);
@@ -449,18 +473,23 @@ const getCommandes = async (dataUserId: any) => {
 };
 const getAllCommandes = async () => {
     try {
-    const res = await fetch(
-        `http://localhost:8080/api/panier`,
-        {
-        method: "GET",
-        credentials: "include",
-        }
-    );
-    if (!res.ok) {
-        throw new Error("Failed to fetch data");
-    }
+        let jsonData:any
+        const url = `http://localhost:8080/api/panier`;
+        const requestOptions:any = {
+            method: 'GET',
+            credentials: "include",
+
+        };
+        await fetch(url, requestOptions)
+            .then(async(res )=> {
+                jsonData = await res.json();
+            })
+            .catch(error => {
+                throw new Error("Failed to fetch data",error);
+            });
+        
+ 
     //console.log({res})
-    const jsonData = await res.json();
     //console.log("cc",jsonData);
     //localStorage.setItem("CartItemCommande", JSON.stringify(jsonData.cartItem));
     setAllCommande(jsonData);
@@ -472,14 +501,20 @@ const getAllCommandes = async () => {
 
 const getDataCard =  async () => {
     try {
-    const res = await fetch("http://localhost:8080/api/card/card", {
-        method: "GET",
-        credentials: "include",
-    });
-    if (!res.ok) {
-        throw new Error("Failed to fetch data : shoplist");
-    }
-    const jsonData = await res.json();
+let jsonData:any
+        const url = `http://localhost:8080/api/card/card`;
+        const requestOptions:any = {
+            method: 'GET',
+            credentials: "include",
+        };
+        await fetch(url, requestOptions)
+            .then(async(res)=> {
+                jsonData = await res.json();
+            })
+            .catch(error => {
+                throw new Error("Failed to fetch data",error);
+            });
+
     setcard(jsonData);
     } catch (e) {
     console.error("get shoplist error", e);

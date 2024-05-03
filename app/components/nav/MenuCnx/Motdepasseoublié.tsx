@@ -78,22 +78,33 @@ const handleVerifCode=(inputcode:any)=>{
 
 
 let email="" ;
+let pass ="" ;
+
 
 const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     email = data.email;
     setEmail(email)
     setemail(email)
 
-    email = data.password;
-    setEmail(email)
-    setemail(email)
+    pass= data.password;
+    setIsPassword(pass)
+    setPassword(isPassword)
     const code = genererCode();
     setCode(code)
     setIsLoading(true);
     const res = await fetch("http://localhost:8080/api/user/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({to: data.email,subject: "mot de passe",text:`votre code est ${code}`}),
+        body: JSON.stringify({to: data.email,subject: "Réinitialisation du mot de passe",text:`Bonjour
+
+        Vous avez demandé récemment à réinitialiser  le mot de passe de votre compte sur  www.commande-pizzatime.fr.
+        
+        Pour réinitialiser votre mot de passe, merci de copier le code suivant:
+        
+        ${code}
+        
+        
+        Cordialement, `}),
     });
     console.log({res})
     const jsonData = await res.json();
@@ -174,7 +185,9 @@ return (
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
                 email={Email}
-                setEmail={setEmail} />
+                setEmail={setEmail}
+                setPassword={setPassword}
+                />
 }
 </>
 );

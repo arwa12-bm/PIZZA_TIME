@@ -5,13 +5,18 @@ import NavBar from "../NavBar";
 import useCard from "@/app/hooks/useCard";
 import Signup from "./signup";
 import Login from "./login";
-import Compte from "./compte";
 import Motdepasseoublié from "./Motdepasseoublié";
 import ConditionsGénéralesUtilisation from "./ConditionsGénéralesd'Utilisation";
 import ConditionsGénéralesdevente from "./Conditions Généralesdevente";
 import PolitiqueConfidentialité from "./Politiquedeconfidentialité";
+import toast from 'react-hot-toast';
 
-const FormCnx = () => {
+interface FormCnxProps{
+    setShowMenuCnx?:Function  |undefined
+    showMenuCnx?:boolean
+}
+
+const FormCnx:React.FC<FormCnxProps> = ({setShowMenuCnx,showMenuCnx}) => {
 const [type, setType] = useState("Connexion");
 const [isSignup, setIsSignup] = useState(false);
 const [isMotdepasseoublié, setIsMotdepasseoublié] = useState(false);
@@ -25,11 +30,7 @@ const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
 const { dataUser,logWithGoogle } = useCard();
 
-useEffect(() => {
-if (dataUser) {
-    setType("Mon compte");
-}
-}, [dataUser]);
+
 
 //close inscription Menu to connex
 function handleMenuCnx() {
@@ -41,7 +42,10 @@ setIsConditionsGénéralesVente(false)
 setIsPolitiquesConfidentialité(false)
 setIsLoading(false);
 setType("Connexion");
+
 }
+
+toast.error("Veuillez vous connecter");
 
 function handleSignup() {
     setIsSignup(true);
@@ -50,8 +54,13 @@ function handleSignup() {
     }
 
 //close connex menu
+
 function handleMenu() {
-setIsClicked(false);
+    setIsClicked(false);
+    if (typeof showMenuCnx !== 'undefined' && showMenuCnx) {
+        {setShowMenuCnx && setShowMenuCnx(false)}
+    }
+
 }
 return (
 <div>
@@ -70,22 +79,14 @@ return (
         </div>
         <hr className="w-[100%] my-2 " />
         <div className="flex-grow overflow-y-auto justify-content-between">
-        {!dataUser?.error || logWithGoogle ? (
-            <Compte handleMenu={handleMenu} />
-        ) : (
-            <>
-            {isSignup && (
-                <Signup
-                handleMenuCnx={handleMenuCnx}
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                />
-            )} 
+        
+        
             {!isSignup && !isMotdepasseoublié &&  !isConditionsGénéralesUtilisation && !isConditionsGénéralesVente && !isPolitiquesConfidentialité && (
                 <Login
                 email={email}
                 setEmail={setEmail}
-
+                password={password}
+                setPassword={setPassword}
                 handleMenu={handleMenu}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
@@ -98,6 +99,13 @@ return (
                 setType={setType}
                 />
             )}
+            {isSignup && (
+                <Signup
+                handleMenuCnx={handleMenuCnx}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+                />
+            )} 
             {isMotdepasseoublié && (
                 <Motdepasseoublié
                 handleSignup={handleSignup}
@@ -112,8 +120,6 @@ return (
             {isConditionsGénéralesVente && (<ConditionsGénéralesdevente />)}
             {isPolitiquesConfidentialité && (<PolitiqueConfidentialité />)}
 
-            </>
-        )}
         </div>
         <div className=" bg-white  h-[10%]  w-full opacity-75  text-center p-2 ">
         <p className=" flex text-sm  underline  justify-center p-2">

@@ -41,7 +41,8 @@ const CartCommande= () => {
         <div >
         {dataCommande  && 
     dataCommande.map((item:any, index:number)=>{
-        return <ItemCentent index={index + 1} item={item} />
+        return <div key={index}><ItemCentent index={index + 1} item={item} /></div>
+        
     })}
         
         

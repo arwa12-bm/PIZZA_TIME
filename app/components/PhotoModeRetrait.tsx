@@ -34,18 +34,16 @@ const PhotoModeRetrait: React.FC<PhotoModeRetraitProps> = ({data}) => {
     
     return ( 
         <>
-            <div className="sticky justify-content  z-30 justify-self-start text-slate cursor-pointer border-[1.2px] border-slate-200 bg-white rounded-r-lg  transition hover:scale-105  "> 
-            <div className="flex justify-self-start flex-col m-2  ">
+            <div className="sticky justify-content   justify-self-start text-slate cursor-pointer border-[1.2px] border-slate-200 bg-white rounded-lg  transition hover:scale-105 p-2  "> 
+            <div className="flex justify-self-start flex-col   ">
                 <div className="flex justify-between">
                     <div className="flex">
-                    <Link href="/"  className="flex sticky absolute z-40 pl-8 " >           
+                    <Link href="/"  className="flex sticky absolute   " >           
                     <Image  src="/logo.png"  alt="logo"  width={"80"} height={"80"} />
                     </Link>
                     <div className="flex flex-cols-4 text-sm  sm:text-md md:text-lg lg:text-lg gap-1 p-2 justify-self-start ">
-                        <div>{!ModeRetrait.livrer? "Commande sur place":" Commande en livraison"}</div>
-                        <div>{formattedDate}</div>
-                        <p>à</p>
-                        <div>{ModeRetrait.Time}</div>
+                        {!ModeRetrait.livrer? "Commande sur place":" Commande en livraison"}{" "}
+                        {formattedDate}{" "}à{" "}{ModeRetrait.Time}
                     </div>
                     </div>
                     <div className="flex justify-self-end p-1">

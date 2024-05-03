@@ -19,7 +19,7 @@ const ItemCententCmd:React.FC<ItemCententProps>= ({item}) => {
     const onCountChanged = (newCount: number) => {
         setCount(newCount);       
     };
-    console.log( "xxx",item.data.price);
+    //console.log( "xxx",item.data.price);
     
     return (
 
@@ -29,7 +29,7 @@ const ItemCententCmd:React.FC<ItemCententProps>= ({item}) => {
                     <div className="flex-rows-2 lg:flex gap-1  ">
                         <div  >
                         <Link href={`/product/${item.id}`}>
-                        <Link href={``} className="font-bold text-md">{item.data.title}</Link>
+                        <div className="font-bold text-md">{item.data.title}</div>
                             <div className="relative w-[80px] aspect-square">
                                 <Image  src={item.data.imageUrl} alt={""} fill className="object-contain"/>
                             </div>
@@ -48,14 +48,14 @@ const ItemCententCmd:React.FC<ItemCententProps>= ({item}) => {
                 <div className="flex flex-col col-span-1 gap-2 justify-content w-[150%]">
                         <p className="font-semibold text-md">Composants de base : </p>
                         <div className="flex ">
-                            {Object.keys(item.checkedItems).map((item)=><p key={item}>{item},</p>)}
+                            {Object.keys(item.checkedItems).map((item:any ,i:any)=><p key={i}>{item},</p>)}
                         </div>
                         {item.sup == null|| Object.keys(item.sup).length === 0 ? "" :
                         <div>
                         <p className="font-semibold text-md">composant supplimentaire : </p>
                         <div className="flex ">
-                        {Object.keys(item.sup).map(key => (
-                                <p key={key}>{key} x {item.sup[key]} ,</p>
+                        {Object.keys(item.sup).map((key:any,i:any) => (
+                                <p key={i}>{key} x {item.sup[key]} ,</p>
                             ))}
                         </div>
                         </div>

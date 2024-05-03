@@ -5,6 +5,8 @@ import Image from "next/image";
 import { MdOutlinePayments } from "react-icons/md";
 import { LuBadgeDollarSign } from "react-icons/lu";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 interface ProductCartProps {
   data: any;
@@ -13,12 +15,10 @@ const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
   const router = useRouter();
 
   return (
-    <div
-      className="relative col-span-1 h-full cursor-pointer border-[1.2px] border-black rounded-md bg-white 
-    transition hover:scale-105  text-sm  "
-    >
-      <div className="flex flex-col gap-2 p-1">
-        <div className="aspect-square overflow-hidden relative w-full rounded-md h-[260px] ">
+  
+  
+      <div className="flex flex-col gap-2 h-[400px]  justify-between">
+        <div className="aspect-square overflow-hidden relative w-full h-[50%] rounded-3xl ">
           <Image
             fill
             src={data.image}
@@ -27,6 +27,7 @@ const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
                             router.push(`/menu/1`)}}
           />
         </div>
+        <div>
         <div className="grid grid-cols-2  justify-between  text-[15px] font-semibold px-1  w-full  text-green-600">
         </div>
         <div className="text-[15px] font-semibold px-1  text-center">{data.Company}</div>
@@ -36,24 +37,16 @@ const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
         <div className=" px-1 text-[15px]  text-center">
           <div>{data.Address}, {data.PostalCode} {data.town}</div>
         </div>
-        {/* <div>
-          <div className="flex gap-2 p-2 items-center">
-            <MdOutlinePayments
-              size={40}
-              className="rounded-3xl p-1 bg-green-600 text-white "
-            />
-            <LuBadgeDollarSign
-              size={40}
-              className="rounded-3xl p-1 bg-green-600 text-white"
-            />
-            <LuBadgeDollarSign
-              size={40}
-              className="rounded-3xl p-1 bg-green-600 text-white"
-            />
-          </div>
-        </div> */}
-      </div>
-    </div>
+</div>
+        <div className=' '>
+        <div  onClick={() => {localStorage.setItem("selectedShoplist",JSON.stringify(data));
+                            router.push(`/menu/1`)}} >
+              <p className='flex items-center justify-center text-center text-lg font-medium text-pink mt-2 hover-underline cursor-pointer hover-scale-150 transition '>Consulter<ChevronRightIcon width={20} height={20} /></p>
+        </div>
+        </div>
+        </div>
+
+
   );
 };
 

@@ -22,18 +22,17 @@ const HandleLogout = async () => {
     });
     localStorage.setItem("CartItem",JSON.stringify(null))        
     await getData();
-    handleMenu();
+    // handleMenu();
     handleClearCart(dataUser)
     router.push("/");
 };
 
 return (
-    <div className="grid flex-row-6  gap-5 p-4">
+    <div className="grid flex-row-6  gap-5  p-4">
     <div
         className="flex gap-4 cursor-pointer"
         onClick={() => {
         router.push("/profile");
-        handleMenu();
         }}
     >
         <LuUserCircle2 size={30} />
@@ -42,7 +41,6 @@ return (
     <div className="flex gap-4 cursor-pointer"
         onClick={() => {
             router.push("/commandes");
-            handleMenu();
             }}>
         <TbShoppingBagCheck size={30} />
         <p className="text-2xl">Mes Commandes</p>
@@ -51,7 +49,6 @@ return (
     <div className="flex gap-4 cursor-pointer"
         onClick={() => {
             router.push("/admin");
-            handleMenu();
             }}>
         <TbShoppingBagCheck size={30} />
         <p className="text-2xl">Espace Admin</p>

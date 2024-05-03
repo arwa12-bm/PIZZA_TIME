@@ -37,7 +37,7 @@ const Input :React.FC<InputProps>= ({
                 {...register(id,{required})}
                 type={type}
                 value={value}
-                placeholder=""
+                placeholder={placeholder}
                 onChange={onChange}
                 className={` border-b-[2px] border-b-gray-200 pl-8 text-m w-full p-4 text-gray-500 mb-4 
                 ${errors[id]? 'focus:border-rose-400':'border-slate-300'}`}

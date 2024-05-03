@@ -28,6 +28,8 @@ setIsPolitiqueConfidentialité: (val: boolean) => void;
 setType: (val: string) => void;
 email:string;
 setEmail:Function
+password:string
+setPassword:Function
 }
 const Login: React.FC<LoginProps> = ({
 handleMenu,
@@ -41,7 +43,9 @@ setIsConditionsGénéralesVente,
 setIsPolitiqueConfidentialité,
 setType,
 email,
-setEmail
+setEmail,
+password,
+setPassword,
 }) => {
 
 
@@ -57,6 +61,9 @@ defaultValues: {
     password: "",
 },
 });
+const { getData,dataUser ,getDataGoogle,logWithGoogle} = useCard();
+const[jsonData,setjsonData]=useState<any>(null)
+  
 
 async function handleGoogle(){
     try {
@@ -102,8 +109,7 @@ function handlePolitiqueConfidentialité() {
     setIsLoading(false);
     setType("Politique de confidentialité");
     }
-const { getData,dataUser ,getDataGoogle,logWithGoogle} = useCard();
-const[jsonData,setjsonData]=useState<any>(null)
+
 
 const onSubmit: SubmitHandler<FieldValues> = async (data) => {
 setIsLoading(true);
@@ -162,6 +168,8 @@ return (
         register={register}
         errors={errors}
         type="password"
+        value={password}
+        onChange={(e:any)=>setPassword(e.target.value)}
         placeholder="Saisissez votre mot de passe"
         label="Mot de passe"
         Icon={PiLockKeyThin}

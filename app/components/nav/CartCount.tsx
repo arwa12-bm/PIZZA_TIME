@@ -7,7 +7,7 @@ const CartCount = () => {
     const  {cartTotalQty} =useCard()
     const router =useRouter()
     return ( 
-    <div className="absolute cursor-pointer" onClick={()=>router.push('/cart')}>
+    <div className="absolute cursor-pointer" >
         <div className="text-3xl">
             <CiShoppingCart />
         </div>
