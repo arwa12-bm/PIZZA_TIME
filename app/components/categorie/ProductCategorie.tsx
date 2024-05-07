@@ -64,12 +64,12 @@ const ProductCategorie:React.FC<ProductCategorieProps>= ({data,selectedCatId}) =
                                     <h4 className='text-lg font-normal text-lightblack pt-4 pb-2 opacity-50'>A partir de {formatPrice(selectedProduct?.price)}</h4>
                                 </div> */}
 
-                                <div className='card-b p-4 relative rounded-3xl  py-4 my-4 text-center' >
-                                <div className='work-img-bg rounded-full flex justify-center absolute top-[-50%] sm:top-[-40%] md:top-[-55%] lg:top-[-45%] left-[0%]'>
-                                    <Image src={selectedProduct?.imageUrl} alt={selectedProduct?.imageUrl} width={510} height={10} />
+                            <div className='card-b p-4  rounded-3xl   py-4  text-center' >
+                                <div className='work-img-bg  rounded-full flex justify-center  top-[-50%] sm:top-[-40%] md:top-[-55%] lg:top-[-45%] left-[0%]'>
+                                    <Image src={selectedProduct?.imageUrl} alt={selectedProduct?.imageUrl} width={510} height={10}  />
                                 </div>
-                                <h3 className='text-2xl text-black font-semibold text-center mt-16'>{selectedProduct?.title}</h3>
-                                <p className='text-lg font-normal text-black text-center text-opacity-50 mt-2'>A partir de {formatPrice(selectedProduct?.price)}</p>
+                                <div className='text-2xl text-black font-semibold text-center '>{selectedProduct?.title}</div>
+                                <div className='text-lg font-normal text-black text-center text-opacity-50 pb-20'>A partir de {formatPrice(selectedProduct?.price)}</div>
                     
                             </div>
                                 

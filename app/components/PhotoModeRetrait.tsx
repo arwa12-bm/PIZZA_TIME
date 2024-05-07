@@ -8,6 +8,8 @@ import { MdDeleteForever} from "react-icons/md";
 import { FaPenClip } from "react-icons/fa6";
 import useCard from "../hooks/useCard";
 import ModeRetraitModal from "./categorie/ModalModeRetrait";
+import { FaRegPenToSquare } from "react-icons/fa6";
+
 
 interface PhotoModeRetraitProps {
     data?:any
@@ -46,9 +48,9 @@ const PhotoModeRetrait: React.FC<PhotoModeRetraitProps> = ({data}) => {
                         {formattedDate}{" "}à{" "}{ModeRetrait.Time}
                     </div>
                     </div>
-                    <div className="flex justify-self-end p-1">
-                    <FaPenClip size={18} className="text-slate-800 " onClick={handleOpenModal}/>
-                    <MdDeleteForever  size={25} className="text-red-800" onClick={()=>{localStorage.removeItem("ModeRetrait"); window.location.reload();}}/>
+                    <div className="grid grid-rows-2 justify-end ">
+                    <FaRegPenToSquare  size={20} className="text-slate-800 m-2 text-green-700" onClick={handleOpenModal}/>
+                    <MdDeleteForever  size={25} className="text-red-800 m-1" onClick={()=>{localStorage.removeItem("ModeRetrait"); window.location.reload();}}/>
                     </div>
                     <ModeRetraitModal Open={isOpen} onClose={handleModalClose} />
                     

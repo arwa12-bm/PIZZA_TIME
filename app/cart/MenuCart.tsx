@@ -4,12 +4,11 @@ import useCard from "../hooks/useCard";
 import { formatPrice } from "../utils/formatPrice";
 import { useEffect, useState } from "react";
 import { Fade } from "react-awesome-reveal";
-import FormCnx from "../components/nav/MenuCnx/FormCnx";
-import { Button } from "reactstrap";
-import toast from "react-hot-toast";
 import Subscriptions from "../profile/Braintree";
-import store from "@/app/hooks/store";
+import store, { setIsValidation } from "@/app/hooks/store";
 import { useSnapshot } from "valtio";
+import Signindialog from "../components/nav/Signindialog";
+import { toast } from "react-toastify";
 
 
 
@@ -35,8 +34,14 @@ getselectedCategorie();
 
 //console.log("xx",data)
 const handleCheckout = async () => {
-setShowPay(true);
-setShowMenuCnx(true)
+if(dataUser?.error ){
+  setIsValidation(false)
+  setShow(false)
+  toast.error("Veuillez vous connecter");
+}else{ 
+
+  setShowPay(true)
+}
 };
 const handleEnAttente =async()=>{
     const url = `http://localhost:8080/api/panier/EnAttente/${dataUser.id}`;
@@ -56,28 +61,22 @@ const handleEnAttente =async()=>{
     
 
     console.log({show});
-    console.log({close});
-
-    console.log({cartProducts});
+    console.log({isValidation});
     
   
 
 
         useEffect(()=>{
-          if(cartProducts !== null && !dataUser?.error){
+          if( isValidation && cartProducts !== null ){
             setShow(true)  
           }
         },[isValidation])
 
-    
-
-
-
+  
 
     return ( 
         <>
 
-        
 
     { show && <div className={
                 " fixed overflow-hidden z-10 bg-gray-900 bg-opacity-25 inset-0 transform ease-in-out " +
@@ -105,11 +104,11 @@ const handleEnAttente =async()=>{
                     Clear Cart
                 </span>
                 <div className="ml-3 flex h-7 items-center">
-                  <button type="button" className="relative -m-2 p-2 text-gray-400 hover:text-gray-500" onClick={()=>{ setShow(false)}}>
+                  <button type="button" className="relative -m-2 p-2 text-gray-400 hover:text-gray-500" onClick={()=>{ setShow(false); setIsValidation(false)}}>
                     <span className="absolute -inset-0.5"></span>
                     <span className="sr-only">Close panel</span>
-                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" >
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
                 </div>
@@ -152,11 +151,11 @@ const handleEnAttente =async()=>{
                     Clear Cart
                 </span>
                 <div className="ml-3 flex h-7 items-center">
-                  <button type="button" className="relative -m-2 p-2 text-gray-400 hover:text-gray-500" onClick={()=>{ setShow(false)}}>
+                  <button type="button" className="relative -m-2 p-2 text-gray-400 hover:text-gray-500" onClick={()=>{ setShow(false); setIsValidation(false)}}>
                     <span className="absolute -inset-0.5"></span>
                     <span className="sr-only">Close panel</span>
-                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" >
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
                 </div>
@@ -173,8 +172,8 @@ const handleEnAttente =async()=>{
                 triggerOnce={true}
             >
                   {cartProducts &&
-        cartProducts.map((item: any) => {
-        return <li className="flex py-6" key={item.id}><ItemCentent item={item} /></li> ;
+        cartProducts.map((item: any,i:any) => {
+        return <li className="flex py-6" key={i}><ItemCentent item={item} /></li> ;
         })}
         </Fade>
                   </ul>
@@ -192,13 +191,13 @@ const handleEnAttente =async()=>{
                 <div onClick={handleCheckout} className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">Checkout</div>
               </div>
               <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
-                <p>
+                <div>
                   or
                   <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500" onClick={()=>setShow(false)}>
                     Continue Shopping
                     <span aria-hidden="true"> &rarr;</span>
                   </button>
-                </p>
+                </div>
               </div>
             </div>
 </>

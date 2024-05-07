@@ -11,8 +11,7 @@ import CartCount from './CartCount';
 import useCard from '@/app/hooks/useCard';
 import { MdMenu } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
-import { useSnapshot } from "valtio";
-import { setIsValidation ,store} from "@/app/hooks/store";
+
 
 
 
@@ -34,26 +33,25 @@ function classNames(...classes: string[]) {
 
 const Navbar = () => {
 
-    const {isValidation}=useSnapshot(store)
     const {logWithGoogle,dataUser} = useCard()
     const [isOpen, setIsOpen] = React.useState(false);
     const router = useRouter()
 
     return (
         <Disclosure as="nav" className="navbar ">
-            <>
-                <div className="mx-auto max-w-7xl p-3 md:p-6 lg:px-8">
-                    <div className="relative flex h-10 sm:h-15 items-center">
-                        <div className="flex flex-1 items-center sm:justify-between">
+            <div className='fixed top-0 left-0 right-0 bg-white w-full h-[15%]  z-10'>
+                <div className=" mx-auto max-w-7xl p-3 md:p-6 lg:px-8">
+                    <div className=" flex h-10 sm:h-15 items-center">
+                        <div className="flex gap-2 sm:flex-1 md:flex-1  lg:flex-1 xl:flex-1  items-center justify-between">
 
                             {/* LOGO */}
 
                             <div className="flex sm:hidden flex-shrink-0 items-center border-right cursor-pointer" onClick={()=>router.push("/")}>
 
-                                <Image src="/logo.png" alt="logo" width={36} height={36} />
+                                <Image src="/logo.png" alt="logo" width={80} height={80} style={{ width: "auto" }} />
                             </div>
                             <div className="hidden sm:flex flex-shrink-0 items-center border-right cursor-pointer" onClick={()=>router.push("/")}>
-                                <Image src="/logo.png" alt="logo" width={120} height={120} />
+                                <Image src="/logo.png" alt="logo" width={120} height={120} style={{ width: "auto" }} />
                             </div>
 
                             {/* LINKS */}
@@ -76,8 +74,9 @@ const Navbar = () => {
                                 </div>
 
                             </div>
-                        <div className='flex items-center pt-4' onClick={()=>setIsValidation(!isValidation)}>
+                        <div className='pb-2' >
                         <CartCount  />
+                        
                         </div>
                         {/* <button className='flex justify-end text-xl font-medium bg-bgpink text-pink py-4 px-4 lg:px-8 navbutton rounded-full hover:text-black'>Sign in</button> */}
                         <div>
@@ -116,7 +115,7 @@ const Navbar = () => {
 
                     </div>
                 </div>
-            </>
+            </div>
         </Disclosure>
     )
 }

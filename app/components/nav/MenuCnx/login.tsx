@@ -147,7 +147,9 @@ return (
         <FcGoogle size={30} className="rounded-full m-4 cursor-pointer transition hover:scale-105" />
         </Link>
         <p className="pt-4">ou</p>
+        <Link href="http://localhost:8080/api/user/facebook">
         <SiFacebook  size={30} className="rounded-full bg-bleu-200 m-4 cursor-pointer transition hover:scale-105 "/>
+        </Link>
         </div>
     </div>
     <Input

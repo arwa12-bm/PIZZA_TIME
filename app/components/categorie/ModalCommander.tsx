@@ -10,6 +10,7 @@ import InputSupp from "../form/InputSupp";
 import useCard from "@/app/hooks/useCard";
 import { setIsValidation ,store} from "@/app/hooks/store";
 import { useSnapshot } from "valtio";
+import { toast } from "react-toastify";
 
 interface ModalCommanderProps {
 Open: boolean;
@@ -110,7 +111,9 @@ if (Existingindex === -1 || cartProducts === null) {
 
 setLoading(true)
 onClose()
-setIsValidation(!isValidation)
+toast.success("Votre plat est ajouté au pannier");
+// setIsValidation(true)
+
 };
 
 return (

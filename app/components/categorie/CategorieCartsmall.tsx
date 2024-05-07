@@ -41,24 +41,19 @@ import useCard from "@/app/hooks/useCard";
             </div>
         :<>
 
-            <div className=" ">
-                <div  className=" text-[15px] cursor-pointer hover:scale-105">
-                    <div onClick={()=>router.push(`/menu/${data.id}`)} className="flex gap-2 p-1 border-b-[1px]" >
-                        <div className=" overflow-hidden relative aspect-square h-[60px] w-[60px]">
+                    <div onClick={()=>router.push(`/menu/${data.id}`)} className=" text-[15px] justify-content  cursor-pointer hover:scale-105" >
+                        <div className="relative aspect-square h-[180px] w-[180px]">
                             <Image
                                 fill
                                 src={data.imageUrl}
                                 alt=""
+                                sizes="(max-width: 600px) 100vw, 600px"
                                 
                             />
                         </div>
-                        <div className="font-semibold pt-5">{data.title} </div>
+                        <div className=" font-semibold pt-5">{data.title} </div>
                     </div>
-                    
-                    {/* <ModeRetraitModal Open={isOpen} onClose={handleModalClose} data={data} /> */}
-                </div>
-            </div>
-            
+                                
 
         </>}
         

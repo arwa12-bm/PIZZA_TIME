@@ -90,7 +90,7 @@ const renderTabContent = () => {
     return (
         <div className="tab-content active">
             <div >
-            <p>
+            <div>
                 <img
                 src="https://www.commande-pizzatime.fr/CESARWEB_WEB/ext/click.svg"
                 alt="icone_horaires"
@@ -98,7 +98,7 @@ const renderTabContent = () => {
                 className="mr-2"
                 />{" "}
                 Horaires d'ouverture :
-            </p>
+            </div>
 
             <ul>
                 <li>LUNDI : xxxxx</li>

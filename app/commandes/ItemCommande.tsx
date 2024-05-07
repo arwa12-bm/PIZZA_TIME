@@ -8,12 +8,12 @@ import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 import { FaBasketShopping } from "react-icons/fa6";
 import ItemCententCmd from "./ItemCententCmd";
 
-interface ItemCententProps{
+interface ItemCommandeProps{
     item:any
     index:number
     profile?:boolean
 }
-const ItemCommande:React.FC<ItemCententProps>= ({item,index,profile}) => {
+const ItemCommande:React.FC<ItemCommandeProps>= ({item,index,profile}) => {
     if(item.etat_Commande===''){ return null; }
     const [clicked,setClicked]=useState(false)
     const {dataUser}= useCard()
@@ -68,23 +68,23 @@ const ItemCommande:React.FC<ItemCententProps>= ({item,index,profile}) => {
     //console.log({item});
     return ( 
     <div className=" relative justify-content border-[1.2px] border-slate-200 bg-white shadow-md  rounded-2xl m-4 p-2">
-        <div className="flex p-1 justify-between">
+        <div className="flex  justify-between">
             <div className="flex  p-2 gap-2">
                 <FaBasketShopping size={25} />
                 <p className="text-xl">Commande {index}</p>
             </div>
-            <div className="text- p-2">
+            <div className="text-md p-2">
             {formatPrice(item.prix)}
             </div>
 
-            <div className="text- p-2">
-            {profile && <p> {item.etat}</p>}
+            {profile &&
+            <>
+            <div className="text-md p-2">
+            <p> {item.etat}</p>
             </div>
 
-            <div className="text- p-2">
+            <div className="text-md p-2">
 
-            
-            {profile && 
                 <div className="flex gap-4 "> 
                 <p>{item.etat_Commande}</p> 
                 {item.etat_Commande === "En attente" &&
@@ -96,47 +96,43 @@ const ItemCommande:React.FC<ItemCententProps>= ({item,index,profile}) => {
                     onClick={()=>handlePasser(item.id)}
                 > passer</div>}
                 </div>
-                }
+        
             </div>
-
-            <div className="text- p-2">
-            {item.ModeRetrait?.livrer ? 
-            <div className="flex gap-4 ">
-                <div>
-                    <p>En livraison</p> <p>à l'heure de {item.ModeRetrait.Time}</p>
-                </div>
-                
-                {item.etat_Commande ==='En cours de livraison' && 
-                <div className="bg-green-500 p-1 -m-1 rounded-xl text-center justify-content cursor-pointer hover:scale-105 "
-                    onClick={()=>handleLivrer(item.id)}
-                >livrer</div>}
-            </div>
-            : <div><p>En emporter</p> <p>à l'heure de{item.ModeRetrait.Time}</p></div>}
-            </div>
+            </>
+            }
             
-            <div className="text- p-2">
-            <p>{item.createdAt.toLocaleString().split('T')[0] }  </p>
-            <p>{item.createdAt.toLocaleString().split('T')[1].split(':')[0] }:{item.createdAt.toLocaleString().split('T')[1].split(':')[1] }</p>
-            </div>
-
-
+            <div className="flex" >
+            <p className="text-md p-2">{item.createdAt.toLocaleString().split('T')[0].split('-')[1] }-{item.createdAt.toLocaleString().split('T')[0].split('-')[1] } / 
+            {item.createdAt.toLocaleString().split('T')[1].split(':')[0] }:{item.createdAt.toLocaleString().split('T')[1].split(':')[1] }</p>
             {clicked?
             <RiArrowDropUpLine size={50} onClick={()=>setClicked(!clicked)}  />
             : <RiArrowDropDownLine size={50} onClick={()=>setClicked(!clicked)} />            }
+            </div>
+
+
         </div>
         {clicked?
         <>
-        <div className="grid grid-cols-5 text-xs font-semibold gap-4 pb-2 items-center mt-8">
-            <div className="justify-self-start">PRODUCT</div>
-            <div className="justify-self-center">DETAILS</div>
-            <div className="justify-self-end">PRICE</div>
-            <div className="justify-self-end">QUANTITY</div>
-            <div className="justify-self-end">TOTAl</div>
-        </div>
-    <div className="">
+        <div className="text-md px-2">
+                {item.ModeRetrait?.livrer ? 
+                <div className="flex gap-4 ">
+                    <div>
+                        <p>En livraison  à l'heure de {item.ModeRetrait.Time}</p>
+                    </div>
+                    
+                    {item.etat_Commande ==='En cours de livraison' && 
+                    <div className="bg-green-500 p-1 -m-1 rounded-xl text-center justify-content cursor-pointer hover:scale-105 "
+                        onClick={()=>handleLivrer(item.id)}
+                    >livrer</div>}
+                </div>
+                : <div><p>En emporter à l'heure de{item.ModeRetrait.Time}</p></div>}
+                </div>
+
+    <div className="border-t-[1px] border-gray-100">
     <div > {/* Assuming you have a unique identifier for each commande */}
         {item.cartItem.map((item:any, itemIndex:any) => (
-            <ItemCententCmd key={itemIndex} item={item}  />
+            <li className="flex py-6" key={itemIndex}><ItemCententCmd item={item}  /></li> 
+
         ))}
     </div>
 

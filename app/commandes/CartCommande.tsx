@@ -5,7 +5,7 @@ import useCard from "../hooks/useCard";
 import { useState } from "react";
 import Subscriptions from "../profile/Braintree";
 import Heading from "../cart/Heading";
-import ItemCentent from "./ItemCommande";
+import ItemCommande from "./ItemCommande";
 
 
 
@@ -41,7 +41,7 @@ const CartCommande= () => {
         <div >
         {dataCommande  && 
     dataCommande.map((item:any, index:number)=>{
-        return <div key={index}><ItemCentent index={index + 1} item={item} /></div>
+        return <div key={index}><ItemCommande index={index + 1} item={item} /></div>
         
     })}
         

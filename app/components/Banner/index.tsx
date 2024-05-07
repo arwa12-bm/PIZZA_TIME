@@ -23,9 +23,9 @@ setShowModal(!showModal);
 };
 
 return (
-<div id="home-section" className="bg-gray-100">
-    <div className="mx-auto max-w-7xl  sm:pb-24 px-6">
-    <div className="grid grid-cols-1 lg:grid-cols-12 space-x-1">
+<div id="home-section" className="bg-gray-100 pt-28">
+    <div className="mx-auto max-w-7xl  sm:pb-24 px-6 ">
+    <div className="grid grid-cols-1 lg:grid-cols-12 space-x-1 ">
         {Object.values(selectedShoplist)?.length > 0 ? (
             <div className="col-span-6 flex flex-col pt-10 justify-center">
             <Fade
@@ -61,9 +61,7 @@ return (
                 triggerOnce={true}
             >
                 <div className="md:flex align-middle justify-center lg:justify-start">
-                <button className="text-xl w-full md:w-auto font-medium rounded-full text-white py-5 px-6 bg-pink lg:px-14 mr-6">
-                    <p onClick={() => setShowModal(!showModal)}>Lets cook</p>
-                </button>
+
                 <ModalInfo
                     Open={showModal}
                     onClose={onClose}
@@ -81,7 +79,7 @@ return (
                 damping={1e-1}
                 triggerOnce={true}
             >
-                <div className="pt-10">
+                <div className="pt-10 pb-4">
                 { ModeRetrait && <PhotoModeRetrait data={selectedShoplist} />}
 
                 </div>
@@ -132,12 +130,13 @@ return (
             </Fade>
         </div>
         )}
-        <div className="col-span-6 flex justify-center relative">
+        <div className="col-span-6 flex justify-center -mt-4">
         <Image
             src="/images/Banner/pizza2.png"
             alt="nothing"
-            width={1000}
-            height={805}
+            width={900}
+            height={700}
+            
         />
         </div>
     </div>

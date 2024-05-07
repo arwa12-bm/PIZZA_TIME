@@ -8,10 +8,10 @@ import { TbShoppingBagCheck } from "react-icons/tb";
 import useCard from "@/app/hooks/useCard";
 
 interface CompteProps {
-handleMenu: () => void;
+handleMenu?: () => void;
 }
 
-const Compte: React.FC<CompteProps> = ({ handleMenu }) => {
+const Compte: React.FC<CompteProps> = ({  }) => {
 const { getData,handleClearCart,dataUser } = useCard();
 const router = useRouter();
 const HandleLogout = async () => {

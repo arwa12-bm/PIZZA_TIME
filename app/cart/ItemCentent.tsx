@@ -35,7 +35,7 @@ const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
                             </h3>
                             <p className="ml-4">{formatPrice(item.data.price)}</p>
                             </div>
-                            <p className="mt-1 text-sm text-gray-500">
+                            <div className="mt-1 text-sm text-gray-500">
                             <button className="text-slate-500 underline" onClick={()=>{setShowDetail(!showDetail)}}>{showDetail?"Voir moins" :"Voir plus..."}</button>
                             {showDetail?
                         <div className="flex flex-col gap-2 px-2">
@@ -56,13 +56,13 @@ const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
                             
                         </div> 
                         :""}
-                            </p>
+                            </div>
                         </div>
                         <div className="flex flex-1 items-end justify-between text-sm">
-                            <p className="text-gray-500">
+                            <div className="text-gray-500">
                                 <NumberControl  value={item.quantity} onChange={onCountChanged} data = {item} />
 
-                            </p>
+                            </div>
 
                                 <div className="flex">
                             <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500" onClick={()=>{handleRemoveProductFromCart(item,dataUser);}}>Remove</button>

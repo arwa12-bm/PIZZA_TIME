@@ -1,28 +1,17 @@
 "use client";
 import { LuUserCircle2 } from "react-icons/lu";
-import { IoIosInformationCircleOutline } from "react-icons/io";
 import { useEffect, useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { CiMobile3 } from "react-icons/ci";
-import { MdArrowBack, MdOutlineMarkEmailRead, MdSaveAs } from "react-icons/md";
+import { MdArrowBack} from "react-icons/md";
 import { useRouter } from "next/navigation";
 
 import Container from "../components/Container";
-import HomePhoto from "../components/HomePhoto";
 import useCard from "../hooks/useCard";
-import InputProfile from "../components/form/inputprofile";
 import Address from "./Address";
 import Cartes from "./Cartes";
 import { formatPrice } from "../utils/formatPrice";
 import Commandes from "./Commandes";
 import InputButton from "../components/form/InputButton";
-import { DropdownAppProfile } from "../components/form/dropDownProfile";
-import ItemCommande from "../commandes/ItemCommande";
-import Heading from "../cart/Heading";
-import FormAddPlat from "../admin/formAddPlat";
 import InfoUser from "./InfoUser";
-import FormAddCategorie from "../admin/formAddCategorie";
-import Banner from "../components/Banner";
 import { Fade } from "react-awesome-reveal";
 
 const Profile = () => {
@@ -103,7 +92,7 @@ return (
             <Cartes />
         </Fade>
         </div>
-       
+    
         <div className="col-span-1 w-[100%] justify-self-center sm:w-[70%] md:w-[70%] lg:w-[70%] xl:w-[70%] md:justify-self-end lg:justify-self-end xl:justify-self-end ">
         <Fade
             direction={"up"}

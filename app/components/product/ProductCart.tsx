@@ -23,6 +23,7 @@ const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
             fill
             src={data.image}
             alt=""
+            sizes="(max-width: 600px) 100vw, 600px"
             onClick={() => {localStorage.setItem("selectedShoplist",JSON.stringify(data));
                             router.push(`/menu/1`)}}
           />

@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import TimePickerApp from '../form/TimePicker';
 import Button from '../form/Button';
 import useCard from '@/app/hooks/useCard';
+import Input from '../form/Input';
+import InputProfile from '../form/inputprofile';
 
 
 interface ModeRetraitModalProps{
@@ -28,6 +30,9 @@ const ModeRetraitModal: React.FC<ModeRetraitModalProps>= ({ Open,onClose,data}) 
     const [loading, setLoading] = useState(false);
     const [selectedTime, setSelectedTime] = useState(dayjs('12:00', format));
     const [ModeRetrait, setModeRetrait] = useState();
+    const [adresse, setAdresse] = useState('');
+    console.log({adresse})
+
     const router = useRouter()
     const handleEmporter =()=>{
         setEmporter(!emporter)
@@ -40,7 +45,7 @@ const ModeRetraitModal: React.FC<ModeRetraitModalProps>= ({ Open,onClose,data}) 
     // console.log({selectedTime})
 
     const handleValider= ()=>{
-        localStorage.setItem("ModeRetrait",JSON.stringify({"Time":selectedTime.format(format),"emporter":emporter,"livrer":livrer }))
+        localStorage.setItem("ModeRetrait",JSON.stringify({"Time":selectedTime.format(format),"emporter":emporter,"livrer":livrer,"adresse":adresse }))
         //{data && router.push(`/menu/${data.id}`)}
         onClose()
         // console.log({data})
@@ -101,7 +106,8 @@ const ModeRetraitModal: React.FC<ModeRetraitModalProps>= ({ Open,onClose,data}) 
                     <h1 className={livrer?"text-green-500":""}>En livraison</h1>
                 </div>
             </div>
-            <div className={big? "flex flex-col gap-8 mt-10 mb-8" : "flex flex-col" }>
+            {livrer && <input  id='adresse' value={adresse}  type='text' className={` border-[1px] border-gray-200 pl-8 relative text-md w-full p-2 text-gray-600 mt-4 mb-4 border-slate-300 `} placeholder='Votre Adresse' onChange={(e:any)=>setAdresse(e.target.value)} />}
+            <div className={big? "flex flex-col gap-8 mt-2 mb-8" : "flex flex-col" }>
                 <label htmlFor="" className="relative mb-2 border-[1px] text-center p-2">Aujourd'hui</label>
                 <TimePickerApp  handleTimeChange={handleTimeChange}/>
             </div>

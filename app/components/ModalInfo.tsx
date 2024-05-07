@@ -68,9 +68,9 @@ const formattedDate = currentDate.toLocaleDateString('en-GB', options);
             <div className="flex gap-2 h-[20%]">
                 <div className=" flex gap-2"> 
                 <CiMobile1 size={25} />
-                <p>
+                <div>
                     <p>{data.tel}</p>
-                </p>
+                </div>
                 </div>
             </div>
             <div className="flex  gap-2">

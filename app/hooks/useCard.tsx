@@ -9,10 +9,11 @@ useEffect,
 useState,
 } from "react";
 import Cookies from 'js-cookie';
+import { toast } from "react-toastify";
 
 
 //import { card } from "../utils/products";
-import toast from 'react-hot-toast';
+
 
 type CartContextType = {
 selectedProductData: any;
@@ -249,7 +250,6 @@ const handleAddPanier = async (cartItem: any, dataUser: any) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ cartItem: cartItem, id_user: dataUser.id, prix: total?.toFixed(2) , ModeRetrait: ModeRetrait}),
     });
-    toast.success("Votre produit est ajouter avec succés");
 };
 
 //Del panier
@@ -282,7 +282,6 @@ const handleAddProductToCart = useCallback(
         updatedCart = [product];
         }
 
-        toast.success("Product added to cart");
         localStorage.setItem("CartItem", JSON.stringify(updatedCart));
         return updatedCart;
     });
@@ -305,6 +304,7 @@ const HandleCartQtyIncrease = useCallback(
     if (product.quantity === 99) {
         return toast.error("Ooop! Maximum reached");
     }
+
 
     if (cartProducts) {
         updatedCart = [...cartProducts];
@@ -370,7 +370,7 @@ const handleRemoveProductFromCart = useCallback(
         );
         setCartProducts(updatedCart);
         // Notify user and update local storage
-        toast.success("Product removed from cart");
+        toast.success("produit est supprimé");
         localStorage.setItem("CartItem", JSON.stringify(updatedCart));
         const cartItems: any = localStorage.getItem("CartItem");
         const cProducts: any[] | null = JSON.parse(cartItems);
