@@ -30,7 +30,7 @@ const Cart = () => {
     
 
     return (
-        <div className='pt-8'> 
+        <div className='pt-8 '> 
         <Container>
             <CartClient  data={selectedProductData}/>
         </Container>

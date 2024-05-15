@@ -39,7 +39,7 @@ const Navbar = () => {
 
     return (
         <Disclosure as="nav" className="navbar ">
-            <div className='fixed top-0 left-0 right-0 bg-white w-full h-[15%]  z-10'>
+            <div className='fixed top-0 left-0 right-0 bg-white w-full h-[15%] shadow-md shadow-rounded-lg shadow-black z-20'>
                 <div className=" mx-auto max-w-7xl p-3 md:p-6 lg:px-8">
                     <div className=" flex h-10 sm:h-15 items-center">
                         <div className="flex gap-2 sm:flex-1 md:flex-1  lg:flex-1 xl:flex-1  items-center justify-between">

@@ -11,6 +11,7 @@ import useCard from "@/app/hooks/useCard";
 import { setIsValidation ,store} from "@/app/hooks/store";
 import { useSnapshot } from "valtio";
 import { toast } from "react-toastify";
+import { formatPrice } from "@/app/utils/formatPrice";
 
 interface ModalCommanderProps {
 Open: boolean;
@@ -36,17 +37,22 @@ CREMEFRAICHE: true,
 FROMAGE: true,
 OIGNON: true,
 });
+const [checkedDetail, setCheckedDetail] = useState({})
 
 const {
 handleAddProductToCart,
 HandleCartQtyIncrease,
 cartProducts,
 dataUser,
+cartTotalAmount,
 getData,
+getTotals
 } = useCard();
 
 useEffect(() => {
 getData();
+const total = getTotals();
+console.log(total)
 }, []);
 
 //created suppList in localStorage
@@ -63,6 +69,10 @@ localStorage.setItem("supList", JSON.stringify(newCheckedItems));
 
 //on validate modal create ItemList{sup,checkedItems,data}
 const handleValider = async () => {
+    if (!checkedDetail || Object.keys(checkedDetail).length === 0) {
+        alert('Please select at least one option.');
+        return;
+    }
 let sup1: any =
     localStorage.getItem("supList") !== null
     ? JSON.parse(localStorage.getItem("supList") ?? "{}")
@@ -88,16 +98,20 @@ const Existingindex =
         (item: any) =>
             JSON.stringify(item.data.id) === JSON.stringify(data.id) && //same item
             Object.keys(diff(item.sup, sup)).length === 0 &&
-            Object.keys(diff(item.checkedItems, checkedItems)).length === 0
+            Object.keys(diff(item.checkedItems, checkedItems)).length === 0 &&
+            Object.keys(diff(item.checkedDetail, checkedDetail)).length === 0
+
         )
     : -1; //same (composant de base )
+    let total:any = await getTotals();
 
 //add to cart new item
 if (Existingindex === -1 || cartProducts === null) {
-
+    // let prixFirst: null | number
+    // { cartProducts === null || typeof cartProducts === "undefined" ? prixFirst = data.price : prixFirst = total}
     handleAddProductToCart(
-    { sup, checkedItems, data, quantity: 1 },
-    dataUser
+    { sup, checkedItems, checkedDetail ,data, quantity: 1 },
+    dataUser,
     );
     localStorage.setItem("supList", JSON.stringify(null));
     localStorage.setItem("ItemList", JSON.stringify(null));
@@ -113,8 +127,10 @@ setLoading(true)
 onClose()
 toast.success("Votre plat est ajouté au pannier");
 // setIsValidation(true)
-
+setCheckedDetail({})
 };
+// {data && console.log("yy",data);}
+
 
 return (
 <>
@@ -137,8 +153,28 @@ return (
         <div className="flex w-full  justify-content justify-center">
             <Image height={450} width={450} src={img} alt="" />
         </div>
-        <div className="text-left text-lg ">
-            <p>COMPOSITION DE BASE</p>
+        <div className="text-left text-lg  ">
+        <div className="flex gap-12 justify-center items-center ">
+            {data && data.detail.price.map((item:any, index:any) => (
+                <div key={index} className="flex justify-center items-center">
+                {formatPrice(item)} 
+                </div>
+            ))}
+            </div>
+        <div className="flex gap-2 justify-center items-center  ">
+            {data && data.detail.taille.map((item:any, index:any) => (
+                <div key={index}>
+                <Checkbox
+                    checked={checkedDetail === item}  // Check if the current item is equal to the checkedDetail
+                    onChange={(e) => setCheckedDetail(item)}  // Update checkedDetail when the checkbox is clicked
+                />
+                {item} 
+                </div>
+            ))}
+            </div>
+    
+
+            <p className="pt-4">COMPOSITION DE BASE</p>
             <FormGroup className="flex gap-2">
             {Object.values(CompList).map((item: any) => (
                 <FormControlLabel

@@ -70,6 +70,7 @@ return (
                 <button className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-sm font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink">
                     <p onClick={() => setShowModal(!showModal)}> INFORMATION UTILES</p>
                 </button>
+                
                 </div>
             </Fade>
             <Fade

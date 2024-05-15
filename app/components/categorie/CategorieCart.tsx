@@ -42,10 +42,10 @@ import useCard from "@/app/hooks/useCard";
         :<>
 
             <div className=" ">
-                <div  className="flex flex-col gap-2 justify-center items-center  text-[15px] cursor-pointer hover:scale-105">
+                <div  className="flex  gap-2 justify-center items-center  text-[15px] cursor-pointer hover:scale-105">
                     <div onClick={handle } >
                         <div className="col-span-1 text-center font-semibold">{data.title} </div>
-                        <div className="aspect-square overflow-hidden relative  rounded-md h-[280px] w-[300px]">
+                        <div className="aspect-square overflow-hidden relative  rounded-md h-[150px] w-[150px]">
                             <Image
                                 fill
                                 src={data.imageUrl}

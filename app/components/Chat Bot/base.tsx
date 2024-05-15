@@ -9,7 +9,7 @@ export const Chatbox = () => {
 const [show,setShow]= useState(false)
 const [messages, setMessages] = useState<any[]>([]);
 const [text,setText]=useState("")
-console.log({show});
+//console.log({show});
 
 
 const sendMessage = (text: string) => {

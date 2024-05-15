@@ -10,7 +10,6 @@ import useCard from "@/app/hooks/useCard";
     interface CategorieCartProps{
         data:any
         isTitle?:boolean
-        
     }
     const CategorieCartsmall:React.FC <CategorieCartProps> = ({data,isTitle}) => {
         const {ModeRetrait}=useCard()
@@ -41,17 +40,17 @@ import useCard from "@/app/hooks/useCard";
             </div>
         :<>
 
-                    <div onClick={()=>router.push(`/menu/${data.id}`)} className=" text-[15px] justify-content  cursor-pointer hover:scale-105" >
-                        <div className="relative aspect-square h-[180px] w-[180px]">
+                    <div onClick={()=>router.push(`/menu/${data.id}#about-section`)} className="flex p-2 text-[15px] justify-center items-center cursor-pointer hover:scale-105" >
+                        <div className="relative rounded-full h-[80px] w-[100px]">
                             <Image
-                                fill
+                                fill  
                                 src={data.imageUrl}
                                 alt=""
-                                sizes="(max-width: 600px) 100vw, 600px"
+                                sizes="(max-width: 80px) 30vw, 80px"
                                 
                             />
                         </div>
-                        <div className=" font-semibold pt-5">{data.title} </div>
+                        <div className=" font-semibold  px-2 ">{data.title} </div>
                     </div>
                                 
 

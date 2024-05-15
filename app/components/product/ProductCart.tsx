@@ -41,8 +41,8 @@ const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
 </div>
         <div className=' '>
         <div  onClick={() => {localStorage.setItem("selectedShoplist",JSON.stringify(data));
-                            router.push(`/menu/1`)}} >
-              <p className='flex items-center justify-center text-center text-lg font-medium text-pink mt-2 hover-underline cursor-pointer hover-scale-150 transition '>Consulter<ChevronRightIcon width={20} height={20} /></p>
+                            router.push(`/menu/1#about-section`)}} >
+              <p className='flex items-center justify-center text-center text-lg font-medium text-red-500 p-4  cursor-pointer hover-scale-200'>Consulter <ChevronRightIcon width={20} height={20} /></p>
         </div>
         </div>
         </div>

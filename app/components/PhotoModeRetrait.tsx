@@ -41,7 +41,7 @@ const PhotoModeRetrait: React.FC<PhotoModeRetraitProps> = ({data}) => {
                 <div className="flex justify-between">
                     <div className="flex">
                     <Link href="/"  className="flex sticky absolute   " >           
-                    <Image  src="/logo.png"  alt="logo"  width={"80"} height={"80"} />
+                    <Image  src="/logo.png"  alt="logo"  width={80} height={80} style={{ width: "auto" }}/>
                     </Link>
                     <div className="flex flex-cols-4 text-sm  sm:text-md md:text-lg lg:text-lg gap-1 p-2 justify-self-start ">
                         {!ModeRetrait.livrer? "Commande sur place":" Commande en livraison"}{" "}

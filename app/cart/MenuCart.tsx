@@ -43,6 +43,7 @@ if(dataUser?.error ){
   setShowPay(true)
 }
 };
+
 const handleEnAttente =async()=>{
     const url = `http://localhost:8080/api/panier/EnAttente/${dataUser.id}`;
     const requestOptions:any = {
@@ -55,13 +56,16 @@ const handleEnAttente =async()=>{
         .catch(error => {
             console.log(error)
         });
+
+        setCmdPass(true) 
+    await handleClearCart(dataUser)
 }
 
 
     
 
-    console.log({show});
-    console.log({isValidation});
+    // console.log({show});
+    // console.log({isValidation});
     
   
 
@@ -72,14 +76,23 @@ const handleEnAttente =async()=>{
           }
         },[isValidation])
 
-  
+      
+
+  const handleClose = ()=>{
+    setIsValidation(false)
+    setShowPay(false)
+    setShow(false); 
+    console.log({cartProducts})
+    console.log("close")
+
+  }
 
     return ( 
         <>
 
 
     { show && <div className={
-                " fixed overflow-hidden z-10 bg-gray-900 bg-opacity-25 inset-0 transform ease-in-out " +
+                " fixed z-30 overflow-hidden z-10 bg-gray-900 bg-opacity-25 inset-0 transform ease-in-out " +
                 (show
                     ? " transition-opacity opacity-100 duration-500 translate-x-0  "
                     : " transition-all delay-500 opacity-0 -translate-x-full  ")
@@ -104,7 +117,7 @@ const handleEnAttente =async()=>{
                     Clear Cart
                 </span>
                 <div className="ml-3 flex h-7 items-center">
-                  <button type="button" className="relative -m-2 p-2 text-gray-400 hover:text-gray-500" onClick={()=>{ setShow(false); setIsValidation(false)}}>
+                  <button type="button" className="relative -m-2 p-2 text-gray-400 hover:text-gray-500" onClick={handleClose}>
                     <span className="absolute -inset-0.5"></span>
                     <span className="sr-only">Close panel</span>
                     <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" >
@@ -125,7 +138,7 @@ const handleEnAttente =async()=>{
                 triggerOnce={true}
             >
               <div className="flex gap-2 p-4 items-center justify-center">
-                <button type="button" className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700" onClick={ () =>{ handleEnAttente(); setCmdPass(true) ;handleClearCart(dataUser)  }}>
+                <button type="button" className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700" onClick={handleEnAttente}>
                 Espace
                   </button>
                   <button type="button" className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700" onClick={() => setCartshow(true)}>
@@ -151,7 +164,7 @@ const handleEnAttente =async()=>{
                     Clear Cart
                 </span>
                 <div className="ml-3 flex h-7 items-center">
-                  <button type="button" className="relative -m-2 p-2 text-gray-400 hover:text-gray-500" onClick={()=>{ setShow(false); setIsValidation(false)}}>
+                  <button type="button" className="relative -m-2 p-2 text-gray-400 hover:text-gray-500" onClick={handleClose}>
                     <span className="absolute -inset-0.5"></span>
                     <span className="sr-only">Close panel</span>
                     <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" >

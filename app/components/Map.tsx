@@ -1,18 +1,25 @@
 "use client";
 
-import { GoogleMap, InfoWindowF, LoadScript, Marker, MarkerF } from "@react-google-maps/api";
+import {  GoogleMap, InfoWindowF, LoadScript, Marker, MarkerF,Autocomplete} from "@react-google-maps/api";
 import Container from "../components/Container";
 import useLocation from "@/app/hooks/useLocation";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { card } from "../utils/products";
 import L from 'leaflet';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import isEqual from 'fast-deep-equal';
 
+interface AutocompleteProps {
+    options: {
+        types?: string[];
+        componentRestrictions?: google.maps.places.ComponentRestrictions;
+    };
+    onPlaceChanged?: (place: any) => void;
+}
 type place=
-{ town: string; image: string; Nature: string; shopid: number; Address: string; Company: string; Country: string; PostalCode: string; latitude: number; longitude: number; Responsible: string; etat: string; } | undefined
+{ id:number; town: string; image: string; Nature: string; shopid: number; Address: string; Company: string; Country: string; PostalCode: string; latitude: number; longitude: number; Responsible: string; etat: string; } | undefined
 type CustomSize ={ width: number; height: number; equals: (other: CustomSize) => boolean}
 const Map = () => {
 
@@ -33,45 +40,7 @@ const customPinView:any= new L.Icon({
         // Set the size of the icon
 });
 
-    // const postalCodes: string[] = Object.values(card.shoplist).map((item) => item.PostalCode);
-    // console.log(postalCodes);
-    
 
-
-//     const getLatLongFromAddress = async (address: any) => {
-//         try {
-//             const response = await axios.get(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${address}&fields=geometry&key=AIzaSyBqmxLZ9JxVPhiQ2sgGtneS12Xe4XnUapM`);
-//             const { results } = response.data;
-        
-//             if (results.length > 0 && results[0].geometry && results[0].geometry.location) {
-//                 const { lat, lng } = results[0].geometry.location;
-//                 return { lat, lng };
-//             } else {
-//                 throw new Error('No results found for the given address');
-//             }
-//             } catch (error: any) {
-//             console.error(`Error fetching geocode data: ${error.message}`);
-//             console.error('Full response:', error.response || error.request || error.message);
-//             }
-//         };
-
-//         const address = '80000'
-//         const location = async (address: string) => {
-//             try {
-//                 const coordinates = await getLatLongFromAddress(address);
-            
-//                 if (coordinates) {
-//                     const { lat, lng } = coordinates;
-//                     console.log(`Latitude: ${lat}, Longitude: ${lng}`);
-//                 } else {
-//                     console.error('No coordinates available for the given address');
-//                 }
-//                 } catch (error: any) {
-//                 console.error(error.message);
-//                 }
-//             };
-
-// location(address)
 const pixelOffset: CustomSize = {
     width: 0,
     height: 0,
@@ -89,33 +58,72 @@ const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
 
 // Use a useEffect to set googleMapsLoaded when the Google Maps API is loaded
 useEffect(() => {
-if (window.google && window.google.maps) {
+if (typeof window !== 'undefined' && window.google && window.google.maps) {
 setGoogleMapsLoaded(true);
 }
 }, []);
 
+
+// const [inputValue, setInputValue] = useState<string>('');
+//     const [Place, setPlace] = useState<any>(null);
+// const handlePlaceChanged = () => {
+//         if (autocomplete.current !== null) {
+//           setPlace(autocomplete.current.getPlace());
+//         } else {
+//           console.error('Autocomplete is not loaded yet!');
+//         }
+//       };
+    
+//     const autocomplete:any  = useRef<google.maps.places.Autocomplete>(null);
+    
+    
 return (
+ 
 
     <div className="">
-   
+      
+    
         <LoadScript
         googleMapsApiKey="AIzaSyA27Qr71arQ8MrgCZf7q73bgGfs5x43XbI"
         onLoad={() => setGoogleMapsLoaded(true)}
+        libraries={["places"]} 
         />
-  
-    {googleMapsLoaded && (
+
+
+    {googleMapsLoaded && (<> 
+    {/* <Autocomplete onLoad={(auto:any) => (autocomplete.current = auto)} onPlaceChanged={handlePlaceChanged}  
+                >
+          <input
+            type="text"
+            placeholder="Enter a location"
+            style={{
+              boxSizing: `border-box`,
+              border: `1px solid transparent`,
+              width: `240px`,
+              height: `32px`,
+              padding: `0 12px`,
+              borderRadius: `3px`,
+              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+              fontSize: `14px`,
+              outline: `none`,
+              textOverflow: `ellipses`
+            }}
+          />
+        </Autocomplete> */}
+        
         <GoogleMap
         mapContainerStyle={ContainerStyle}
         center={cordinate}
         zoom={4}
         >
+
                             <MarkerF
                         key="myLocation"
                         icon={customPinView}
                         position={userLocation}
                             />
 
-                {Object.values(card.shoplist).map((place)=>(
+                {Object.values(card.shoplist).map((place:any)=>(
                     <MarkerF
                     key={`${place.Address}-${place.Company}-${place.latitude}-${place.longitude}`}
                     onClick={()=>{
@@ -128,6 +136,14 @@ return (
                         />
 
                 ))}
+                {/* {Place && (
+          <Marker
+            position={{
+              lat: Place.geometry.location.lat(),
+              lng: Place.geometry.location.lng()
+            }}
+          />
+        )} */}
                 {selectedPlace && (
                     <InfoWindowF 
                     position={{
@@ -148,7 +164,7 @@ return (
                                 alt=""
                                 onClick={() => {
                                     localStorage.setItem("selectedShoplist",JSON.stringify(selectedPlace));
-                                    router.push(`/menu/06bc3ded-c63b-412d-bea7-b3d1af1955c9`)
+                                    router.push(`/menu/${selectedPlace.id}#about-section`)
                                 }}                            />
                             </div>
                         
@@ -163,6 +179,7 @@ return (
                 )}
 
         </GoogleMap>
+        </>
     )}
     </div>
 );

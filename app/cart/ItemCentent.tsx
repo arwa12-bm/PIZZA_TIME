@@ -11,7 +11,7 @@ interface ItemCententProps{
     item:any
 }
 const ItemCentent:React.FC<ItemCententProps>= ({item}) => {
-    const {handleRemoveProductFromCart,dataUser} =useCard()
+    const {handleRemoveProductFromCart,dataUser,cartTotalAmount} =useCard()
     
     const [showDetail,setShowDetail] =useState(false)
     const [count, setCount] =useState(0);

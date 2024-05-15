@@ -36,26 +36,21 @@ const ProductCategorie:React.FC<ProductCategorieProps>= ({data,selectedCatId}) =
     const [isOpen,setIsOpen]=useState(false)
     const [isOpenModeRetrait,setIsOpenModeRetrait]=useState(false)
 
-    const handleOpenModal =()=>{
-        setIsOpen(true)
-    }
     
-    const handleModalClose = () => {
-        setIsOpen(false);
-    };
-    const handleOpenModal2 =()=>{
-        setIsOpenModeRetrait(true)
-    }
-    const handleModalClose2 = () => {
-        setIsOpenModeRetrait(false);
-    };
+    const handleCommande =()=>{
+        if(ModeRetrait === null || Object.keys(ModeRetrait).length === 0 ){
+            setIsOpenModeRetrait(true)
+        }else{
+            setIsOpen(true)
+        }
 
+    }
 
 
 
     return ( 
 <>
-        {card && <div  onClick={ModeRetrait === null || Object.keys(ModeRetrait).length === 0 ?handleOpenModal2:  handleOpenModal}>
+        {card && <div  onClick={handleCommande}>
                                 {/* <div className='m-3 py-14 my-10 text-center'>
                                     <div className="relative">
                                         <Image src={selectedProduct?.imageUrl} alt="gaby" width={362} height={262} className="inline-block m-auto" />
@@ -76,8 +71,8 @@ const ProductCategorie:React.FC<ProductCategorieProps>= ({data,selectedCatId}) =
         </div>
         }
 
-            <ModalCommander  Open={isOpen} onClose={handleModalClose} data={selectedProduct} img={selectedProduct?.imageUrl} CompList={selectedProduct?.basicComposition}/>
-            <ModeRetraitModal Open={isOpenModeRetrait} onClose={handleModalClose2} data={selectedCatId} />
+            <ModalCommander  Open={isOpen} onClose={()=>setIsOpen(false)} data={selectedProduct} img={selectedProduct?.imageUrl} CompList={selectedProduct?.basicComposition}/>
+            <ModeRetraitModal Open={isOpenModeRetrait} onClose={()=>setIsOpenModeRetrait(false)} data={selectedCatId} />
 
         {/* <div  className="flex flex-cols-2 gap-8 justify-center items-center m-4  text-[15px] cursor-pointer hover:scale-105  border-gray-200 p-2">
             {card && <div  onClick={ModeRetrait === null || Object.keys(ModeRetrait).length === 0 ?handleOpenModal2:handleOpenModal}>
@@ -97,7 +92,6 @@ const ProductCategorie:React.FC<ProductCategorieProps>= ({data,selectedCatId}) =
                     </div>
                 </div>
             </div>}
-          
         </div> */}
         </>
     );

@@ -14,6 +14,7 @@ import Gallery from "./components/Gallery";
 import { Fade } from "react-awesome-reveal";
 import MenuCart from "./cart/MenuCart";
 import { Chatbox } from "./components/Chat Bot/base";
+import GoogleMap from "./map/text";
 
 export default function Home() {
 const {card} =useCard()
@@ -24,32 +25,6 @@ const [tokenData, setTokenData] = useState(null);
 
 
 
-// useEffect(() => {
-//     // Fonction pour extraire les paramètres de l'URL
-//     const getTokenDataFromUrl = () => {
-//         const searchParams = new URLSearchParams(window.location.search);
-//         console.log({searchParams})
-//         const token = searchParams.get('token');
-//         if (token) {
-//             try {
-//                 // Convertir la chaîne JSON en objet JavaScript
-//                 const parsedTokenData = JSON.parse(decodeURIComponent(token));
-//                 console.log({parsedTokenData})
-//                 setTokenData(parsedTokenData);
-//             } catch (error) {
-//                 console.error('Error parsing token data:', error);
-//             }
-//         }
-//     };
-
-//     // Appeler la fonction pour extraire les données du token lorsque le composant est monté
-//     getTokenDataFromUrl();
-// }, []);
-
-
-//console.log({tokenData})
-
-// {!showMap && window.location.reload();}
 
   return (
     <div className="">
