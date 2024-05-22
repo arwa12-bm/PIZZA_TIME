@@ -15,32 +15,32 @@ interface StatData {
 
 export const Steam = () => {
 
-   const {statDay,stat}= useCard()
-   console.log({statDay});
-   const keysList: string[] = [];
-   const nbrFoisList: number[] = [];
-   const DayList: string[] = [];
+   const {stat}= useCard()
+   // console.log({stat});
+   const DayList: any[] = [];
+   const sortedStat = [...stat].sort((a, b) => a.id - b.id);
+   const sorted7Stat = sortedStat.map((el: any) => el).slice(-7);
 
-
-   stat.forEach((item :any,index:any )=> {
-      DayList.push(`Jour ${index+1}`)
-      const information = item.information;
-      for (const key in information) {
-         if (information.hasOwnProperty(key) ) {
-            keysList.push(key);
-            nbrFoisList.push(information[key].nbrFois);
-         }}
+let types:any={}
+sorted7Stat.forEach((el:any,index:number)=>{
+   Object.keys(el.information).forEach((el:any)=>{if(!Object.keys(types).includes((el))){
+      types[el]={"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,}
+   }})
+   
+   Object.keys(el.information).forEach((elt:any)=>{
       
-   });
-   console.log({keysList});
-   console.log({nbrFoisList});
+   types[elt][(index+1).toString()]=types[elt][(index+1).toString()]+el.information[elt].nbrFois
+})})
+   
 
 
-   const state:any = keysList.map((category:any, index:any) => ({
-      name: category,
-     data:nbrFoisList , // Convert time strings to milliseconds since epoch
-   }));
- 
+
+
+   const state: any = Object.keys(types).map((el) => ({
+      name: el, // Extract the day label
+      data: Object.values(types[el]) // Use nbrFoisList as data
+}));
+
    const options: Props['options'] = {
    chart: {
       type: 'area',
@@ -108,7 +108,7 @@ export const Steam = () => {
    
    return (
       <>
-         <div className='border-box w-[50%] z-5'>
+         <div className='border-box z-5'>
             <div id="chart">
                <Chart
                   options={options}

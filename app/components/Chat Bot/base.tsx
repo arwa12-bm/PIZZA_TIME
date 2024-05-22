@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from 'react';
 import Container from '../Container';
 import { MicrophoneComponent } from './recordVoice';

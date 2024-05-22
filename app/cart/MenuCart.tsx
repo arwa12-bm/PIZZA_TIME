@@ -1,4 +1,4 @@
-import Image from "next/image";
+"use client"
 import ItemCentent from "./ItemCentent";
 import useCard from "../hooks/useCard";
 import { formatPrice } from "../utils/formatPrice";
@@ -13,10 +13,9 @@ import { toast } from "react-toastify";
 
 
 const MenuCart:React.FC = () => {
-  const {isValidation}=useSnapshot(store)
-    const [show ,setShow]=useState(false)
-    const [showPay, setShowPay] = useState(false);
-const [showMenuCnx, setShowMenuCnx] = useState(false);
+const {isValidation}=useSnapshot(store)
+const [show ,setShow]=useState(false)
+const [showPay, setShowPay] = useState(false);
 const [cartshow, setCartshow] = useState(false);
 const [cmdPass, setCmdPass] = useState(false);
 const {
@@ -62,16 +61,8 @@ const handleEnAttente =async()=>{
 }
 
 
-    
-
-    // console.log({show});
-    // console.log({isValidation});
-    
-  
-
-
         useEffect(()=>{
-          if( isValidation && cartProducts !== null ){
+          if(isValidation ){
             setShow(true)  
           }
         },[isValidation])

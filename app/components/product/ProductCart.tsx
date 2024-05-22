@@ -1,22 +1,22 @@
 "use client";
 
-import { useEffect } from "react";
 import Image from "next/image";
-import { MdOutlinePayments } from "react-icons/md";
-import { LuBadgeDollarSign } from "react-icons/lu";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import useCard from "@/app/hooks/useCard";
+import { Fade } from "react-awesome-reveal";
 
-interface ProductCartProps {
-  data: any;
-}
-const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
+
+const ProductCart = () => {
   const router = useRouter();
-
+  const {card}= useCard()
+  
   return (
-  
-  
+    <div className='grid sm:grid-cols-2 lg:grid-cols-4 gap-y-20 gap-x-5 mt-20'>
+    <Fade direction={'up'} delay={1000} cascade damping={1e-1} triggerOnce={true}>
+    {card && card.shoplist.map((data: any,i:any) => (
+        <div className='card-b  relative rounded-3xl bg-gray-100' key={i}> 
+    
       <div className="flex flex-col gap-2 h-[400px]  justify-between">
         <div className="aspect-square overflow-hidden relative w-full h-[50%] rounded-3xl ">
           <Image
@@ -47,7 +47,11 @@ const ProductCart: React.FC<ProductCartProps> = ({ data }) => {
         </div>
         </div>
 
-
+        </div>
+      ))}
+    </Fade>
+</div>
+  
   );
 };
 

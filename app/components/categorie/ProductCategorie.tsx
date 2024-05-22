@@ -64,7 +64,7 @@ const ProductCategorie:React.FC<ProductCategorieProps>= ({data,selectedCatId}) =
                                     <Image src={selectedProduct?.imageUrl} alt={selectedProduct?.imageUrl} width={510} height={10}  />
                                 </div>
                                 <div className='text-2xl text-black font-semibold text-center '>{selectedProduct?.title}</div>
-                                <div className='text-lg font-normal text-black text-center text-opacity-50 pb-20'>A partir de {formatPrice(selectedProduct?.price)}</div>
+                                <div className='text-lg font-normal text-black text-center text-opacity-50 pb-20'>A partir de {formatPrice(selectedProduct?.detail.price[0])}</div>
                     
                             </div>
                                 
@@ -74,25 +74,6 @@ const ProductCategorie:React.FC<ProductCategorieProps>= ({data,selectedCatId}) =
             <ModalCommander  Open={isOpen} onClose={()=>setIsOpen(false)} data={selectedProduct} img={selectedProduct?.imageUrl} CompList={selectedProduct?.basicComposition}/>
             <ModeRetraitModal Open={isOpenModeRetrait} onClose={()=>setIsOpenModeRetrait(false)} data={selectedCatId} />
 
-        {/* <div  className="flex flex-cols-2 gap-8 justify-center items-center m-4  text-[15px] cursor-pointer hover:scale-105  border-gray-200 p-2">
-            {card && <div  onClick={ModeRetrait === null || Object.keys(ModeRetrait).length === 0 ?handleOpenModal2:handleOpenModal}>
-                <div className="aspect-square overflow-hidden relative  rounded-md h-[280px] w-[300px]">
-                    <Image
-                        fill
-                        src={selectedProduct?.imageUrl}
-                        alt=""
-                        
-                    />
-                </div>
-                <div className="flex flex-col">
-                    <div className="col-span-1 text-center text-xl font-semibold p-1">{selectedProduct?.title}</div>
-                    <div className=" text-center ">A partir de {formatPrice(selectedProduct?.price)}</div>
-                    <div className="flex text-center text-gray-600">
-                                {selectedProduct.basicComposition.map((item:any)=><p key={item}>{item.title},</p>)}
-                    </div>
-                </div>
-            </div>}
-        </div> */}
         </>
     );
 }

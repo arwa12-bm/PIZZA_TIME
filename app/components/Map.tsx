@@ -75,11 +75,12 @@ setGoogleMapsLoaded(true);
 //       };
     
 //     const autocomplete:any  = useRef<google.maps.places.Autocomplete>(null);
-    
+const [showMap,setShowMap]=useState(false)
+
     
 return (
- 
-
+   <>
+{showMap===true?
     <div className="">
       
     
@@ -182,6 +183,16 @@ return (
         </>
     )}
     </div>
+    :null}
+    <div className="flex justify-between px-2 ">
+        <div className="w-[30%] " >
+        </div>
+        <div  onClick={()=>{ setShowMap(!showMap)}}  className=" flex gap-2   border-b-[2px] border-l-[2px] border-r-[2px] p-2 border-red-800 transition hover:scale-105 cursor-pointer rounded-b-lg text-lg text-white bg-red-800 justify-center " >
+          <FaMapMarkerAlt size={20}/>
+          <p>Retrouvez nous sur la carte</p> 
+          </div>
+        </div>
+    </>
 );
 }
 

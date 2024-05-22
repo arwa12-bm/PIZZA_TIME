@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react";
-import { CiCreditCard1, CiMobile3, CiSquareMinus, CiSquarePlus } from "react-icons/ci";
-import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
-import Subscriptions from "../profile/Braintree";
+import {  useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { IoIosInformationCircleOutline } from "react-icons/io";
-import { MdOutlineMarkEmailRead, MdSaveAs } from "react-icons/md";
+import {MdSaveAs } from "react-icons/md";
 import InputProfile from "../components/form/inputprofile";
-import { LuUserCircle2 } from "react-icons/lu";
-import useCard from "../hooks/useCard";
-import { title } from "process";
 import Container from "../components/Container";
+import useCard from "../hooks/useCard";
 
+interface FormAddCategorieProps{
+    update?:boolean
+    Data?:any
+    onCloseModalUpdate?:()=>void
+}
+const FormAddCategorie:React.FC<FormAddCategorieProps> = ({update,Data,onCloseModalUpdate}) => {
 
-const FormAddCategorie = () => {
-
-
+        const {getDataCard}=useCard()
         const [itemData, setItemData] = useState<any>({
             title: "",
             imageUrl: "",
@@ -22,7 +21,13 @@ const FormAddCategorie = () => {
             shopParent: ""
         
         });
-   
+    
+
+        useEffect(() => {
+            if (update && Data) {
+                setItemData(Data);
+            }
+            }, [update, Data]);
 
     const {
         register: registerSignup,
@@ -32,33 +37,46 @@ const FormAddCategorie = () => {
         defaultValues: itemData,
         });
 
-        const handleChange = (e:any) => {
-            const { name, value } = e.target;
-            setItemData({
-                ...itemData,
-                [name]: value
-            });
-        };
-
-
-    
 
         const onSubmitUpdate: SubmitHandler<FieldValues> = async (formData) => {
             console.log({formData})
+            if(update){
+                await fetch(`http://localhost:8080/api/categories/${Data.id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify(formData ),
+                });
+            
+                console.log("done Update")
+                if (onCloseModalUpdate) {
+                    onCloseModalUpdate();
+                }
+            }else{
             await fetch(`http://localhost:8080/api/categories/Addcategories`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
                 body: JSON.stringify(formData ),
             });
-            console.log("done")
+        
+            console.log("done Add")
+        }
+            setItemData({
+                title: "",
+                imageUrl: "",
+                idCard:1,
+                shopParent: ""
+            
+            });
+            getDataCard()
             
             };
 
     return (
         <Container>
         <div className="flex justify-center">
-            <div className=" border-[1.2px] border-slate-200 bg-white shadow-md  rounded-2xl m-4  w-[60%] ">
+            <div className=" border-[1.2px] border-slate-200 bg-white shadow-md  rounded-2xl m-4 w-full px-8">
             <div className="flex justify-between">
                 <div className="flex p-2 gap-1">
                 <IoIosInformationCircleOutline size={25} />

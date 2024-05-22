@@ -10,7 +10,6 @@ useState,
 } from "react";
 import Cookies from 'js-cookie';
 import { toast } from "react-toastify";
-import { log } from "console";
 
 
 //import { card } from "../utils/products";
@@ -119,6 +118,7 @@ const fetchAllStat=async()=>{
 }
 
 const fetchStatData=async()=>{
+    let jsonData
     const url = `http://localhost:8080/api/panier/stat/1`;
     const requestOptions:any = {
         method: 'GET',
@@ -126,51 +126,54 @@ const fetchStatData=async()=>{
     };
     await fetch(url, requestOptions)
         .then(async(res )=> {
-            const jsonData = await res.json();
+            jsonData = await res.json();
             setStatDay(jsonData)
         })
         .catch(error => {
             console.log(error)
         });
-        
+    return  jsonData
 }
-const SaveStatData=async()=>{
+const SaveStatData = async () => {
+    let jsonData;
     const currentTime = new Date();
-    const day =  currentTime.toISOString().split('T')[0]
-    const url = `http://localhost:8080/api/stat/AddStat`;
-    const requestOptions:any = {
-        method: 'POST',
-        body: JSON.stringify({date:day,information:statDay}),
-    };
-    await fetch(url, requestOptions)
-    .then(response => {
-        // Handle response
-        console.log({response});
-        
-        })
-        .catch(error => {
-            console.log(error)
-        });
+    const day = currentTime.toISOString().split('T')[0];
+    const dataDay = await  fetchStatData()
+    console.log({ date: day, information: dataDay });
 
-        
+    const url = `http://localhost:8080/api/stat/AddStat`;
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ date: day, information: dataDay }),
+    };
+
+    try {
+        const res = await fetch(url, requestOptions);
+        jsonData = await res.json();
+        console.log({ jsonData });
+    } catch (error) {
+        console.error("Failed to fetch data", error);
+    }
 }
 
-// let lastExecutedMinute = -1;
 
-// setInterval(async () => {
-//     const currentTime = new Date();
-//     const minutes = currentTime.getMinutes();
-// console.log({currentTime});
+useEffect(() => {
+    const intervalId = setInterval(async () => {
+        const currentTime = new Date();
+        const min = currentTime.getMinutes();
+        console.log(min);
+        if (min === 28 ) {
+            await SaveStatData();
+            console.log("cc");
+        }
+    }, 60000);
 
-//     if (minutes !== lastExecutedMinute) {
-//         // Execute your code here
-//         SaveStatData()
-//         lastExecutedMinute = minutes;
-//         console.log("Executing every minute");
-//         return;
-//         // Update last executed minute
-//     }
-// }, 60000);
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
+}, []);
+
 
 
 
@@ -192,18 +195,12 @@ if (decodedToken && decodedToken.email) {
     //console.log({dataUser});
     setLogWithGoogle(true)
     
-  } else {
-    console.log('Token does not contain email');
-  }
+} else {
+console.log('Token does not contain email');
+}
 
 },[])
 
-
-
-
-// console.log("Email:", email);
-// console.log("First Name:", firstName);
-// console.log("lastName:", lastName);
 
 
 const getselectedShoplist = useCallback(()=>{
@@ -249,12 +246,6 @@ useEffect(() => {
     fetchData();
 }, [dataUser,cartProducts]);
 
-
-// useEffect(() => {
-//         if (cartProducts !== null  && dataUser!==null && dataUser?.error?.lenth > 0) {  
-//             getPanier(dataUser)
-//         }
-//     }, [dataUser]);
 
 //get List of item in cart
 useEffect(()=>{

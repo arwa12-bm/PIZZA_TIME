@@ -1,3 +1,5 @@
+"use client";
+
 import { proxy } from "valtio";
 
 type StoreType = {

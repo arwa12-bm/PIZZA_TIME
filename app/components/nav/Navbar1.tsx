@@ -1,7 +1,7 @@
 "use client";
 import { Disclosure } from '@headlessui/react';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import Drawer from "./Drawer";
 import Drawerdata from "./Drawerdata";
@@ -41,7 +41,7 @@ const Navbar = () => {
         <Disclosure as="nav" className="navbar ">
             <div className='fixed top-0 left-0 right-0 bg-white w-full h-[15%] shadow-md shadow-rounded-lg shadow-black z-20'>
                 <div className=" mx-auto max-w-7xl p-3 md:p-6 lg:px-8">
-                    <div className=" flex h-10 sm:h-15 items-center">
+                    <div className=" flex h-10 sm:h-15 items-center justify-between">
                         <div className="flex gap-2 sm:flex-1 md:flex-1  lg:flex-1 xl:flex-1  items-center justify-between">
 
                             {/* LOGO */}
@@ -50,7 +50,7 @@ const Navbar = () => {
 
                                 <Image src="/logo.png" alt="logo" width={80} height={80} style={{ width: "auto" }} />
                             </div>
-                            <div className="hidden sm:flex flex-shrink-0 items-center border-right cursor-pointer" onClick={()=>router.push("/")}>
+                            <div className="hidden sm:flex  flex-shrink-0 items-center border-right cursor-pointer" onClick={()=>router.push("/")}>
                                 <Image src="/logo.png" alt="logo" width={120} height={120} style={{ width: "auto" }} />
                             </div>
 

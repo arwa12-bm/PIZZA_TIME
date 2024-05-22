@@ -10,8 +10,9 @@ import useCard from "@/app/hooks/useCard";
     interface CategorieCartProps{
         data:any
         isTitle?:boolean
+        setShowTop:Function
     }
-    const CategorieCartsmall:React.FC <CategorieCartProps> = ({data,isTitle}) => {
+    const CategorieCartsmall:React.FC <CategorieCartProps> = ({data,isTitle,setShowTop}) => {
         const {ModeRetrait}=useCard()
         const [isOpen,setIsOpen]=useState(false)
         const handleOpenModal =()=>{
@@ -40,7 +41,9 @@ import useCard from "@/app/hooks/useCard";
             </div>
         :<>
 
-                    <div onClick={()=>router.push(`/menu/${data.id}#about-section`)} className="flex p-2 text-[15px] justify-center items-center cursor-pointer hover:scale-105" >
+                    <div onClick={()=>{setShowTop(false)
+                            router.push(`/menu/${data.id}#about-section`)}}
+                            className="flex p-2 text-[15px] justify-center items-center cursor-pointer hover:scale-105" >
                         <div className="relative rounded-full h-[80px] w-[100px]">
                             <Image
                                 fill  

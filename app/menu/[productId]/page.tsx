@@ -2,25 +2,23 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import { useSnapshot } from "valtio";
+import { Fade } from "react-awesome-reveal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import ProductCategorie from "@/app/components/categorie/ProductCategorie";
 import useCard from "@/app/hooks/useCard";
 import CategorieCartsmall from "@/app/components/categorie/CategorieCartsmall";
 import Container from "@/app/components/Container";
-import { Fade } from "react-awesome-reveal";
 import Banner from "@/app/components/Banner";
 import MenuCart from "@/app/cart/MenuCart";
 import Gallery from "@/app/components/Gallery";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Autoplay from "embla-carousel-autoplay"
-import { setIsValidation ,store} from "@/app/hooks/store";
+import {store} from "@/app/hooks/store";
 
 
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import { useSnapshot } from "valtio";
-import Slider from "./Slider";
 
 
 const Menu = () => {
@@ -28,9 +26,10 @@ const params = useParams();
 
 
 const [data, setData] = useState<any>();
-const { card, getDataCard, selectedShoplist,selectedCategorie} = useCard();
+const { stat,card, getDataCard} = useCard();
+const [isSticky, setIsSticky] = useState(false);
+const [showTop, setShowTop] = useState(false);
 
-// console.log({card});
 
 const {isValidation}=useSnapshot(store)
 
@@ -54,7 +53,6 @@ if (card === "undefined") {
     console.log({ card });
 }
 }, []);
-const [isSticky, setIsSticky] = useState(false);
 
     useEffect(() => {
     const handleScroll = () => {
@@ -90,6 +88,34 @@ const [isSticky, setIsSticky] = useState(false);
           slidesToSlide: 1 // optional, default to 1.
         }
     };
+console.log({stat})
+
+const sortedStat = [...stat].sort((a:any, b:any) => a.id - b.id);
+const sorted7Stat = sortedStat.map((el: any) => el).slice(-7);
+
+console.log({sorted7Stat})
+
+    let category:any= {};
+sorted7Stat?.forEach((el:any) => {
+    Object.keys(el.information).forEach((key:any) => {
+        if (!category[key]) {
+            category[key] =  Number(el.information[key].nbrFois);
+        }else{
+            category[key] = category[key] + Number(el.information[key].nbrFois);
+        }
+    });
+});
+// Convert category object to an array of [key, value] pairs
+const sortedCategoryArray = Object.entries(category).sort(([, a]:any, [, b]:any) => b  - a );
+
+// Convert sorted array back to an object (if needed)
+const sortedCategory = Object.fromEntries(sortedCategoryArray);
+
+console.log({ sortedCategory });
+console.log({category});
+// const filteredItems = data[0].items.filter((item: any) => sortedCategory.hasOwnProperty(item.key));
+
+// console.log({ filteredItems });
 
 return (
 <div className="flex flex-col ">
@@ -119,13 +145,13 @@ return (
                             .map((item: any) => (
                             <div key={item.id} className="">
                                 {" "}
-                                <CategorieCartsmall data={item} />
+                                <CategorieCartsmall data={item}  setShowTop={setShowTop} />
                             </div>
                             ))}
                 </Carousel>
                 }
-                <div className="text-center p-2   relative ">
-                    <Fade
+                <div className="text-center p-2  relative ">
+                        <Fade
                         direction={"up"}
                         delay={400}
                         cascade
@@ -138,13 +164,14 @@ return (
                         <h2 className="text-xl font-bold mb-2 tracking-widest uppercase ls-51">
                             {data && data[0]?.title}
                         </h2>
-                        
+                        <h2 className="text-xl text-right font-semibold px-4" onClick={()=>{setShowTop(true)}}>Top 10</h2>
                     </Fade>
-                
                     </div>
+
             </div>
         </div>
-        
+        {showTop? "":
+
         <div className="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-5  gap-8 mt-4  ">
         <Fade
             direction={"up"}
@@ -153,7 +180,7 @@ return (
             damping={1e-1}
             triggerOnce={true}
         >
-            {data &&
+        {data &&
             data[0].items?.map((item: any) => (
                 <div key={item}>
                 <ProductCategorie
@@ -162,8 +189,10 @@ return (
                 />
                 </div>
             ))}
+            
         </Fade>
         </div>
+        }
     </div>
     <Gallery />
     </Container>
