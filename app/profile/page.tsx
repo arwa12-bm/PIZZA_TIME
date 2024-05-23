@@ -37,7 +37,7 @@ useEffect(() => {
 //console.log({ dataUser });
 
 return (
-    <div className="bg-gray-100 pt-10  pb-32">
+    <div className="bg-gray-100 pt-[10%]  pb-32">
     {/* <Banner /> */}
 
     {/* <HomePhoto data={selectedProductData} /> */}
@@ -108,63 +108,6 @@ return (
                 </div>
                 <div>
                 <span>{formatPrice(cartTotalAmount)}</span>
-                </div>
-            </div>
-            </div>
-        </Fade>
-        <Fade
-            direction={"up"}
-            delay={800}
-            cascade
-            damping={1e-1}
-            triggerOnce={true}
-            >
-            <div className=" relative justify-content border-[1.2px] border-slate-800 bg-white  shadow-md  rounded-xl ml-4 mr-4 mt-1">
-            <div className="flex p-2 justify-between ">
-                <div className="sm:w-[100px] md:w-[100px] lg:w-[100px] xl:w-[100px] ">
-                <p className="">Cart de fidélité</p>
-                </div>
-                <div className="w-[250px] sm:w-[200px] md:w-[200px] lg:w-[200px] xl:w-[200px]">
-                <InputButton
-                    label={"Valider"}
-                    placeholder={"123 123 123 123"}
-                />
-                </div>
-            </div>
-            </div>
-        </Fade>
-        <Fade
-            direction={"up"}
-            delay={800}
-            cascade
-            damping={1e-1}
-            triggerOnce={true}
-            >
-            <div className=" relative justify-content border-[1.2px] border-slate-400 bg-white  shadow-md  rounded-xl ml-4 mr-4 mt-1">
-            <div className="flex p-2 justify-between ">
-                <div className="sm:w-[100px] md:w-[100px] lg:w-[100px] xl:w-[100px]">
-                <p className="">Code Promo</p>
-                </div>
-                <div className="w-[250px] sm:w-[200px] md:w-[200px] lg:w-[200px] xl:w-[200px]">
-                <InputButton label={"Appliquer"} />
-                </div>
-            </div>
-            </div>
-        </Fade>
-        <Fade
-            direction={"up"}
-            delay={800}
-            cascade
-            damping={1e-1}
-            triggerOnce={true}
-            >
-            <div className=" relative justify-content border-[1.2px] border-slate-400 bg-white  shadow-md  rounded-xl ml-4 mr-4 mt-1">
-            <div className="flex p-2 justify-between ">
-                <div className="">
-                <p className="p-1">Reste a payer</p>
-                </div>
-                <div>
-                <span className="p-1">{formatPrice(cartTotalAmount)}</span>
                 </div>
             </div>
             </div>

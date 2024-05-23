@@ -44,7 +44,7 @@ const Items: React.FC<ItemContentProps> = ({ item, onDelete,categorie,plat,shop}
                         <div >
                         <div className="flex gap-4 mt-4 w-full justify-between text-base font-medium text-gray-900">
                             <h3>
-                            <a href="#">{item.Nature}:{item.town}</a>
+                            <a href="#">{item.Company}</a>
                             
                         </h3>
                         {/* <p className="">{formatPrice(item.price)}</p> */}

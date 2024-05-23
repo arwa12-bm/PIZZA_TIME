@@ -16,7 +16,7 @@ interface ProductCategorieProps{
 }
 
 const ProductCategorie:React.FC<ProductCategorieProps>= ({data,selectedCatId}) => {
-
+    console.log({data})
     const {selectedCategorie,getselectedCategorie,card,ModeRetrait} = useCard()
     useEffect(()=>{
         getselectedCategorie()
@@ -45,6 +45,7 @@ const ProductCategorie:React.FC<ProductCategorieProps>= ({data,selectedCatId}) =
         }
 
     }
+console.log({selectedProduct});
 
 
 

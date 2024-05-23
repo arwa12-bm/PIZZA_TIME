@@ -61,7 +61,7 @@ defaultValues: {
     password: "",
 },
 });
-const { getData,dataUser ,getDataGoogle,logWithGoogle} = useCard();
+const { getData,dataUser } = useCard();
 const[jsonData,setjsonData]=useState<any>(null)
   
 
@@ -127,10 +127,10 @@ if(jsonData.message === "success"){
     getData();
     handleMenu();
 }
-if(logWithGoogle){
-    getDataGoogle
-    handleMenu();
-}
+// if(logWithGoogle){
+//     getDataGoogle
+//     handleMenu();
+// }
 
     
 };

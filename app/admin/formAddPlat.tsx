@@ -32,12 +32,12 @@ setBasicCompositions([
     title: "",
     },
 ]);
-setBasicTaille([
+setBasicTaille(
     {
     taille: [""],
-    price: [""],
+    price: [0],
     },
-]);
+);
 setSelected("");
 };
 
@@ -59,17 +59,13 @@ const [basicCompositions, setBasicCompositions] = useState<
     title: "",
 },
 ]);
-const [basicTaille, setBasicTaille] = useState<
-{
+const [basicTaille, setBasicTaille] = useState<{
     taille: string[];
-    price: string[];
-}[]
->([
-{
+    price: number[];
+  }>({
     taille: [""],
-    price: [""],
-},
-]);
+    price: [0],
+  });
 
 useEffect(() => {
 if (update && Data) {
@@ -113,29 +109,36 @@ setBasicCompositions(updatedCompositions);
 };
 
 const handleTailleChange = (
-index: number,
-subIndex: number,
-field: string,
-value: any
-) => {
-const newBasicTaille: any = [...basicTaille];
-newBasicTaille[index][field][subIndex] = value;
-setBasicTaille(newBasicTaille);
-};
+    subIndex: number,
+    field: 'taille' | 'price',
+        value: string | number
+    ) => {
+        setBasicTaille(prevState => {
+        const newState = { ...prevState };
+        if (field === 'taille') {
+            newState.taille[subIndex] = value as string;
+        } else if (field === 'price') {
+            newState.price[subIndex] = value as number;
+        }
+        return newState;
+        });
+    };
+    
+    const handleAddTaille = () => {
+        setBasicTaille(prevState => ({
+        taille: [...prevState.taille, ""],
+        price: [...prevState.price, 0],
+        }));
+    };
+    
+    const handleRemoveTaille = (subIndex: number) => {
+        setBasicTaille(prevState => ({
+        taille: prevState.taille.filter((_, idx) => idx !== subIndex),
+        price: prevState.price.filter((_, idx) => idx !== subIndex),
+        }));
+    };
+  
 
-const handleAddTaille = (index: number) => {
-const newBasicTaille = [...basicTaille];
-newBasicTaille[index].taille.push("");
-newBasicTaille[index].price.push("");
-setBasicTaille(newBasicTaille);
-};
-
-const handleRemoveTaille = (index: number, subIndex: number) => {
-const newBasicTaille = [...basicTaille];
-newBasicTaille[index].taille.splice(subIndex, 1);
-newBasicTaille[index].price.splice(subIndex, 1);
-setBasicTaille(newBasicTaille);
-};
 
 let listCategorie;
 listCategorie = card?.categories.map((el: any) => el.title);
@@ -230,69 +233,51 @@ return (
             })
             }
         />
-        <Box sx={{ minWidth: 120 }}>
-            {basicTaille.map((entry, index) => (
-            <div key={index}>
-                {entry.taille.map((_, subIndex: any) => (
-                <div className="flex" key={subIndex}>
-                    <div className="w-[100%]">
-                    <InputProfile
-                        id={`basicTailleTitle ${subIndex}`}
-                        errors={errorsSignup}
-                        type="text"
-                        placeholder=""
-                        label={`Taille ${subIndex + 1}`}
-                        value={entry.taille[subIndex]}
-                        onChange={(e) =>
-                        handleTailleChange(
-                            index,
-                            subIndex,
-                            "taille",
-                            e.target.value
-                        )
-                        }
-                    />
-                    </div>
-                    <div className="w-[100%]">
-                    <InputProfile
-                        id={`basicPriceTitle ${subIndex}`}
-                        errors={errorsSignup}
-                        type="number"
-                        placeholder=""
-                        label={`Price ${subIndex + 1}`}
-                        value={entry.price[subIndex]}
-                        onChange={(e) =>
-                        handleTailleChange(
-                            index,
-                            subIndex,
-                            "price",
-                            e.target.value
-                        )
-                        }
-                    />
-                    </div>
-                    <div className="grid grid-rows-2 items-center">
-                    {subIndex === entry.taille.length - 1 &&
-                        entry.taille.length > 1 && (
-                        <div
-                            onClick={() =>
-                            handleRemoveTaille(index, subIndex)
-                            }
-                        >
-                            <CiSquareMinus size={30} />
-                        </div>
-                        )}
-                    {subIndex === entry.taille.length - 1 && (
-                        <div onClick={() => handleAddTaille(index)}>
-                        <CiSquarePlus size={30} />
-                        </div>
-                    )}
-                    </div>
-                </div>
-                ))}
+            <Box sx={{ minWidth: 120 }}>
+        {basicTaille.taille.map((_, subIndex) => (
+        <div className="flex" key={subIndex}>
+            <div className="w-[100%]">
+            <InputProfile
+                id={`basicTailleTitle ${subIndex}`}
+                errors={errorsSignup}
+                type="text"
+                placeholder=""
+                label={`Taille ${subIndex + 1}`}
+                value={basicTaille.taille[subIndex]}
+                onChange={(e) =>
+                handleTailleChange(subIndex, "taille", e.target.value)
+                }
+            />
             </div>
-            ))}
-        </Box>
+            <div className="w-[100%]">
+            <InputProfile
+                id={`basicPriceTitle ${subIndex}`}
+                errors={errorsSignup}
+                type="number"
+                placeholder=""
+                label={`Price ${subIndex + 1}`}
+                value={basicTaille.price[subIndex]}
+                onChange={(e) =>
+                handleTailleChange(subIndex, "price", parseFloat(e.target.value))
+                }
+            />
+            </div>
+            <div className="grid grid-rows-2 items-center">
+            {subIndex === basicTaille.taille.length - 1 && basicTaille.taille.length > 1 && (
+                <div onClick={() => handleRemoveTaille(subIndex)}>
+                <CiSquareMinus size={30} />
+                </div>
+            )}
+            {subIndex === basicTaille.taille.length - 1 && (
+                <div onClick={handleAddTaille}>
+                <CiSquarePlus size={30} />
+                </div>
+            )}
+            </div>
+        </div>
+        ))}
+    </Box>
+
         {basicCompositions.map((composition: any, index: any) => (
             <div className="flex" key={index}>
             <div className="w-[100%]">

@@ -33,7 +33,7 @@ function classNames(...classes: string[]) {
 
 const Navbar = () => {
 
-    const {logWithGoogle,dataUser} = useCard()
+    const {dataUser} = useCard()
     const [isOpen, setIsOpen] = React.useState(false);
     const router = useRouter()
 
@@ -80,7 +80,7 @@ const Navbar = () => {
                         </div>
                         {/* <button className='flex justify-end text-xl font-medium bg-bgpink text-pink py-4 px-4 lg:px-8 navbutton rounded-full hover:text-black'>Sign in</button> */}
                         <div>
-                        {!dataUser?.error || logWithGoogle ? 
+                        {!dataUser?.error  ? 
                         ""
                         : 
                             <Signindialog />
@@ -91,7 +91,7 @@ const Navbar = () => {
                         {/* DRAWER FOR MOBILE VIEW */}
 
                         {/* DRAWER ICON */}
-                        {!dataUser?.error || logWithGoogle ? <>
+                        {!dataUser?.error ? <>
 
                         <div className='' onClick={() => setIsOpen(true)}>
                                 <MdMenu

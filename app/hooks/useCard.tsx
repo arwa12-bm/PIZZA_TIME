@@ -35,7 +35,7 @@ ModeRetrait: any;
 statDay:any;
 stat:any
 card:any;
-logWithGoogle:boolean;
+// logWithGoogle:boolean;
 getselectedShoplist: () => any;
 getselectedCategorie: () => any;
 handleAddProductToCart: (product: any, dataUser: any) => void;
@@ -45,7 +45,7 @@ HandleCartQtyDecrease: (product: any, dataUser: any) => void;
 handleRemoveProductFromCart: (product: any, dataUser: any) => void;
 getData: () => any;
 getTotals: () => any;
-getDataGoogle: () => any;
+// getDataGoogle: () => any;
 getPanier: (dataUserId: any) => any;
 getCommandes: (dataUserId: any) => any;
 getAllCommandes:()=>any;
@@ -177,29 +177,29 @@ useEffect(() => {
 
 
 
-const getDataGoogle = useCallback(async () => {
-    const myCookieValue:any = Cookies.get('jwt')
+// const getDataGoogle = useCallback(async () => {
+//     const myCookieValue:any = Cookies.get('jwt')
 
-//console.log({myCookieValue});
-const tokenJSON = myCookieValue.substring(2);
+// //console.log({myCookieValue});
+// const tokenJSON = myCookieValue.substring(2);
 
-// Decode the JSON portion
-const decodedToken = JSON.parse(tokenJSON);
-// Check if the token contains an email property
-if (decodedToken && decodedToken.email) {
-        // Access email and first name
-    const email = decodedToken.email;
-    const firstName = decodedToken.firstName;
-    const lastName = decodedToken.lastNAme;
-    setDataUser({email,nom:`${firstName} ${lastName}`})
-    //console.log({dataUser});
-    setLogWithGoogle(true)
+// // Decode the JSON portion
+// const decodedToken = JSON.parse(tokenJSON);
+// // Check if the token contains an email property
+// if (decodedToken && decodedToken.email) {
+//         // Access email and first name
+//     const email = decodedToken.email;
+//     const firstName = decodedToken.firstName;
+//     const lastName = decodedToken.lastNAme;
+//     setDataUser({email,nom:`${firstName} ${lastName}`})
+//     //console.log({dataUser});
+//     setLogWithGoogle(true)
     
-} else {
-console.log('Token does not contain email');
-}
+// } else {
+// console.log('Token does not contain email');
+// }
 
-},[])
+// },[])
 
 
 
@@ -225,11 +225,11 @@ const getselectedCategorie = useCallback(()=>{
 },[])
 
 useEffect(() => {
-    if(!logWithGoogle){
+    // if(!logWithGoogle){
         getData();
-    }else{
-        getDataGoogle
-    }
+    // }else{
+    //     getDataGoogle
+    // }
     
 }, []);
 
@@ -491,7 +491,7 @@ const handleClearCart = useCallback(async( dataUser: any) => {
 const getData = useCallback(async () => {
     try {
         let jsonData :any
-        if(!logWithGoogle){
+        // if(!logWithGoogle){
             const url = `http://localhost:8080/api/user/user`;
             const requestOptions:any = {
                 method: 'GET',
@@ -510,7 +510,7 @@ const getData = useCallback(async () => {
     //console.log({jsonData});
 
     setDataUser(jsonData);
-}
+// }
     } catch (e) {
     console.error("get panier error", e);
     }
@@ -625,7 +625,7 @@ useEffect(() => {
 
 
 const value = {
-    logWithGoogle,
+    // logWithGoogle,
     selectedCategorie,
     selectedShoplist,
     card,
@@ -653,7 +653,7 @@ const value = {
     handleAddPanier,
     handleDelPanier,
     getData,
-    getDataGoogle,
+    // getDataGoogle,
     getPanier,
     getCommandes,
     getAllCommandes,

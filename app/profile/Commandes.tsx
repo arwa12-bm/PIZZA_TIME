@@ -18,6 +18,7 @@ const Commandes:React.FC<ItemCententProps>= ({item}) => {
     
     const [showDetail,setShowDetail] =useState(false)
     
+    let index=item.data.detail.taille.findIndex((el:any)=>el===item.checkedDetail)
 
     return (
 
@@ -38,7 +39,7 @@ const Commandes:React.FC<ItemCententProps>= ({item}) => {
                         </div>
                     </div>
                 </div>
-                <div className="justify-self-end font-semibold"> {formatPrice(item.data.price)}</div>
+                <div className="justify-self-end font-semibold"> {formatPrice(item.data.detail.price[index])}</div>
                 <div className="justify-self-center">
                     <MdRemoveCircleOutline  onClick={()=>{handleRemoveProductFromCart(item, dataUser)}} size={25} />
                 </div>

@@ -22,6 +22,8 @@ const ItemCententCmd:React.FC<ItemCententProps>= ({item}) => {
     };
     //console.log( "xxx",item.data.price);
     
+    let index=item.data.detail.taille.findIndex((el:any)=>el===item.checkedDetail)
+
     return (
 <>
         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
@@ -35,7 +37,7 @@ const ItemCententCmd:React.FC<ItemCententProps>= ({item}) => {
                 <a href="#">{item.data.title} x {item.quantity}</a>
                 
             </h3>
-            <p className="ml-4">{formatPrice(item.data.price * item.quantity)}</p>
+            <p className="ml-4">{formatPrice(item.data.detail.price[index] * item.quantity)}</p>
             </div>
             <div className="mt-1 text-sm text-gray-500">
             <button className="text-slate-500 underline" onClick={()=>{setShowDetail(!showDetail)}}>{showDetail?"Voir moins" :"Voir plus..."}</button>

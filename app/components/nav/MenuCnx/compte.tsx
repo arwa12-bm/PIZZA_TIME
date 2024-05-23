@@ -1,9 +1,9 @@
 import { useRouter } from "next/navigation";
-import { CiStar } from "react-icons/ci";
-import { IoMdNotificationsOutline } from "react-icons/io";
-import { LuBadgePercent, LuUserCircle2 } from "react-icons/lu";
+import {  LuUserCircle2 } from "react-icons/lu";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { TbShoppingBagCheck } from "react-icons/tb";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
+
 
 import useCard from "@/app/hooks/useCard";
 
@@ -50,21 +50,9 @@ return (
         onClick={() => {
             router.push("/admin");
             }}>
-        <TbShoppingBagCheck size={30} />
+        <MdOutlineAdminPanelSettings size={30} />
         <p className="text-2xl">Espace Admin</p>
     </div>}
-    <div className="flex gap-4">
-        <CiStar size={30} />
-        <p className="text-2xl">Fidélité</p>
-    </div>
-    <div className="flex gap-4">
-        <LuBadgePercent size={30} />
-        <p className="text-2xl">Promotions</p>
-    </div>
-    <div className="flex gap-4">
-        <IoMdNotificationsOutline size={30} />
-        <p className="text-2xl">Notificetions</p>
-    </div>
     <div className="flex gap-4" onClick={HandleLogout}>
         <RiLogoutCircleLine size={30} />
         <p className="text-2xl">Déconnexion</p>

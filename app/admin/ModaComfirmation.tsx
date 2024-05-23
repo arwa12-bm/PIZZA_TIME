@@ -58,7 +58,7 @@ const Comfirmation: React.FC<ComfirmationProps>= ({ Open,onClose,action,data}) =
                 key="link"
                 href=""
                 disabled={loading}
-                onClick={action}
+                onClick={()=>{action}}
             />
             ]}
         >
