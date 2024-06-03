@@ -31,6 +31,7 @@ dataUser: any;
 dataPanier: any;
 dataCommande:any;
 AllCommande:any;
+AllUser:any
 ModeRetrait: any;
 statDay:any;
 stat:any
@@ -49,10 +50,13 @@ getTotals: () => any;
 getPanier: (dataUserId: any) => any;
 getCommandes: (dataUserId: any) => any;
 getAllCommandes:()=>any;
+getAllUser:()=>any;
 getProductData: () => any;
 handleAddPanier: (cartProducts: any, dataUser: any) => void;
 handleDelPanier: (dataUser: any) => void;
 getDataCard: () => any;
+getModeRetrait: () => any;
+fetchAllStat: () => any;
 };
 
 export interface card{
@@ -88,6 +92,7 @@ const [selectedProductId, setselectedProductId] = useState<
 const [dataPanier, setDataPanier] = useState<any | null>();
 const [dataCommande, setDataCommande] = useState<any | null>();
 const [AllCommande, setAllCommande] = useState<any | null>();
+const [AllUser, setAllUser] = useState<any | null>();
 const [card,setcard]=useState<card| undefined>()
 const [logWithGoogle,setLogWithGoogle]=useState(false)
 const [done,setDone]=useState(false)
@@ -165,7 +170,7 @@ useEffect(() => {
         const currentTime = new Date();
         const min = currentTime.getMinutes();
         console.log(min);
-        if (min === 28 ) {
+        if (min === 45 ) {
             await SaveStatData();
             console.log("cc");
         }
@@ -177,41 +182,13 @@ useEffect(() => {
 
 
 
-// const getDataGoogle = useCallback(async () => {
-//     const myCookieValue:any = Cookies.get('jwt')
+const getselectedShoplist = useCallback(() => {
+    const storedShoplist = localStorage.getItem("selectedShoplist");
+    const selShoplist = storedShoplist ? JSON.parse(storedShoplist) : {};
+    setSelectedShoplist(selShoplist)
+    return selShoplist
+}, []); // Dependency array is empty, so this callback will be memoized
 
-// //console.log({myCookieValue});
-// const tokenJSON = myCookieValue.substring(2);
-
-// // Decode the JSON portion
-// const decodedToken = JSON.parse(tokenJSON);
-// // Check if the token contains an email property
-// if (decodedToken && decodedToken.email) {
-//         // Access email and first name
-//     const email = decodedToken.email;
-//     const firstName = decodedToken.firstName;
-//     const lastName = decodedToken.lastNAme;
-//     setDataUser({email,nom:`${firstName} ${lastName}`})
-//     //console.log({dataUser});
-//     setLogWithGoogle(true)
-    
-// } else {
-// console.log('Token does not contain email');
-// }
-
-// },[])
-
-
-
-const getselectedShoplist = useCallback(()=>{
-
-    setSelectedShoplist(
-        localStorage.getItem("selectedShoplist") !== null
-            ? JSON.parse(localStorage.getItem("selectedShoplist") ?? "{}")
-            : {}
-        );
-
-},[])
 
 
 const getselectedCategorie = useCallback(()=>{
@@ -268,11 +245,15 @@ useEffect(()=>{
 
 
 
-useEffect(() => {
+const getModeRetrait =()=>{
     const ModRetrait: any = localStorage.getItem("ModeRetrait");
     const MRetrait: any[] | null = JSON.parse(ModRetrait);
     setModeRetrait(MRetrait);
-    //console.log({ ModeRetrait });
+    return MRetrait
+}
+
+useEffect(() => {
+    getModeRetrait()
 }, []);  
 
 
@@ -285,6 +266,29 @@ useEffect(() => {
     : null;
     setselectedProductId(parsedProductId);
 }, []);
+const getSuppliment = useCallback(async () => {
+    try {
+        let jsonData :any
+        // if(!logWithGoogle){
+            const url = `http://localhost:8080/api/SuppComp`;
+            const requestOptions:any = {
+                method: 'GET',
+                credentials: "include",
+    
+            };
+            await fetch(url, requestOptions)
+                .then(async(res )=> {
+                    jsonData = await res.json();
+                })
+                .catch(error => {
+                    throw new Error("Failed to fetch data",error);
+                });
+
+ return jsonData
+    } catch (e) {
+    console.error("get panier error", e);
+    }
+}, []);
 
 const getTotals =async()=>{
     // console.log({cartProducts});
@@ -292,10 +296,25 @@ const getTotals =async()=>{
     if(cartProducts!==null && typeof cartProducts !== "undefined" ){
         const {total,qty} = cartProducts?.reduce((acc, item)=>{
             // console.log({item});
-        let index=item.data.detail.taille.findIndex((el:any)=>el===item.checkedDetail)
+        let indexcheck=item.data.detail.taille.findIndex((el:any)=>el===item.checkedDetail)
         // console.log({index});
-       
-        const itemTotal = item.data.detail.price[index] * item.quantity
+
+
+// let prixsupp: number
+//         if (item.sup.length > 0) { 
+//             const suppList = getSuppliment();
+//             const index = item.supp.findIndex((el:any) => el === item.suppList);
+        
+//             if (index !== -1) {
+
+//                 prixsupp =
+//             } else {
+//                 // Handle the case where the index is not found
+//                 console.log('Checked detail not found in supplement list');
+//             }
+//         }
+
+        const itemTotal = item.data.detail.price[indexcheck] * item.quantity 
         acc.total += itemTotal 
         acc.qty +=item.quantity
         return acc
@@ -323,13 +342,17 @@ useEffect(() => {
 
 const handleAddPanier = async (cartItem: any, dataUser: any,prix:any) => {
     let total:any
+    let shop :any
+    let MRetrait:any
     // console.log("panier Total",prix)
     { cartTotalAmount === 0 ? total= prix.toFixed(2) : total=cartTotalAmount?.toFixed(2) }
     // console.log("panier Total",total)
+    shop = getselectedShoplist()
+    MRetrait= getModeRetrait()
     await fetch("http://localhost:8080/api/panier/AddPanier", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ cartItem: cartItem, id_user: dataUser.id, prix:total, ModeRetrait: ModeRetrait}),
+    body: JSON.stringify({ cartItem: cartItem, id_user: dataUser.id, prix:total, ModeRetrait: MRetrait,  shop: shop.id }),
     });
     await getTotals();
 };
@@ -486,7 +509,7 @@ const handleClearCart = useCallback(async( dataUser: any) => {
     localStorage.setItem("ItemList", JSON.stringify(null));
     localStorage.setItem("CartItem", JSON.stringify(null));
     await handleDelPanier(dataUser);
-}, []);
+}, []);  
 
 const getData = useCallback(async () => {
     try {
@@ -597,6 +620,34 @@ const getAllCommandes = async () => {
 };
 
 
+const getAllUser = async () => {
+    try {
+        let jsonData:any
+        const url = `http://localhost:8080/api/user`;
+        const requestOptions:any = {
+            method: 'GET',
+            credentials: "include",
+
+        };
+        await fetch(url, requestOptions)
+            .then(async(res )=> {
+                jsonData = await res.json();
+            })
+            .catch(error => {
+                throw new Error("Failed to fetch data",error);
+            });
+        
+ 
+    //console.log({res})
+    //console.log("cc",jsonData);
+    //localStorage.setItem("CartItemCommande", JSON.stringify(jsonData.cartItem));
+    setAllUser(jsonData);
+    } catch (e) {
+    console.error("getAllUser error", e);
+    }
+};
+
+
 const getDataCard =  async () => {
     try {
 let jsonData:any
@@ -635,6 +686,7 @@ const value = {
     dataPanier,
     dataCommande,
     AllCommande,
+    AllUser,
     selectedProductData,
     selectedProductId,
     CategorieObject,
@@ -653,12 +705,15 @@ const value = {
     handleAddPanier,
     handleDelPanier,
     getData,
+    getModeRetrait,
     // getDataGoogle,
     getPanier,
     getCommandes,
     getAllCommandes,
+    getAllUser,
     getDataCard,
     getTotals,
+    fetchAllStat,
     // getProductData
 };
 return <CardContext.Provider value={value} {...props} />;

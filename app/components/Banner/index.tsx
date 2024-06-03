@@ -10,7 +10,7 @@ import { LuBadgeDollarSign } from "react-icons/lu";
 import PhotoModeRetrait from "../PhotoModeRetrait";
 
 const Banner = () => {
-const { card, selectedShoplist, getselectedShoplist, ModeRetrait } =
+const { card, selectedShoplist, getselectedShoplist,ModeRetrait,getModeRetrait } =
 useCard();
 useEffect(() => {
 getselectedShoplist();
@@ -21,6 +21,7 @@ const [showModal, setShowModal] = useState(false);
 const onClose = () => {
 setShowModal(!showModal);
 };
+
 
 return (
 <div id="home-section" className="bg-gray-100 pt-28">

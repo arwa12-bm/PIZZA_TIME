@@ -151,7 +151,8 @@ return (
         <div className="flex justify-between">
         <div className="flex p-2 gap-1">
             <IoIosInformationCircleOutline size={25} />
-            <p className="">Ajouter un categorie</p>
+            {!update ? <p >Ajouter un boutique</p>: <p>Modifier un boutique</p>}
+
         </div>
         <div className="p-2">
             <MdSaveAs

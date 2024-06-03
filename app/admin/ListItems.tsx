@@ -1,15 +1,24 @@
 import { Fade } from "react-awesome-reveal";
 import useCard from "../hooks/useCard";
 import Items from "./Items";
+import { useEffect } from "react";
 
 
 interface ListItemProps{
     plat:boolean
     categorie:boolean
     shop:boolean
+    user:boolean
 }
-const ListItem:React.FC<ListItemProps> = ({plat, categorie,shop}) => {
-    const {card,getDataCard}=useCard()
+const ListItem:React.FC<ListItemProps> = ({plat, categorie,shop,user}) => {
+    const {card,getDataCard,dataUser,getAllUser,AllUser}=useCard()
+    useEffect(()=>{
+        if (dataUser.role === "admin"){
+            getAllUser()
+        }
+    },[])
+    
+    // {AllUser && console.log(AllUser)}
     //console.log(card.items)
     const DeleteShop = async (id: any) => {
         const url = `http://localhost:8080/api/shoplist/${id}`;
@@ -59,6 +68,21 @@ const ListItem:React.FC<ListItemProps> = ({plat, categorie,shop}) => {
             });
             getDataCard()
     };
+    const DeleteUser = async (id: any) => {
+        const url = `http://localhost:8080/api/user/${id}`;
+        const requestOptions:any = {
+            method: 'DELETE',
+        };
+        fetch(url, requestOptions)
+            .then(response => {
+            // Handle response
+            getAllUser()
+            console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            });
+    };
 
     return ( 
         <div className="col-span-1 w-[60%] justify-self-end  ">  
@@ -72,7 +96,12 @@ const ListItem:React.FC<ListItemProps> = ({plat, categorie,shop}) => {
         <div className=" relative justify-content border-[1.2px]  border-slate-400 bg-slate-800   text-white shadow-md  rounded-t-xl ml-4 mr-4 mt-4 ">
         <div className="grid flex-row p-2 justify-between ">
             <div className="flex gap-1 ">
-            <p className="">Panier</p>
+                {plat && <p className="">Liste de plat</p>}
+                {categorie && <p className="">Liste de categorie</p>}
+                {shop && <p className="">Liste de boutique</p>}
+                {user && <p className="">Liste d'utilisateur</p>}
+
+
             </div>
         </div>
         </div>
@@ -89,21 +118,28 @@ const ListItem:React.FC<ListItemProps> = ({plat, categorie,shop}) => {
         { card && plat && card.items.map((item: any, i:any) => {
                 return (
                 <div key={i}>
-                    <Items item={item} onDelete={DeleteItem} plat={plat}  categorie={categorie} shop={shop}/>
+                    <Items item={item} onDelete={DeleteItem} plat={plat}  categorie={categorie} shop={shop} user={user}/>
                 </div>
                 );
             })}
         { card && categorie && card.categories.map((item: any, i:any) => {
                 return (
                 <div key={i}>
-                    <Items item={item}  onDelete={DeleteCategorie}  plat={plat} categorie={categorie} shop={shop}/>
+                    <Items item={item}  onDelete={DeleteCategorie}  plat={plat} categorie={categorie} shop={shop} user={user}/>
                 </div>
                 );
             })}
         { card && shop && card.shoplist.map((item: any, i:any) => {
             return (
             <div key={i}>
-                <Items item={item}  onDelete={DeleteShop}  plat={plat} categorie={categorie} shop={shop}/>
+                <Items item={item}  onDelete={DeleteShop}  plat={plat} categorie={categorie} shop={shop} user={user} />
+            </div>
+            );
+            })}
+            { AllUser && user && AllUser.map((item: any, i:any) => {
+            return (
+            <div key={i}>
+                <Items item={item}  onDelete={DeleteUser}  plat={plat} categorie={categorie} shop={shop} user={user} />
             </div>
             );
             })}

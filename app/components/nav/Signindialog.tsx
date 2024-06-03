@@ -35,7 +35,7 @@ const [isLoading, setIsLoading] = useState(false);
 const [isClicked, setIsClicked] = useState(true);
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
-const { dataUser,logWithGoogle } = useCard();
+const { dataUser } = useCard();
 
 useEffect(() => {
     if (dataUser) {
@@ -90,16 +90,16 @@ function handleMenuCnx() {
                     </button>
                 </div>
             </div> */}
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            <div className="absolute  inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div className=''>
                     <button type="button" className='flex justify-end text-xl font-medium bg-bgpink text-pink py-4 px-4 lg:px-8 navbutton rounded-full hover:text-white hover:bg-pink' onClick={openModal}>
-                        Sign In
+                        Se connecter
                     </button>
                 </div>
             </div>
 
             <Transition appear show={isOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-10" onClose={handleMenu}>
+                <Dialog as="div" className="relative z-30" onClose={handleMenu}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -128,8 +128,8 @@ function handleMenuCnx() {
                 <div className="w-full max-w-md space-y-8">
 
                                 {isClicked &&
-                                <div >
-        <div className="flex w-full justify-content  py-3">
+                                <div  className='' >
+        <div className="flex w-full justify-content py-3">
         <button
             onClick={type === "Inscription" || type === "Mot de passe oublié" || type === "Conditions Générales d’Utilisation (CGU)" || type === "Conditions Générales de vente (CGV)"|| type === "Modifier votre Mot de passe"
             ? handleMenuCnx : handleMenu}
@@ -142,7 +142,7 @@ function handleMenuCnx() {
         </div>
         <hr className="w-[100%] my-2 " />
         <div className="flex-grow  justify-content-between">
-        {!dataUser?.error || logWithGoogle ? (
+        {!dataUser?.error ? (
             <Compte handleMenu={handleMenu} />
         ) : (
             <>

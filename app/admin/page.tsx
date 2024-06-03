@@ -16,24 +16,43 @@ import { MdMenu } from "react-icons/md";
 import ListItem from "./ListItems";
 import Comfirmation from "./ModaComfirmation";
 import FormAddShop from "./formAddShop";
+import FormAddUser from "./formAddUser";
+import { CardTransactions } from "./card-transactions";
 
 
 const Admin = () => {
     const {
         getAllCommandes,
-        AllCommande,    
+        AllCommande,
+        dataUser,   
         } = useCard();
         
 
-            getAllCommandes();
+const [filtredCommande, setFiltredCommande] = useState([]);
 
-        
+useEffect(() => {
+    // Call the function to get all commandes
+    getAllCommandes();
+}, []); // Empty array ensures this runs only once when the component mounts
+
+useEffect(() => {
+    // Filter commandes when AllCommande or dataUser changes
+    if (AllCommande && AllCommande.length > 0 && dataUser) {
+        const filtered = AllCommande.filter((item:any) => item.shop === dataUser.shop);
+        setFiltredCommande(filtered);
+    }
+}, [AllCommande, dataUser]); // Dependency array
+
+
+// console.log(AllCommande)
+
         
         
         const [commande, setCommande] = useState(true);
         const [addplat, setAddPlat] = useState(false);
         const [addcategorie, setAddCategorie] = useState(false);
         const [addshop, setAddShop] = useState(false);
+        const [adduser, setAddUser] = useState(false);
         const [stat, setStat] = useState(false);
         const [isOpen, setIsOpen] = useState(false);
 
@@ -42,6 +61,7 @@ const Admin = () => {
             setAddPlat(false)
             setStat(false)
             setAddShop(false)
+            setAddUser(false)
             setCommande(true);
             };
             const handleAddPlat = () => {
@@ -49,6 +69,7 @@ const Admin = () => {
                 setCommande(false);
                 setStat(false)
                 setAddShop(false)
+                setAddUser(false)
                 setAddPlat(true)
                 };
             
@@ -57,6 +78,7 @@ const Admin = () => {
                 setCommande(false);
                 setStat(false)
                 setAddShop(false)
+                setAddUser(false)
                 setAddCategorie(true)
             
                 };
@@ -65,6 +87,7 @@ const Admin = () => {
                 setCommande(false);
                 setAddCategorie(false)
                 setAddShop(false)
+                setAddUser(false)
                 setStat(true)
                 };
                 const handleShop = () => {
@@ -72,9 +95,17 @@ const Admin = () => {
                     setCommande(false);
                     setAddCategorie(false)
                     setStat(false)
+                    setAddUser(false)
                     setAddShop(true)
                     };
-             
+                const handleUser = () => {
+                    setAddPlat(false)
+                    setCommande(false);
+                    setAddCategorie(false)
+                    setStat(false)
+                    setAddShop(false)
+                    setAddUser(true)
+                    };
 
     return ( 
         <div className="mt-[10%]">
@@ -86,6 +117,7 @@ const Admin = () => {
                                 handleAddCategorie={handleAddCategorie}
                                 handleStat={handleStat}
                                 handleShop={handleShop}
+                                handleUser={handleUser}
                                 commande={commande}
                                 addplat={addplat}
                                 addcategorie={addcategorie}
@@ -104,8 +136,8 @@ const Admin = () => {
     {commande && (
         <>
             <Search />
-        {AllCommande &&
-            AllCommande.sort((a:any, b:any) => a.id - b.id).map((item: any, index: number) => {
+        {filtredCommande &&
+            filtredCommande.sort((a:any, b:any) => a.id - b.id).map((item: any, index: number) => {
             return <div key={item.id}><ItemCommande index={index + 1} item={item}  profile /></div>;
             })}
         </>
@@ -113,21 +145,28 @@ const Admin = () => {
     {addplat && (
         <div className="flex gap-2 p-4">
             <FormAddPlat />
-            <ListItem plat={addplat}  categorie={addcategorie} shop={addshop} />
+            <ListItem plat={addplat}  categorie={addcategorie} shop={addshop} user={adduser} />
         </div>
         
     )}
     {addcategorie && (
         <div className="flex gap-2 p-4">
             <FormAddCategorie />
-            <ListItem plat={addplat}  categorie={addcategorie} shop={addshop}/>
+            <ListItem plat={addplat}  categorie={addcategorie} shop={addshop} user={adduser} />
         </div>
         
     )}
     {addshop && (
         <div className="flex gap-2 p-4">
             <FormAddShop />
-            <ListItem plat={addplat}  categorie={addcategorie} shop={addshop}/>
+            <ListItem plat={addplat}  categorie={addcategorie} shop={addshop} user={adduser} />
+        </div>
+        
+    )}
+    {adduser && (
+        <div className="flex gap-2 p-4">
+            <FormAddUser />
+            <ListItem plat={addplat}  categorie={addcategorie} shop={addshop} user={adduser} />
         </div>
         
     )}

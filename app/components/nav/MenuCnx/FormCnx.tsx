@@ -28,7 +28,7 @@ const [isLoading, setIsLoading] = useState(false);
 const [isClicked, setIsClicked] = useState(true);
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
-const { dataUser,logWithGoogle } = useCard();
+const { dataUser } = useCard();
 
 
 
@@ -63,7 +63,7 @@ function handleMenu() {
 
 }
 return (
-<div>
+<div >
     {isClicked ? (
     <div className="fixed  flex flex-col min-h-screen top-0 right-0 bg-white  h-screen z-30 w-[350px]  ">
         <div className="flex w-full justify-content  py-3">

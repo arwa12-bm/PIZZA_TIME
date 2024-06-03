@@ -24,6 +24,7 @@ const sendMessage = (text: string) => {
     })
     .then((response) => response.json())
     .then((response) => {
+        console.log(response)
         const samMessage = { name: 'xxx', message: text };
         const answerMessage = { name: 'Sam', message: response.answer };
         
@@ -44,7 +45,7 @@ const sendMessage = (text: string) => {
 
 return (
 <Container>
-<div className="fixed bottom-0 right-0 mb-4 mr-4">
+<div className="fixed bottom-0 z-30 right-0 mb-4 mr-4">
 
     {show &&
     <div id="chat-container" className="fixed bottom-16 right-4 w-96">

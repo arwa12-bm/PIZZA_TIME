@@ -48,7 +48,7 @@ const ItemCommande:React.FC<ItemCommandeProps>= ({item,index,profile}) => {
             });
     }
     const handlePasser =(id:any)=>{
-        const url = `http://localhost:8080/api/panier/passer/${id}`;
+        const url = `http://localhost:8080/api/panier/EncoursLiv/${id}`;
         const requestOptions:any = {
             method: 'PUT',
         };
@@ -87,7 +87,7 @@ const ItemCommande:React.FC<ItemCommandeProps>= ({item,index,profile}) => {
 
                 <div className="flex gap-4 "> 
                 <p>{item.etat_Commande}</p> 
-                {item.etat_Commande === "En attente" &&
+                {item.etat_Commande === "Passée" &&
                 <div className="bg-green-500 p-1 -m-1 rounded-xl text-center justify-content cursor-pointer hover:scale-105 "
                     onClick={()=>handleValide(item.id)}
                 > valider</div>}

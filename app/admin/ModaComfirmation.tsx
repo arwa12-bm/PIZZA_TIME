@@ -1,12 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Modal } from 'antd';
-import { HiOutlineShoppingBag } from 'react-icons/hi2';
-import { TbTruckDelivery } from 'react-icons/tb';
-import dayjs from 'dayjs';
-import { useRouter } from 'next/navigation';
-
-
-import useCard from '@/app/hooks/useCard';
 import Button from '../components/form/Button';
 
 
@@ -21,30 +14,6 @@ interface ComfirmationProps{
 const Comfirmation: React.FC<ComfirmationProps>= ({ Open,onClose,action,data}) => {
     if (!Open) return null
 
-    const [big,setBig]=useState(true)
-    const [loading, setLoading] = useState(false);
-   
-
-    const router = useRouter()
-  
-    useEffect(() => {
-        
-        const handleResize = () => {
-            if (window.innerWidth < 760) {
-                setBig(false)
-                
-            } else {
-                setBig(true)
-            }
-        };
-
-        window.addEventListener("resize", handleResize);
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []);
-
-
     return (
         <>
         <Modal
@@ -57,8 +26,7 @@ const Comfirmation: React.FC<ComfirmationProps>= ({ Open,onClose,action,data}) =
                 label='Valider  '
                 key="link"
                 href=""
-                disabled={loading}
-                onClick={()=>{action}}
+                onClick={()=>{action();onClose()}}
             />
             ]}
         >

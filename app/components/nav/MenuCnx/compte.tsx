@@ -15,6 +15,7 @@ const Compte: React.FC<CompteProps> = ({  }) => {
 const { getData,handleClearCart,dataUser } = useCard();
 const router = useRouter();
 const HandleLogout = async () => {
+    
     await fetch("http://localhost:8080/api/user/logout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -23,8 +24,9 @@ const HandleLogout = async () => {
     localStorage.setItem("CartItem",JSON.stringify(null))        
     await getData();
     // handleMenu();
-    handleClearCart(dataUser)
-    router.push("/");
+    await handleClearCart(dataUser)
+    await router.push("/");
+
 };
 
 return (
@@ -45,7 +47,7 @@ return (
         <TbShoppingBagCheck size={30} />
         <p className="text-2xl">Mes Commandes</p>
     </div>
-    {dataUser?.role === "admin" &&
+    {(dataUser?.role === "admin" || dataUser?.role === "restaurant_owner" )&&
     <div className="flex gap-4 cursor-pointer"
         onClick={() => {
             router.push("/admin");

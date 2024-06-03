@@ -13,9 +13,10 @@ import Slider from "react-slick";
 interface ProductCategorieProps{
     data:any
     selectedCatId:any
+    showTop?:boolean
 }
 
-const ProductCategorie:React.FC<ProductCategorieProps>= ({data,selectedCatId}) => {
+const ProductCategorie:React.FC<ProductCategorieProps>= ({data,selectedCatId,showTop}) => {
     console.log({data})
     const {selectedCategorie,getselectedCategorie,card,ModeRetrait} = useCard()
     useEffect(()=>{
@@ -24,10 +25,13 @@ const ProductCategorie:React.FC<ProductCategorieProps>= ({data,selectedCatId}) =
 
     },[])
     //{card && console.log({data})}
-    
-
     let  selectedProduct :any
+
+if(!showTop){
     selectedProduct  = card?.items?.find((item:any)=> item.id === Number(data) )
+}else{
+    selectedProduct = data
+}
     //console.log({card})
 
     //{card && console.log({selectedProduct})}

@@ -12,6 +12,7 @@ import { SiFacebook } from "react-icons/si";
 import useCard from "@/app/hooks/useCard";
 import Button from "../../form/Button";
 import Input from "../../form/Input";
+import { toast } from "react-toastify";
 
 
 
@@ -127,12 +128,13 @@ if(jsonData.message === "success"){
     getData();
     handleMenu();
 }
-// if(logWithGoogle){
-//     getDataGoogle
-//     handleMenu();
-// }
+if(jsonData.message === "votre email est incorrecte"){
+    toast.error("votre email est incorrecte")
+}
+if(jsonData.message === "votre email est incorrecte"){
+    toast.error("votre mot de passe est incorrecte")
+}
 
-    
 };
 
 

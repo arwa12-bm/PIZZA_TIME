@@ -11,6 +11,7 @@ import Button from '../components/form/Button';
 import FormAddPlat from './formAddPlat';
 import FormAddCategorie from './formAddCategorie';
 import FormAddShop from './formAddShop';
+import FormAddUser from './formAddUser';
 
 
 
@@ -21,40 +22,22 @@ interface ComfirmationProps{
     plat:boolean
     categorie:boolean
     shop:boolean
+    user:boolean
 }
 
-const Update: React.FC<ComfirmationProps>= ({ Open,onClose,Data,categorie,plat,shop}) => {
+const Update: React.FC<ComfirmationProps>= ({ Open,onClose,Data,categorie,plat,shop,user}) => {
     if (!Open) return null
 
     const [big,setBig]=useState(true)
     const [loading, setLoading] = useState(false);
-   
 
-    const router = useRouter()
-  
-    useEffect(() => {
-        
-        const handleResize = () => {
-            if (window.innerWidth < 760) {
-                setBig(false)
-                
-            } else {
-                setBig(true)
-            }
-        };
-
-        window.addEventListener("resize", handleResize);
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []);
 
 
     return (
         <>
         <Modal
             open={Open}
-            title="Modes de retrait"
+            // title="Update"
             onCancel={onClose}
             footer={[
         
@@ -67,13 +50,17 @@ const Update: React.FC<ComfirmationProps>= ({ Open,onClose,Data,categorie,plat,s
             />
             ]}
         >
-
+<div className='relative'>
 { plat && <FormAddPlat update={true} Data={Data} onCloseModalUpdate={()=>onClose()} /> } 
 { categorie && <FormAddCategorie update={true} Data={Data} onCloseModalUpdate={()=>onClose()}/> }        
 { shop && <FormAddShop update={true} Data={Data} onCloseModalUpdate={()=>onClose()}/> }        
+{ user && <FormAddUser update={true} Data={Data} onCloseModalUpdate={()=>onClose()}/> }
+
+</div>
 
 </Modal>
-        </>
+
+    </>
     );
     };
 

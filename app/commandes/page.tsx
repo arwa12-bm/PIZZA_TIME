@@ -13,32 +13,32 @@ getData();
 
 getAllCommandes();
 
-const [EnAttente, setEnAttente] = useState(true);
+const [Passée, setPassée] = useState(true);
 const [EnCoursPrep, setEnCoursPrep] = useState(false);
 const [EnCoursLiv, setEnCoursLiv] = useState(false);
 const [Expédié, setExpédié] = useState(false);
 
-const handleEnAttente = () => {
+const handlePassée = () => {
 setEnCoursPrep(false);
 setEnCoursLiv(false);
 setExpédié(false);
-setEnAttente(true);
+setPassée(true);
 };
 const handleEnCoursPrep = () => {
 setEnCoursLiv(false);
 setExpédié(false);
-setEnAttente(false);
+setPassée(false);
 setEnCoursPrep(true);
 };
 const handleEnCoursLiv = () => {
 setExpédié(false);
-setEnAttente(false);
+setPassée(false);
 setEnCoursPrep(false);
 setEnCoursLiv(true);
 };
 
 const handleExpédié = () => {
-setEnAttente(false);
+setPassée(false);
 setEnCoursPrep(false);
 setEnCoursLiv(false);
 setExpédié(true);
@@ -49,14 +49,14 @@ return (
     <Container>
     <div className="grid grid-cols-4 gap-8 justify-between shadow-md shadow-rounded-lg shadow-black  my-2">
         <p
-        onClick={handleEnAttente}
+        onClick={handlePassée}
         className={
-            !EnAttente
+            !Passée
             ? "border-b-[1px] p-2 text-lg text-center text-slate-500 transition hover:scale-105 cursor-pointer "
             : "border-b-[2px] border-b-slate-700 p-2 text-lg text-center text-slate-500 transition hover:scale-105 cursor-pointer"
         }
         >
-        En Attente
+        Passée
         </p>
         <p
         onClick={handleEnCoursPrep}
@@ -90,9 +90,9 @@ return (
         </p>
     </div>
 
-    {(EnAttente || EnCoursPrep || EnCoursLiv || Expédié) && (
+    {(Passée || EnCoursPrep || EnCoursLiv || Expédié) && (
         <CartCommande
-    EnAttente={EnAttente} 
+    Passée={Passée} 
     EnCoursPrep={EnCoursPrep}
     EnCoursLiv={EnCoursLiv}
     Expédié={Expédié}

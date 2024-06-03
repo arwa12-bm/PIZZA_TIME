@@ -128,7 +128,7 @@ console.log({ updatedFormData });
                     <div className="flex justify-between">
                         <div className="flex p-2 gap-1">
                             <IoIosInformationCircleOutline size={25} />
-                            <p>Ajouter un categorie</p>
+                            {!update ? <p >Ajouter un categorie</p>: <p>Modifier un categorie</p>}
                         </div>
                         <div className="p-2">
                             <MdSaveAs
@@ -138,7 +138,7 @@ console.log({ updatedFormData });
                             />
                         </div>
                     </div>
-                    <div className="p-2 grid gap-2">
+                    <div className="p-2 relative grid gap-2">
                         <InputProfile
                             id="title"
                             required

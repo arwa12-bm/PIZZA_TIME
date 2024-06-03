@@ -53,7 +53,7 @@ const Subscriptions = () => {
                     <h1>Completed.</h1>
                 </div>
             ) : (
-                <div>
+                <div>  
                     <DropIn
                         options={{ authorization: "sandbox_q7nc2w95_6hjmcbvghc9srkkf" }}
                         onInstance={(inst) => {(instance = inst);setInst(inst)}}

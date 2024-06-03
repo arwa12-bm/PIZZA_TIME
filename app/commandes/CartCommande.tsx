@@ -8,28 +8,28 @@ import Heading from "../cart/Heading";
 import ItemCommande from "./ItemCommande";
 
 interface CartCommandeProps {
-    EnAttente: boolean;
+    Passée: boolean;
     EnCoursPrep: boolean;
     EnCoursLiv: boolean;
     Expédié: boolean;
 }
 
 const CartCommande: React.FC<CartCommandeProps> = ({ 
-    EnAttente,
+    Passée,
     EnCoursPrep,
     EnCoursLiv,
     Expédié 
 }) => {
     const { dataCommande } = useCard();
     const [showPay, setShowPay] = useState(false);
-    const [commandeEnAttente, setCommandeEnAttente] = useState<any[]>([]);
+    const [commandePassée, setCommandePassée] = useState<any[]>([]);
     const [commandeEnCoursPrep, setCommandeEnCoursPrep] = useState<any[]>([]);
     const [commandeEnCoursLiv, setCommandeEnCoursLiv] = useState<any[]>([]);
     const [commandeExpédié, setCommandeExpédié] = useState<any[]>([]);
 
     useEffect(() => {
         if (dataCommande && dataCommande.length > 0) {
-            setCommandeEnAttente(dataCommande.filter((item: any) => item.etat_Commande === 'En attente'));
+            setCommandePassée(dataCommande.filter((item: any) => item.etat_Commande === 'En attente'));
             setCommandeEnCoursPrep(dataCommande.filter((item: any) => item.etat_Commande === 'En cours de préparation'));
             setCommandeEnCoursLiv(dataCommande.filter((item: any) => item.etat_Commande === 'En cours de livraison'));
             setCommandeExpédié(dataCommande.filter((item: any) => item.etat_Commande === 'Expédié'));
@@ -62,8 +62,8 @@ const CartCommande: React.FC<CartCommandeProps> = ({
         <>
             <Heading title="Mes Commandes" center />
             <div>
-                {EnAttente &&
-                    commandeEnAttente.map((item: any, index: number) => (
+                {Passée &&
+                    commandePassée.map((item: any, index: number) => (
                         <div key={index}><ItemCommande index={index + 1} item={item} /></div>
                     ))}
                 {EnCoursPrep &&

@@ -3,8 +3,11 @@
 import { MdDeleteForever } from "react-icons/md";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import { useState } from "react";
+import { FaUserCircle } from "react-icons/fa";
+
 import Comfirmation from "./ModaComfirmation";
 import Update from "./ModalUpdate";
+import useCard from "../hooks/useCard";
 
 interface ItemContentProps{
     item:any
@@ -12,22 +15,22 @@ interface ItemContentProps{
     categorie:boolean
     plat:boolean
     shop:boolean
+    user:boolean
 }
 
-const Items: React.FC<ItemContentProps> = ({ item, onDelete,categorie,plat,shop}) => {
-    
+const Items: React.FC<ItemContentProps> = ({ item, onDelete,categorie,plat,shop,user}) => {
+    const {getAllUser}=useCard()
     const [showModal, setShowModal] = useState(false);
     const onClose = () => {
     setShowModal(!showModal);
     };
     const [showModalUpdate, setShowModalUpdate] = useState(false);
     const onCloseUpdate = () => {
-    setShowModalUpdate(!showModalUpdate);
-    };
+    setShowModalUpdate(!showModalUpdate);};
     
     return (
 <div className="flex justify-between  border-b-[1px] gap-8  m-2 w-full ">
-                        {!shop ?
+                        {(categorie || plat) &&
                         <div className="flex ">
                         <div className="h-20 w-20 m-1 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                         <img src={item.imageUrl} alt="" className="h-full w-full object-cover object-center" />
@@ -40,7 +43,8 @@ const Items: React.FC<ItemContentProps> = ({ item, onDelete,categorie,plat,shop}
                         {/* <p className="">{formatPrice(item.price)}</p> */}
                         </div>
                         </div>
-                        :
+                        }
+                        {shop &&
                         <div >
                         <div className="flex gap-4 mt-4 w-full justify-between text-base font-medium text-gray-900">
                             <h3>
@@ -51,12 +55,27 @@ const Items: React.FC<ItemContentProps> = ({ item, onDelete,categorie,plat,shop}
                         </div>
                         </div>
                         }
+                        {user &&
+                
+                        <div className="flex items-center justify-between gap-6">
+                            <FaUserCircle  size={25}/>
+                            <div className="">
+                            <span className="font-semibold">{item.email}</span>
+                            <div className="">
+                            <span className="font-semibold">{item.role}/</span>
+                            <span className="font-semibold">{item.télephone}</span>
+                            </div>
+                            </div>
+                            <span className="text-gray-500 text-xs">{item.createdAt.split("T")[0]}</span>
+                        </div>
+                        
+                        }
                         <div className="grid grid-rows-2 justify-end ">
                             <FaRegPenToSquare  size={20} className="text-slate-800 m-2 text-green-700"onClick={()=>setShowModalUpdate(true)} />
                             <MdDeleteForever  size={25} className="text-red-800 m-1" onClick={()=>setShowModal(true)}/>
                         </div>
-                        <Comfirmation onClose={onClose} Open={showModal} action={()=>onDelete(item.id)}/>
-                        <Update  onClose={onCloseUpdate} Open={showModalUpdate} Data={item} categorie={categorie} plat={plat}  shop={shop}/>
+                        <Comfirmation onClose={onClose} Open={showModal} action={()=>{onDelete(item.id);}}/>
+                        <Update  onClose={onCloseUpdate} Open={showModalUpdate} Data={item} categorie={categorie} plat={plat}  shop={shop} user={user}/>
             </div>
     );
 }

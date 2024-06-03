@@ -43,8 +43,8 @@ if(dataUser?.error ){
 }
 };
 
-const handleEnAttente =async()=>{
-    const url = `http://localhost:8080/api/panier/EnAttente/${dataUser.id}`;
+const handlePassée =async()=>{
+    const url = `http://localhost:8080/api/panier/CmdPassee/${dataUser.id}`;
     const requestOptions:any = {
         method: 'PUT',
     };
@@ -129,7 +129,7 @@ const handleEnAttente =async()=>{
                 triggerOnce={true}
             >
               <div className="flex gap-2 p-4 items-center justify-center">
-                <button type="button" className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700" onClick={handleEnAttente}>
+                <button type="button" className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700" onClick={handlePassée}>
                 Espace
                   </button>
                   <button type="button" className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700" onClick={() => setCartshow(true)}>

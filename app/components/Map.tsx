@@ -4,12 +4,12 @@ import {  GoogleMap, InfoWindowF, LoadScript, Marker, MarkerF,Autocomplete} from
 import Container from "../components/Container";
 import useLocation from "@/app/hooks/useLocation";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { card } from "../utils/products";
 import L from 'leaflet';
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import isEqual from 'fast-deep-equal';
+import useCard from "../hooks/useCard";
 
 interface AutocompleteProps {
     options: {
@@ -32,7 +32,7 @@ const {userLocation}= useLocation()
 
 
 
-console.log("locationx",userLocation)
+// console.log("locationx",userLocation)
 
 const customPinView:any= new L.Icon({
     icon: FaMapMarkerAlt, // Specify the path to your icon image
@@ -53,7 +53,7 @@ const [selectedPlace,setSelectedPlace]=useState<place>()
 const router = useRouter();
 
 
-console.log("locationaaa",userLocation)
+// console.log("locationaaa",userLocation)
 const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
 
 // Use a useEffect to set googleMapsLoaded when the Google Maps API is loaded
@@ -76,7 +76,7 @@ setGoogleMapsLoaded(true);
     
 //     const autocomplete:any  = useRef<google.maps.places.Autocomplete>(null);
 const [showMap,setShowMap]=useState(false)
-
+const {card}=useCard()
     
 return (
    <>
@@ -165,7 +165,7 @@ return (
                                 alt=""
                                 onClick={() => {
                                     localStorage.setItem("selectedShoplist",JSON.stringify(selectedPlace));
-                                    router.push(`/menu/${selectedPlace.id}#about-section`)
+                                    router.push(`/menu/1#about-section`)
                                 }}                            />
                             </div>
                         
