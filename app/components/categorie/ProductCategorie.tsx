@@ -17,7 +17,7 @@ interface ProductCategorieProps{
 }
 
 const ProductCategorie:React.FC<ProductCategorieProps>= ({data,selectedCatId,showTop}) => {
-    console.log({data})
+    // console.log({data})
     const {selectedCategorie,getselectedCategorie,card,ModeRetrait} = useCard()
     useEffect(()=>{
         getselectedCategorie()
@@ -49,7 +49,7 @@ if(!showTop){
         }
 
     }
-console.log({selectedProduct});
+// console.log({selectedProduct});
 
 
 

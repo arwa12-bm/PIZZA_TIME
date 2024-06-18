@@ -57,6 +57,7 @@ handleDelPanier: (dataUser: any) => void;
 getDataCard: () => any;
 getModeRetrait: () => any;
 fetchAllStat: () => any;
+calculateSuppPrice: (dataUserId: any) => any
 };
 
 export interface card{
@@ -169,7 +170,6 @@ useEffect(() => {
     const intervalId = setInterval(async () => {
         const currentTime = new Date();
         const min = currentTime.getMinutes();
-        console.log(min);
         if (min === 45 ) {
             await SaveStatData();
             console.log("cc");
@@ -266,68 +266,77 @@ useEffect(() => {
     : null;
     setselectedProductId(parsedProductId);
 }, []);
+
+
 const getSuppliment = useCallback(async () => {
     try {
-        let jsonData :any
-        // if(!logWithGoogle){
-            const url = `http://localhost:8080/api/SuppComp`;
-            const requestOptions:any = {
-                method: 'GET',
-                credentials: "include",
-    
-            };
-            await fetch(url, requestOptions)
-                .then(async(res )=> {
-                    jsonData = await res.json();
-                })
-                .catch(error => {
-                    throw new Error("Failed to fetch data",error);
-                });
+        const url = `http://localhost:8080/api/SuppComp`;
+        const requestOptions:any = {
+            method: 'GET',
+            credentials: "include",
+        };
 
- return jsonData
+        const response = await fetch(url, requestOptions);
+        if (!response.ok) {
+            throw new Error("Failed to fetch data");
+        }
+        const jsonData = await response.json();
+        return jsonData;
     } catch (e) {
-    console.error("get panier error", e);
+        console.error("getSuppliment error", e);
     }
 }, []);
 
-const getTotals =async()=>{
-    // console.log({cartProducts});
-    
-    if(cartProducts!==null && typeof cartProducts !== "undefined" ){
-        const {total,qty} = cartProducts?.reduce((acc, item)=>{
-            // console.log({item});
-        let indexcheck=item.data.detail.taille.findIndex((el:any)=>el===item.checkedDetail)
-        // console.log({index});
+async function calculateSuppPrice(item: any) {
+    let prixsupp = 0;
 
+    // Assuming suppList is a promise
+    const suppList = await getSuppliment(); // Replace this with how you actually get the promise
 
-// let prixsupp: number
-//         if (item.sup.length > 0) { 
-//             const suppList = getSuppliment();
-//             const index = item.supp.findIndex((el:any) => el === item.suppList);
-        
-//             if (index !== -1) {
+    if (item.sup && suppList && Object.keys(item.sup).length > 0) {
+        for (const supKey in item.sup) {
+            const index = suppList.findIndex((s: any) => s.title === supKey);
 
-//                 prixsupp =
-//             } else {
-//                 // Handle the case where the index is not found
-//                 console.log('Checked detail not found in supplement list');
-//             }
-//         }
+            if (index !== -1) {
+                prixsupp += suppList[index].price * item.sup[supKey];
+            }
+        }
+    } else {
+        prixsupp = 0;
+    }
 
-        const itemTotal = item.data.detail.price[indexcheck] * item.quantity 
-        acc.total += itemTotal 
-        acc.qty +=item.quantity
-        return acc
-    },{
-        total:0,
-        qty:0
-    })
-    setCartTotalQty(qty)
-    //console.log({total});
-    setCartTotalAmount(total)
-    return total
-
+    return prixsupp;
 }
+
+const getTotals = async () => {
+    // console.log({ cartProducts });
+
+    if (cartProducts !== null && typeof cartProducts !== "undefined") {
+        const promises = cartProducts.map(async (item) => {
+            let indexcheck = item.data.detail.taille.findIndex((el: any) => el === item.checkedDetail);
+            // console.log({ index });
+
+            let prixsupp = await calculateSuppPrice(item);
+
+            const itemTotal = item.data.detail.price[indexcheck] * item.quantity;
+            return {
+                total: itemTotal + prixsupp,
+                qty: item.quantity
+            };
+        });
+
+        const results = await Promise.all(promises);
+        const { total, qty } = results.reduce((acc, result) => {
+            acc.total += result.total;
+            acc.qty += result.qty;
+            return acc;
+        }, { total: 0, qty: 0 });
+
+        setCartTotalQty(qty);
+        // console.log({ total });
+        setCartTotalAmount(total);
+        return total;
+    }
 }
 
 // get  totalAmount and total quantity
@@ -344,9 +353,13 @@ const handleAddPanier = async (cartItem: any, dataUser: any,prix:any) => {
     let total:any
     let shop :any
     let MRetrait:any
-    // console.log("panier Total",prix)
-    { cartTotalAmount === 0 ? total= prix.toFixed(2) : total=cartTotalAmount?.toFixed(2) }
-    // console.log("panier Total",total)
+    let cartTotal = await getTotals()
+    console.log("panier Total",prix)
+    if (typeof prix !== 'undefined' && prix !== null) {
+        total = prix.toFixed(2);
+    } else {
+    total = cartTotal?.toFixed(2);
+    }    console.log("panier Total",total)
     shop = getselectedShoplist()
     MRetrait= getModeRetrait()
     await fetch("http://localhost:8080/api/panier/AddPanier", {
@@ -385,14 +398,17 @@ const handleAddProductToCart = useCallback(
         // console.log({cartTotalAmount});
         // console.log({dataPanier});
         let index=product.data.detail.taille.findIndex((el:any)=>el===product.checkedDetail)
+        let prixsupp = await calculateSuppPrice(product);
+
+
         // console.log({index});
         if (cartProducts) {
             updatedCart = [...cartProducts, product]; // Ajoute le nouveau produit à la fin du panier existant
             // const itemTotal = product.data.detail.price[index] * product.quantity
-            prix = cartTotalAmount + product.data.detail.price[index]; // Met à jour le prix total en ajoutant le prix du nouveau produit
+            prix = total + product.data.detail.price[index]+ prixsupp; // Met à jour le prix total en ajoutant le prix du nouveau produit
         } else {
             updatedCart = [product]; // Crée un nouveau panier avec le produit si le panier est vide
-            prix = product.data.detail.price[index]; // Définit le prix total comme le prix du nouveau produit
+            prix = product.data.detail.price[index] + prixsupp; // Définit le prix total comme le prix du nouveau produit
         }
 
         setCartProducts(updatedCart); // Met à jour l'état du panier avec le nouveau contenu
@@ -535,7 +551,7 @@ const getData = useCallback(async () => {
     setDataUser(jsonData);
 // }
     } catch (e) {
-    console.error("get panier error", e);
+    console.error("get user error", e);
     }
 }, []);
 
@@ -552,16 +568,17 @@ const getPanier = async (dataUser:any) => {
         await fetch(url, requestOptions)
             .then(async(res )=> {
                 jsonData = await res.json();
+                //console.log({jsonData});
+                if (typeof jsonData !== "undefined") {
+                    localStorage.setItem("CartItem", JSON.stringify(jsonData[0]?.cartItem));
+                    setDataPanier(jsonData[0]);
+                }
             })
             .catch(error => {
                 throw new Error("Failed to fetch data",error);
             });
 
-//console.log({jsonData});
-if (typeof jsonData !== "undefined") {
-    localStorage.setItem("CartItem", JSON.stringify(jsonData[0]?.cartItem));
-    setDataPanier(jsonData[0]);
-}
+
     } catch (e) {
     console.error("getPanier error", e);
     }
@@ -579,15 +596,14 @@ const getCommandes = async (dataUserId: any) => {
         await fetch(url, requestOptions)
             .then(async(res )=> {
                 jsonData = await res.json();
+                setDataCommande(jsonData);
             })
             .catch(error => {
                 throw new Error("Failed to fetch data",error);
             }); 
-
     //console.log({res})
     //console.log("cc",jsonData);
     //localStorage.setItem("CartItemCommande", JSON.stringify(jsonData.cartItem));
-    setDataCommande(jsonData);
     } catch (e) {
     console.error("getCommande error", e);
     }
@@ -714,6 +730,7 @@ const value = {
     getDataCard,
     getTotals,
     fetchAllStat,
+    calculateSuppPrice,
     // getProductData
 };
 return <CardContext.Provider value={value} {...props} />;

@@ -5,7 +5,13 @@ import Container from "../components/Container";
 import useCard from "../hooks/useCard";
 import { useEffect, useState } from "react";
 
-const commandes = () => {
+interface commandesProps{
+    profile:boolean
+    filtredCommande:any
+    setSearch:Function
+    setIdUserSearch:Function
+}
+const Commandes:React.FC<commandesProps>= ({profile,filtredCommande,setSearch,setIdUserSearch}) => {
 const { getData, getAllCommandes, AllCommande } = useCard();
 useEffect(() => {
 getData();
@@ -45,9 +51,9 @@ setExpédié(true);
 };
 
 return (
-<div className="pt-8  mt-[4%]">
+<div className="pt-8  mt-[5%] ">
     <Container>
-    <div className="grid grid-cols-4 gap-8 justify-between shadow-md shadow-rounded-lg shadow-black  my-2">
+    <div className="grid grid-cols-4 gap-8 justify-between shadow-md shadow-rounded-lg shadow-black  my-2 p-4">
         <p
         onClick={handlePassée}
         className={
@@ -96,10 +102,14 @@ return (
     EnCoursPrep={EnCoursPrep}
     EnCoursLiv={EnCoursLiv}
     Expédié={Expédié}
+    profile={profile}
+    filtredCommande={filtredCommande}
+    setSearch={setSearch}
+    setIdUserSearch={setIdUserSearch}
         />
     )}
     </Container>
 </div>
 );
 };
-export default commandes;
+export default Commandes;

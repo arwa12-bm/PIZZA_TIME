@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "../utils/formatPrice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useCard from "../hooks/useCard";
 import NumberControl from "../components/form/InputNumber";
 
@@ -12,10 +12,11 @@ interface ItemCententProps{
     
 }
 const ItemCententCmd:React.FC<ItemCententProps>= ({item}) => {
-    const {handleRemoveProductFromCart, dataUser} =useCard()
+    const {calculateSuppPrice} =useCard()
     
     const [showDetail,setShowDetail] =useState(false)
     const [count, setCount] =useState(0);
+    const [prixSupp, setPrixSupp] = useState(0);
 
     const onCountChanged = (newCount: number) => {
         setCount(newCount);       
@@ -23,6 +24,15 @@ const ItemCententCmd:React.FC<ItemCententProps>= ({item}) => {
     //console.log( "xxx",item.data.price);
     
     let index=item.data.detail.taille.findIndex((el:any)=>el===item.checkedDetail)
+    const updatePrixSupp = async (item: any) => {
+        const calculatedSuppPrice = await calculateSuppPrice(item);
+        setPrixSupp(calculatedSuppPrice);
+        // console.log("Updated prixSupp:", calculatedSuppPrice);
+    };
+
+    useEffect(() => {
+        updatePrixSupp(item);
+    }, [item]);
 
     return (
 <>
@@ -37,7 +47,7 @@ const ItemCententCmd:React.FC<ItemCententProps>= ({item}) => {
                 <a href="#">{item.data.title} x {item.quantity}</a>
                 
             </h3>
-            <p className="ml-4">{formatPrice(item.data.detail.price[index] * item.quantity)}</p>
+            <p className="ml-4">{formatPrice(item.data.detail.price[index] * item.quantity +prixSupp)}</p>
             </div>
             <div className="mt-1 text-sm text-gray-500">
             <button className="text-slate-500 underline" onClick={()=>{setShowDetail(!showDetail)}}>{showDetail?"Voir moins" :"Voir plus..."}</button>

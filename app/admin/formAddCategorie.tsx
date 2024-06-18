@@ -171,35 +171,39 @@ console.log({ updatedFormData });
                                 })
                             }
                         />
-                        <FormControl sx={{ m: 1, width: 300 }}>
-                            <InputLabel id="demo-multiple-chip-label">Shop Parent</InputLabel>
-                            <Select
-                                labelId="demo-multiple-chip-label"
-                                id="selectedShop"
-                                multiple
-                                value={selectedShop}
-                                onChange={handleChange}
-                                input={<OutlinedInput id="select-multiple-chip" label="Shop Parent" />}
-                                renderValue={(selected) => (
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                        {selected.map((value: any,index:any) => (
-                                            <Chip key={index} label={value} />
-                                        ))}
-                                    </Box>
-                                )}
-                                MenuProps={MenuProps}
-                            >
-                                {listshoplist.map((name: any,index:any) => (
-                                    <MenuItem
-                                        key={index}
-                                        value={name}
-                                        style={getStyles(name, itemData.shopParent, theme)}
-                                    >
-                                        {name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
+                <FormControl sx={{ m: 1, width: 300 }} error={!!errorsSignup.selectedShop}>
+            <InputLabel id="demo-multiple-chip-label">Shop Parent</InputLabel>
+            <Select
+                labelId="demo-multiple-chip-label"
+                id="selectedShop"
+                multiple
+                value={selectedShop}
+                {...registerSignup("selectedShop", { required: true })}
+                onChange={handleChange}
+                input={<OutlinedInput id="select-multiple-chip" label="Shop Parent" />}
+                renderValue={(selected) => (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        {selected.map((value: any, index: any) => (
+                            <Chip key={index} label={value} />
+                        ))}
+                    </Box>
+                )}
+                MenuProps={MenuProps}
+            >
+                {listshoplist.map((name: any, index: any) => (
+                    <MenuItem
+                        key={index}
+                        value={name}
+                        style={getStyles(name, itemData.shopParent, theme)}
+                    >
+                        {name}
+                    </MenuItem>
+                ))}
+            </Select>
+            {errorsSignup.selectedShop && (
+                <p style={{ color: 'red', fontSize: "0.75rem" }}>veuillez compléter ce champ</p>
+            )}
+        </FormControl>
                     </div>
                 </div>
             </div>

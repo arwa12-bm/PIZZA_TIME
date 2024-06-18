@@ -1,7 +1,8 @@
 import { Fade } from "react-awesome-reveal";
 import useCard from "../hooks/useCard";
 import Items from "./Items";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import DropDowen from "./dropDowen";
 
 
 interface ListItemProps{
@@ -28,12 +29,12 @@ const ListItem:React.FC<ListItemProps> = ({plat, categorie,shop,user}) => {
         fetch(url, requestOptions)
             .then(response => {
             // Handle response
+            getDataCard()
             console.log(response)
             })
             .catch(error => {
                 console.log(error)
             });
-    getDataCard()
 
     };
     const DeleteCategorie = async (id: any) => {
@@ -44,12 +45,12 @@ const ListItem:React.FC<ListItemProps> = ({plat, categorie,shop,user}) => {
         fetch(url, requestOptions)
             .then(response => {
             // Handle response
+            getDataCard()
             console.log(response)
             })
             .catch(error => {
                 console.log(error)
             });
-    getDataCard()
 
     };
     const DeleteItem = async (id: any) => {
@@ -60,13 +61,13 @@ const ListItem:React.FC<ListItemProps> = ({plat, categorie,shop,user}) => {
         fetch(url, requestOptions)
             .then(response => {
             // Handle response
+            getDataCard()
             console.log(response)
 
             })
             .catch(error => {
                 console.log(error)
             });
-            getDataCard()
     };
     const DeleteUser = async (id: any) => {
         const url = `http://localhost:8080/api/user/${id}`;
@@ -83,6 +84,49 @@ const ListItem:React.FC<ListItemProps> = ({plat, categorie,shop,user}) => {
                 console.log(error)
             });
     };
+    const [categorieFilter, setCayegorieFilter] = useState('all')
+    console.log({categorieFilter})
+    let filtredItem :any
+
+    if(card){
+
+        if(typeof categorieFilter != undefined && categorieFilter !== 'all'){
+            filtredItem =card.items.filter((item:any)=> item.categoryParent=== categorieFilter)
+    
+        }else if(typeof categorieFilter != undefined && categorieFilter === 'all'){
+            filtredItem = card.items.map((item:any)=> item)
+        }
+    }
+    console.log({filtredItem})
+    let filtredcategorie :any
+
+    if(card){
+
+        if(typeof categorieFilter != undefined && categorieFilter !== 'all'){
+            filtredcategorie = card.categories.filter((item: any) => item.shopParent.includes(categorieFilter));
+
+    
+        }else if(typeof categorieFilter != undefined && categorieFilter === 'all'){
+            filtredcategorie = card.categories.map((item:any)=> item)
+        }
+    }
+    console.log({filtredcategorie})
+
+    let filtreduser :any
+
+    if(card && AllUser){
+
+        if(typeof categorieFilter != undefined && categorieFilter !== 'all'){
+            filtreduser = AllUser.filter((item: any) => item.role=== categorieFilter);
+
+    
+        }else if(typeof categorieFilter != undefined && categorieFilter === 'all'){
+            filtreduser = AllUser.map((item:any)=> item)
+        }
+    }
+    console.log({filtreduser})
+
+
 
     return ( 
         <div className="col-span-1 w-[60%] justify-self-end  ">  
@@ -94,16 +138,14 @@ const ListItem:React.FC<ListItemProps> = ({plat, categorie,shop,user}) => {
         triggerOnce={true}
         >
         <div className=" relative justify-content border-[1.2px]  border-slate-400 bg-slate-800   text-white shadow-md  rounded-t-xl ml-4 mr-4 mt-4 ">
-        <div className="grid flex-row p-2 justify-between ">
-            <div className="flex gap-1 ">
-                {plat && <p className="">Liste de plat</p>}
-                {categorie && <p className="">Liste de categorie</p>}
-                {shop && <p className="">Liste de boutique</p>}
-                {user && <p className="">Liste d'utilisateur</p>}
+            <div className="flex w-full p-4 ">
+                {plat && <div className="flex items-center justify-between w-full"><p >Liste de plat</p>  <DropDowen plat={plat}  categorie={categorie} shop={shop} user={user} setCayegorieFilter={setCayegorieFilter}/> <p>{filtredItem.length}</p></div>  }
+                {categorie && <div className="flex items-center justify-between w-full"> <p >Liste de categorie</p> <DropDowen plat={plat}  categorie={categorie} shop={shop} user={user} setCayegorieFilter={setCayegorieFilter}/> <p>{filtredcategorie.length}</p> </div> }
+                {shop && <div className="flex items-center justify-between w-full"><p className="">Liste de restaurant</p> <p>{card.shoplist.length}</p></div>}
+                {user && <div className="flex items-center justify-between w-full"><p className="">Liste d'utilisateur</p> <DropDowen plat={plat}  categorie={categorie} shop={shop} user={user} setCayegorieFilter={setCayegorieFilter}/> <p>{filtreduser.length}</p></div>}
 
 
             </div>
-        </div>
         </div>
         </Fade>
         <Fade
@@ -114,31 +156,31 @@ const ListItem:React.FC<ListItemProps> = ({plat, categorie,shop,user}) => {
         triggerOnce={true}
         >
         <div className=" relative justify-content border-b-[1.2px]  border-l-[1.2px] border-r-[1.2px] border-slate-400 bg-white  shadow-md  rounded-b-xl ml-4 mr-4 mb-4">
-        <div className="grid flex-row p-2 justify-between ">
-        { card && plat && card.items.map((item: any, i:any) => {
+        <div className="grid flex-row p-2  items-center justify-content  w-full ">
+        { card && filtredItem && plat && filtredItem.map((item: any, i:any) => {
                 return (
                 <div key={i}>
                     <Items item={item} onDelete={DeleteItem} plat={plat}  categorie={categorie} shop={shop} user={user}/>
                 </div>
                 );
             })}
-        { card && categorie && card.categories.map((item: any, i:any) => {
+        { card && categorie && filtredcategorie.map((item: any, i:any) => {
                 return (
-                <div key={i}>
+                <div key={i} className="w-full">
                     <Items item={item}  onDelete={DeleteCategorie}  plat={plat} categorie={categorie} shop={shop} user={user}/>
                 </div>
                 );
             })}
         { card && shop && card.shoplist.map((item: any, i:any) => {
             return (
-            <div key={i}>
+            <div key={i} className="w-full">
                 <Items item={item}  onDelete={DeleteShop}  plat={plat} categorie={categorie} shop={shop} user={user} />
             </div>
             );
             })}
-            { AllUser && user && AllUser.map((item: any, i:any) => {
+            { AllUser && user && filtreduser.map((item: any, i:any) => {
             return (
-            <div key={i}>
+            <div key={i} className="w-full">
                 <Items item={item}  onDelete={DeleteUser}  plat={plat} categorie={categorie} shop={shop} user={user} />
             </div>
             );

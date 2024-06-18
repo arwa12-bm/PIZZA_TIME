@@ -3,7 +3,6 @@ import { useSnapshot } from "valtio";
 import React, { useState } from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Button } from "@nextui-org/react";
-import { card } from "../utils/products";
 import useCard from "../hooks/useCard";
 //import store from "@/app/components/store"; address selcted id
 

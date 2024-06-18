@@ -16,7 +16,6 @@ onCloseModalUpdate?: () => void;
 
 const FormAddShop: React.FC<FormAddShopProps> = ({ update, Data, onCloseModalUpdate }) => {
 
-    
 
 const { getDataCard } = useCard();
 const [itemData, setItemData] = useState<any>({
@@ -42,7 +41,7 @@ horaire: {},
 etat: "",
 });
 
-const [Listhoraire,setListhoraire]=useState({
+const [Listhoraire,setListhoraire]=useState<any>({
     LUNDI: { firstStart: "", firstEnd: "", secondStart: "", secondEnd: "" },
     MARDI: { firstStart: "", firstEnd: "", secondStart: "", secondEnd: "" },
     MERCREDI: { firstStart: "", firstEnd: "", secondStart: "", secondEnd: "" },
@@ -127,20 +126,65 @@ setItemData({
 });
 getDataCard();
 };
-const handleChange = (day:any, session:any, timeType:any, value:any) => {
-    // Log the update to be applied
-    console.log({ [day]: { [session + timeType]: value } });
+const handleChange = (day:any, sessionType:any, timeType:any, value:any) => {
+    // Prepare the updated sessions object
+    const updatedSessions = {
+        ...Listhoraire[day],
+        [`${sessionType}${timeType}`]: value
+    };
 
-    setListhoraire((prevState:any) => ({
-        ...prevState,
-        [day]: {
-            ...prevState[day], // Preserve the other fields of the day's schedule
-            [session + timeType]: value, // Update the specific field
-        },
-    }));
+    // Validate session times
+    if (sessionType === 'first') {
+        if (timeType === 'Start') {
+            // Ensure Session 1 Start < Session 1 End
+            if (compareTime(value, Listhoraire[day].firstEnd) >= 0) {
+                // Handle error state or alert the user
+                // Example: setErrorState('Session 1 Start time must be before Session 1 End time');
+                return;
+            }
+        } else if (timeType === 'End') {
+            // Ensure Session 1 End > Session 1 Start
+            if (compareTime(Listhoraire[day].firstStart, value) >= 0) {
+                // Handle error state or alert the user
+                // Example: setErrorState('Session 1 End time must be after Session 1 Start time');
+                return;
+            }
+        }
+    } else if (sessionType === 'second') {
+        if (timeType === 'Start') {
+            // Ensure Session 2 Start < Session 2 End
+            if (compareTime(value, Listhoraire[day].secondEnd) >= 0) {
+                // Handle error state or alert the user
+                // Example: setErrorState('Session 2 Start time must be before Session 2 End time');
+                return;
+            }
+        } else if (timeType === 'End') {
+            // Ensure Session 2 End > Session 2 Start
+            if (compareTime(Listhoraire[day].secondStart, value) >= 0) {
+                // Handle error state or alert the user
+                // Example: setErrorState('Session 2 End time must be after Session 2 Start time');
+                return;
+            }
+        }
+    }
 
-    // Log the updated state after applying the change
-    console.log(Listhoraire);
+    // Update the state or context with the validated sessions
+    setListhoraire({
+        ...Listhoraire,
+        [day]: updatedSessions
+    });
+};
+
+// Function to compare two time strings (HH:mm format)
+const compareTime = (time1:any, time2:any) => {
+    const [hours1, minutes1] = time1.split(':').map(parseFloat);
+    const [hours2, minutes2] = time2.split(':').map(parseFloat);
+    
+    if (hours1 !== hours2) {
+        return hours1 - hours2;
+    } else {
+        return minutes1 - minutes2;
+    }
 };
 
 
@@ -151,7 +195,7 @@ return (
         <div className="flex justify-between">
         <div className="flex p-2 gap-1">
             <IoIosInformationCircleOutline size={25} />
-            {!update ? <p >Ajouter un boutique</p>: <p>Modifier un boutique</p>}
+            {!update ? <p >Ajouter un restaurant</p>: <p>Modifier un restaurant</p>}
 
         </div>
         <div className="p-2">

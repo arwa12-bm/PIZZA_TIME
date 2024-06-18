@@ -102,7 +102,7 @@ const ItemCommande:React.FC<ItemCommandeProps>= ({item,index,profile}) => {
             }
             
             <div className="flex" >
-            <p className="text-md p-2">{item.createdAt.toLocaleString().split('T')[0].split('-')[1] }-{item.createdAt.toLocaleString().split('T')[0].split('-')[1] } / 
+            <p className="text-md p-2">{item.createdAt.toLocaleString().split('T')[0].split('-')[1] }-{item.createdAt.toLocaleString().split('T')[0].split('-')[2] } / 
             {item.createdAt.toLocaleString().split('T')[1].split(':')[0] }:{item.createdAt.toLocaleString().split('T')[1].split(':')[1] }</p>
             {clicked?
             <RiArrowDropUpLine size={50} onClick={()=>setClicked(!clicked)}  />

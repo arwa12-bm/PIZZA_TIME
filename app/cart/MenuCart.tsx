@@ -7,7 +7,6 @@ import { Fade } from "react-awesome-reveal";
 import Subscriptions from "../profile/Braintree";
 import store, { setIsValidation } from "@/app/hooks/store";
 import { useSnapshot } from "valtio";
-import Signindialog from "../components/nav/Signindialog";
 import { toast } from "react-toastify";
 
 
@@ -23,7 +22,7 @@ const {
   cartTotalAmount,
   cartProducts,
   dataUser,
-  selectedCategorie,
+  calculateSuppPrice,
   getselectedCategorie,  
   } = useCard();
 
@@ -73,8 +72,8 @@ const handlePassée =async()=>{
     setIsValidation(false)
     setShowPay(false)
     setShow(false); 
-    console.log({cartProducts})
-    console.log("close")
+    // console.log({cartProducts})
+    // console.log("close")
 
   }
 

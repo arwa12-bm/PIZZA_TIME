@@ -24,14 +24,6 @@ import useCard from "@/app/hooks/useCard";
     
         const router = useRouter()
 
-        const handle=()=>{
-            
-            if (ModeRetrait === null || Object.keys(ModeRetrait).length === 0 ){
-                handleOpenModal()
-            }else{
-                router.push(`/menu/${data.id}`)} 
-
-        }
     
         return ( 
         <div>

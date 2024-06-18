@@ -6,19 +6,28 @@ import { useEffect, useState } from "react";
 import Subscriptions from "../profile/Braintree";
 import Heading from "../cart/Heading";
 import ItemCommande from "./ItemCommande";
+import Search from "../components/form/searchBar";
 
 interface CartCommandeProps {
     Passée: boolean;
     EnCoursPrep: boolean;
     EnCoursLiv: boolean;
     Expédié: boolean;
+    profile:boolean;
+    filtredCommande:any;
+    setSearch:Function
+    setIdUserSearch:Function
 }
 
 const CartCommande: React.FC<CartCommandeProps> = ({ 
     Passée,
     EnCoursPrep,
     EnCoursLiv,
-    Expédié 
+    Expédié ,
+    profile,
+    filtredCommande,
+    setSearch,
+    setIdUserSearch
 }) => {
     const { dataCommande } = useCard();
     const [showPay, setShowPay] = useState(false);
@@ -28,13 +37,26 @@ const CartCommande: React.FC<CartCommandeProps> = ({
     const [commandeExpédié, setCommandeExpédié] = useState<any[]>([]);
 
     useEffect(() => {
-        if (dataCommande && dataCommande.length > 0) {
-            setCommandePassée(dataCommande.filter((item: any) => item.etat_Commande === 'En attente'));
+
+        if (dataCommande && !profile && dataCommande.length > 0) {
+            setCommandePassée(dataCommande.filter((item: any) => item.etat_Commande === 'Passée'));
             setCommandeEnCoursPrep(dataCommande.filter((item: any) => item.etat_Commande === 'En cours de préparation'));
             setCommandeEnCoursLiv(dataCommande.filter((item: any) => item.etat_Commande === 'En cours de livraison'));
             setCommandeExpédié(dataCommande.filter((item: any) => item.etat_Commande === 'Expédié'));
         }
+        if(profile && filtredCommande){
+            setCommandePassée(filtredCommande.filter((item: any) => item.etat_Commande === 'Passée'));
+            setCommandeEnCoursPrep(filtredCommande.filter((item: any) => item.etat_Commande === 'En cours de préparation'));
+            setCommandeEnCoursLiv(filtredCommande.filter((item: any) => item.etat_Commande === 'En cours de livraison'));
+            setCommandeExpédié(filtredCommande.filter((item: any) => item.etat_Commande === 'Expédié'));
+        }
+
     }, [dataCommande]);
+
+const sortedCommandePassée = [...commandePassée].sort((a, b) => b.id - a.id);
+const sortedCommandeEnCoursPrep = [...commandeEnCoursPrep].sort((a, b) => b.id - a.id);
+const sortedCommandeEnCoursLiv = [...commandeEnCoursLiv].sort((a, b) => b.id - a.id);
+const sortedCommandeExpédié = [...commandeExpédié].sort((a, b) => b.id - a.id);
 
     if (!dataCommande || dataCommande.length === 0) {
         return (
@@ -60,24 +82,32 @@ const CartCommande: React.FC<CartCommandeProps> = ({
 
     return (
         <>
+        {profile ? 
+            <>
+            <Heading title="Liste de Commandes" center />
+            <Search  setIdUserSearch={setIdUserSearch} setSearch={setSearch}/>
+            </>:
             <Heading title="Mes Commandes" center />
+
+            }
+         
             <div>
-                {Passée &&
-                    commandePassée.map((item: any, index: number) => (
-                        <div key={index}><ItemCommande index={index + 1} item={item} /></div>
-                    ))}
-                {EnCoursPrep &&
-                    commandeEnCoursPrep.map((item: any, index: number) => (
-                        <div key={index}><ItemCommande index={index + 1} item={item} /></div>
-                    ))}
-                {EnCoursLiv &&
-                    commandeEnCoursLiv.map((item: any, index: number) => (
-                        <div key={index}><ItemCommande index={index + 1} item={item} /></div>
-                    ))}
-                {Expédié &&
-                    commandeExpédié.map((item: any, index: number) => (
-                        <div key={index}><ItemCommande index={index + 1} item={item} /></div>
-                    ))}
+            {Passée &&
+            sortedCommandePassée.map((item: any, index: number) => (
+                <div key={index}><ItemCommande index={sortedCommandePassée.length - index } item={item} profile/></div>
+            ))}
+            {EnCoursPrep &&
+                sortedCommandeEnCoursPrep.map((item: any, index: number) => (
+                    <div key={index}><ItemCommande index={sortedCommandeEnCoursPrep.length - index} item={item} profile/></div>
+                ))}
+            {EnCoursLiv &&
+                sortedCommandeEnCoursLiv.map((item: any, index: number) => (
+                    <div key={index}><ItemCommande index={sortedCommandeEnCoursLiv.length - index} item={item} profile/></div>
+                ))}
+            {Expédié &&
+                sortedCommandeExpédié.map((item: any, index: number) => (
+                    <div key={index}><ItemCommande index={sortedCommandeExpédié.length - index} item={item} profile/></div>
+                ))}
             </div>
         </>
     );

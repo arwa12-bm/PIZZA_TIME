@@ -18,6 +18,8 @@ import Comfirmation from "./ModaComfirmation";
 import FormAddShop from "./formAddShop";
 import FormAddUser from "./formAddUser";
 import { CardTransactions } from "./card-transactions";
+import Heading from "../cart/Heading";
+import Commandes from "../commandes/page";
 
 
 const Admin = () => {
@@ -25,28 +27,8 @@ const Admin = () => {
         getAllCommandes,
         AllCommande,
         dataUser,   
+        getData,
         } = useCard();
-        
-
-const [filtredCommande, setFiltredCommande] = useState([]);
-
-useEffect(() => {
-    // Call the function to get all commandes
-    getAllCommandes();
-}, []); // Empty array ensures this runs only once when the component mounts
-
-useEffect(() => {
-    // Filter commandes when AllCommande or dataUser changes
-    if (AllCommande && AllCommande.length > 0 && dataUser) {
-        const filtered = AllCommande.filter((item:any) => item.shop === dataUser.shop);
-        setFiltredCommande(filtered);
-    }
-}, [AllCommande, dataUser]); // Dependency array
-
-
-// console.log(AllCommande)
-
-        
         
         const [commande, setCommande] = useState(true);
         const [addplat, setAddPlat] = useState(false);
@@ -55,7 +37,35 @@ useEffect(() => {
         const [adduser, setAddUser] = useState(false);
         const [stat, setStat] = useState(false);
         const [isOpen, setIsOpen] = useState(false);
+        const [idUserSearch, setIdUserSearch] = useState();
+        const [filtredCommande, setFiltredCommande] = useState([]);
+        const [search, setSearch] = useState(false);
 
+useEffect(() => {
+    // Call the function to get all commandes
+    getData()
+    getAllCommandes();
+
+}, [AllCommande]); // Empty array ensures this runs only once when the component mounts
+
+useEffect(() => {
+    // Filter commandes when AllCommande or restaurant_owner changes
+    if (AllCommande && AllCommande.length > 0 && dataUser && !search) {
+        const filtered = AllCommande.filter((item:any) => item.shop === dataUser.shop);
+        setFiltredCommande(filtered);
+    }
+    if (AllCommande && AllCommande.length > 0 && dataUser && search) {
+        const filtered = AllCommande.filter((item:any) => item.shop === dataUser.shop && item.id_user === idUserSearch);
+        setFiltredCommande(filtered);
+    }
+}, [AllCommande, dataUser,idUserSearch]); // Dependency array
+
+
+// console.log(AllCommande)
+
+        
+        
+       
         const handleCommande = () => {
             setAddCategorie(false)
             setAddPlat(false)
@@ -109,38 +119,47 @@ useEffect(() => {
 
     return ( 
         <div className="mt-[10%]">
-             
-        <Drawer isOpen={isOpen} setIsOpen={setIsOpen}>
-                            <Data   
-                                handleCommande={handleCommande}
-                                handleAddPlat={handleAddPlat}
-                                handleAddCategorie={handleAddCategorie}
-                                handleStat={handleStat}
-                                handleShop={handleShop}
-                                handleUser={handleUser}
-                                commande={commande}
-                                addplat={addplat}
-                                addcategorie={addcategorie}
-                                addshop={addshop}
-                                stat={stat}
-                                />
-                        </Drawer>
+            
+            <div className="z-10" >
+    <Drawer isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Data   
+            handleCommande={handleCommande}
+            handleAddPlat={handleAddPlat}
+            handleAddCategorie={handleAddCategorie}
+            handleStat={handleStat}
+            handleShop={handleShop}
+            handleUser={handleUser}
+            commande={commande}
+            addplat={addplat}
+            addcategorie={addcategorie}
+            addshop={addshop}
+            stat={stat}
+        />
+    </Drawer>
+  
+</div>
+
+                    
         <Container >
-        <div className='' onClick={() => setIsOpen(true)}>
+        <div  onClick={() => setIsOpen(true)} className="flex  gap-2 mb-2 items-center px-4 bg-gray-50 shadow-lg rounded-lg">
                                 <MdMenu
-                        size={50}
+                        size={55}
                         className="text-slate-400 mt-2 border-rounded  cursor-pointer rounded-md  "
                             />
+                            <div className="p-4 ">
+        {dataUser && (
+            <>
+                <p className="text-lg font-semibold text-slate-600 ">Espace {dataUser.role}</p>
+                <p className="text-base text-gray-800">Bonjour {dataUser.nom}</p>
+            </>
+        )}
+    </div>
                         </div>
-    <div className="my-2 mb-10">
+    <div >
     {commande && (
-        <>
-            <Search />
-        {filtredCommande &&
-            filtredCommande.sort((a:any, b:any) => a.id - b.id).map((item: any, index: number) => {
-            return <div key={item.id}><ItemCommande index={index + 1} item={item}  profile /></div>;
-            })}
-        </>
+        <div className=" -mt-[8%]">
+            <Commandes profile={true} filtredCommande={filtredCommande} setIdUserSearch={setIdUserSearch} setSearch={setSearch} />
+        </div>
     )}
     {addplat && (
         <div className="flex gap-2 p-4">

@@ -23,7 +23,7 @@ interface NavigationItem {
 
 const navigation: NavigationItem[] = [
     { name: 'Accueil', href: '#home-section', current: false },
-    { name: 'Nos magasin', href: '#about-section', current: false },
+    { name: 'Nos restaurants', href: '#about-section', current: false },
     { name: 'Nos galerie', href: '#gallery-section', current: false },
 ]
 

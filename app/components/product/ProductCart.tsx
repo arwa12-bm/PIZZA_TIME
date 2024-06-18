@@ -9,7 +9,13 @@ import { Fade } from "react-awesome-reveal";
 
 const ProductCart = () => {
   const router = useRouter();
-  const {card}= useCard()
+  const {card,selectedShoplist}= useCard()
+
+let filteredCategories :any
+if(card){
+    filteredCategories = card.categories.filter((item: any) => item.shopParent.includes(selectedShoplist.Company));
+}
+
   
   return (
     <div className='grid sm:grid-cols-2 lg:grid-cols-4 gap-y-20 gap-x-5 mt-20'>
@@ -25,7 +31,7 @@ const ProductCart = () => {
             alt=""
             sizes="(max-width: 600px) 100vw, 600px"
             onClick={() => {localStorage.setItem("selectedShoplist",JSON.stringify(data));
-                            router.push(`/menu/1`)}}
+                            router.push(`/menu/${filteredCategories[0].id}`)}}
           />
         </div>
         <div>

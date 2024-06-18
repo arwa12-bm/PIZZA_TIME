@@ -91,7 +91,7 @@ localStorage.setItem(
     "ItemList",
     JSON.stringify({ sup, checkedItems, data })
 );
-console.log("Modal", cartProducts);
+// console.log("Modal", cartProducts);
 const Existingindex =
     cartProducts !== null
     ? cartProducts?.findIndex(

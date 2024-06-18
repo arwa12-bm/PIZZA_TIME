@@ -2,18 +2,36 @@
 import { useEffect, useState } from 'react';
 import Container from '../Container';
 import { MicrophoneComponent } from './recordVoice';
+import useCard from '@/app/hooks/useCard';
 
 
 export const Chatbox = () => {
 
-
+const { card} =useCard()
 const [show,setShow]= useState(false)
 const [messages, setMessages] = useState<any[]>([]);
 const [text,setText]=useState("")
-//console.log({show});
+let titresCategories = '';
+let titresItems  = '';
+let titresShop = '';
+
+
+    if (card) {
+        titresCategories = card.categories.map((item: any) => item.title).join(', ');
+        titresItems = card.items.map((item: any) => item.title).join(', ');
+        titresShop = card.shoplist.map((item: any) => item.Company).join(', ');
+
+        console.log(titresItems);
+    }
+
 
 
 const sendMessage = (text: string) => {
+    if (!card) {
+        console.error('Card is undefined');
+        return;
+    }
+
     fetch('http://127.0.0.1:5000/predict', {
         method: 'POST',
         body: JSON.stringify({ message: text }),
@@ -24,11 +42,23 @@ const sendMessage = (text: string) => {
     })
     .then((response) => response.json())
     .then((response) => {
-        console.log(response)
+        console.log(response);
         const samMessage = { name: 'xxx', message: text };
-        const answerMessage = { name: 'Sam', message: response.answer };
-        
-        // Add a delay between displaying each message
+        let resp = response.answer;
+        let answerMessage;
+
+        if (resp === "Voici nos categories de plats:" || resp === "Nous avons les categories suivantes:") {
+            answerMessage = { name: 'Sam', message: `${resp} ${titresCategories}` };
+        } else if(resp === "Voici notre menu:" || resp === "Decouvrez nos delicieux plats:" ){
+            answerMessage = { name: 'Sam', message: `${resp} ${titresItems}` };
+        }else if(resp === "Voici les restaurants disponibles:" || resp === "Nos restaurants partenaires sont:" ){
+            answerMessage = { name: 'Sam', message: `${resp} ${titresShop}` };
+        }else {
+            answerMessage = { name: 'Sam', message: resp };
+        }
+
+        console.log(answerMessage);
+
         setMessages(prevMessages => [...prevMessages, samMessage]);
         setTimeout(() => {
             setMessages(prevMessages => [...prevMessages, answerMessage]);
@@ -37,8 +67,7 @@ const sendMessage = (text: string) => {
         setText("");
     })
     .catch((error) => console.error('Error:', error));
-}; 
-
+};
 
 
 

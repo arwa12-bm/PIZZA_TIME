@@ -47,7 +47,12 @@ const InputProfile :React.FC<InputProps>= ({
                 className={` border-b-[2px] border-b-gray-200 pl-8 text-m w-full p-2 text-gray-600 mb-4 
                 ${errors[id]? 'focus:border-rose-400':'border-slate-300'}`}
                 
-            />    
+            /> 
+            {errors[id] && (
+                <p style={{ color: "red", fontSize: "0.75rem" }}>
+                    Veuillez compléter ce champ
+                </p>
+            )}   
         </div>
     );
 }
