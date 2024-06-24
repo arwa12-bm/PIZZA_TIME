@@ -6,7 +6,7 @@ import { formatPrice } from '../utils/formatPrice';
 
 const Subscriptions = () => {
     const [purchaseComplete, setPurchaseComplete] = useState(false);
-    const { cartTotalAmount,handleClearCart,dataUser } = useCard();
+    const { cartTotalAmount,handleClearCart,dataUser,getData,getPanier,getTotals,getCartProducts } = useCard();
     const [inst,setInst]=useState<any>()
     let instance:any;
 
@@ -31,9 +31,13 @@ const Subscriptions = () => {
                         method: 'PUT',
                     };
                     fetch(url, requestOptions)
-                        .then(response => {
+                        .then(async (response) => {
                             setPurchaseComplete(true);
                             handleClearCart(dataUser);
+                            getPanier(dataUser)
+                            getCartProducts()
+                            
+
                         })
                         .catch(error => {
                             throw new Error('Failed to update shopping cart');
@@ -50,7 +54,7 @@ const Subscriptions = () => {
         <div>
             {purchaseComplete ? (
                 <div>
-                    <h1>Completed.</h1>
+                    <h1>Votre Commande passé avec succes</h1>
                 </div>
             ) : (
                 <div>  

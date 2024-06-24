@@ -22,7 +22,7 @@ const Menu = () => {
 const params = useParams();
 
 const [data, setData] = useState<any>(null);
-const { fetchAllStat,stat, card, getDataCard,selectedShoplist } = useCard();
+const { fetchAllStat,stat, card, getDataCard,selectedShoplist,dataUser,getPanier,getTotals} = useCard();
 const [isSticky, setIsSticky] = useState(false);
 const [showTop, setShowTop] = useState(false);
 const { isValidation } = useSnapshot(store);
@@ -50,6 +50,16 @@ if (!card) {
 }, [card]);
 
 
+useEffect(() => {
+    async ()=>{
+        if (dataUser !== null || dataUser?.error?.length < 0 ) {
+                    await getPanier(dataUser);
+                await getTotals();
+            }
+    }
+        
+
+}, []);
 useEffect(() => {
 const handleScroll = () => {
     const offset = window.scrollY;
@@ -141,7 +151,7 @@ return (
         </div>
         {showTop ? 
         <TopItem params={params} showTop={showTop} /> : (
-        <div className="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-5 gap-8 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-5 gap-8 mt-[15%]">
             <Fade
             direction={"up"}
             delay={500}

@@ -3,9 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import ModalInfoUtiles from "./ModalInfoUtiles";
 import { MdDeleteForever} from "react-icons/md";
-import { FaPenClip } from "react-icons/fa6";
 import useCard from "../hooks/useCard";
 import ModeRetraitModal from "./categorie/ModalModeRetrait";
 import { FaRegPenToSquare } from "react-icons/fa6";
@@ -57,7 +55,6 @@ const PhotoModeRetrait: React.FC<PhotoModeRetraitProps> = ({data}) => {
                 </div>
             </div> 
         </div>
-        <ModalInfoUtiles />
     </>
 
 );

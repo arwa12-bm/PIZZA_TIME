@@ -160,8 +160,8 @@ try {
 };
 return (
 <Container>
-    <div className="flex justify-center ">
-    <div className="border-[1.2px] border-slate-200 bg-white shadow-md rounded-2xl m-4 w-full px-8 ">
+    <div className="flex  border-[1.2px] border-slate-200 bg-white shadow-md rounded-2xl  w-full relative">
+    <div className=" w-full  ">
         <div className="flex justify-between">
         <div className="flex p-2 gap-1">
             <IoIosInformationCircleOutline size={25} />

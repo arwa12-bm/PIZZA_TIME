@@ -87,12 +87,12 @@ const DropDowen: React.FC<DropDowenProps> = ({ categorie, plat, shop, user, setC
                 <Box sx={{ minWidth: 120 }}>
                     <FormControl fullWidth sx={{ color: 'white' }}>
                         <InputLabel htmlFor="uncontrolled-native">
-                            Restaurant
+                        Role
                         </InputLabel>
                         <NativeSelect
                             onChange={handleChange} // Handle change event
                             inputProps={{
-                                name: 'Restaurant',
+                                name: 'Role',
                                 id: 'uncontrolled-native',
                             }}
                         >

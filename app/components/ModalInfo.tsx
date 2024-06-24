@@ -88,8 +88,7 @@ const formattedDate = currentDate.toLocaleDateString('en-GB', options);
                 <GiTakeMyMoney size={25} />
                 <div className='flex gap-1 p-1'>
                 <p>Espèce - </p>
-                <p>Carte bancaire - </p>
-                <p>Ticket restaurant</p>
+                <p>Carte bancaire</p>
                 </div>
                 </div>
             </div>
@@ -97,23 +96,21 @@ const formattedDate = currentDate.toLocaleDateString('en-GB', options);
     
     }
     
-    {activeTab === "horaires"&&
+    {activeTab === "horaires" && (
         <div className="tab-content active">
-                <div className='flex gap-2 mt-4 '>
-                    <MdAccessTime size={25} />
-                    <p>Horaires d'ouverture :</p>
-                </div>
+            <div className="flex gap-2 mt-4">
+            <MdAccessTime size={25} />
+            <p>Horaires d'ouverture :</p>
+            </div>
             <div>
-
-                <p>LUNDI : {data.horaire.LUNDI}</p>
-                <p>MARDI : {data.horaire.MARDI}</p>
-                <p>MERCREDI : {data.horaire.MERCREDI}</p>
-                <p>JEUDI : {data.horaire.JEUDI}</p>
-                <p>VENDREDI : {data.horaire.VENDREDI}</p>
-                <p>SAMEDI : {data.horaire.SAMEDI}</p>
-                <p>DIMANCHE : {data.horaire.DIMANCHE}</p>
+            {Object.entries(data.horaire).map(([day, times]:any) => (
+                <p key={day}>
+                {day} : {times.firstStart} - {times.firstEnd}{" "}
+                {times.secondStart && times.secondEnd ? `, ${times.secondStart} - ${times.secondEnd}` : ""}
+                </p>
+            ))}
             </div>
-            </div>
+        </div>)
         }
     {activeTab === "livraison"&& 
         <div

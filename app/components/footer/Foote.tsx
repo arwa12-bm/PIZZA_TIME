@@ -4,43 +4,11 @@ import { MdFacebook } from "react-icons/md";
 import { AiFillInstagram, AiFillTrademarkCircle, AiFillTwitterCircle, AiFillYoutube } from 'react-icons/ai';
 
 
-interface ProductType {
-    id: number;
-    section: string;
-    link: string[];
-}
-
-interface socialLinks {
-    imgSrc: string;
-    link: string;
-    width: number;
-}
-
-
-
-// const products: ProductType[] = [
-//     {
-//         id: 1,
-//         section: "Company",
-//         link: ['About', 'Careers', 'Mobile', 'Blog', 'How we work?'],
-//     },
-//     {
-//         id: 2,
-//         section: "Contact",
-//         link: ['Help/FAQ', 'Press', 'Affiliates', 'Hotel owners', 'Partners']
-//     }
-//     ,
-//     {
-//         id: 3,
-//         section: "More",
-//         link: ['Recipe', 'Chef', 'Food', 'Support']
-//     }
-// ]
 
 const Footer = () => {
     return (
 
-        <div className=" max-w-2xl pt-10  max-w-7xl px-8 bg-gray-100 border-t-[1.5] border-slate-400">
+        <div className="pt-10  max-w-8xl px-8 bg-gray-100 border-t-[1.5] border-slate-400">
             <div className=" grid md:grid-cols-2 lg:grid-cols-2 m-12">
 
                 {/* COLUMN-1 */}
@@ -65,7 +33,7 @@ const Footer = () => {
 
                 {/* CLOUMN-2/3/4 */}
                 <div>
-                    <h3 className='text-textbl text-xs font-medium mt-5 mb-4 lg:mb-16'> Open an account in minutes, get full financial <br /> control for much longer.</h3>
+                <h3 className='text-textbl text-xs font-medium mt-5 mb-4 lg:mb-16'> Ouvrez un compte en quelques minutes et profitez d'un contrôle financier complet pour bien plus longtemps.</h3>
                                     <div className='flex gap-4  pt-2 '>
 
                                 <div className='flex gap-1'>

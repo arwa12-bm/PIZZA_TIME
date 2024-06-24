@@ -57,6 +57,7 @@ handleDelPanier: (dataUser: any) => void;
 getDataCard: () => any;
 getModeRetrait: () => any;
 fetchAllStat: () => any;
+getCartProducts: () => any;
 calculateSuppPrice: (dataUserId: any) => any
 };
 
@@ -95,8 +96,6 @@ const [dataCommande, setDataCommande] = useState<any | null>();
 const [AllCommande, setAllCommande] = useState<any | null>();
 const [AllUser, setAllUser] = useState<any | null>();
 const [card,setcard]=useState<card| undefined>()
-const [logWithGoogle,setLogWithGoogle]=useState(false)
-const [done,setDone]=useState(false)
 const [statDay,setStatDay]=useState<any | null>()
 const [stat,setStat]=useState<any | null>()
 
@@ -202,39 +201,33 @@ const getselectedCategorie = useCallback(()=>{
 },[])
 
 useEffect(() => {
-    // if(!logWithGoogle){
         getData();
-    // }else{
-    //     getDataGoogle
-    // }
-    
+
 }, []);
 
 useEffect(() => {
-    //console.log("ddd", dataUser);
 
     const fetchData = async () => {
         if (dataUser !== null || dataUser?.error?.length < 0 ) {
                 await getPanier(dataUser);
             await getCommandes(dataUser);
-            //console.log("dddc", dataUser);
         }
     };
     fetchData();
 }, [dataUser,cartProducts]);
-
+const getCartProducts =()=>{
+    if (dataPanier !== null ) {
+        const cartItems: any = localStorage.getItem("CartItem");
+        if (cartItems !== "undefined") {
+            const cProducts = JSON.parse(cartItems);
+            setCartProducts(cProducts);
+        }
+        }
+}
 
 //get List of item in cart
 useEffect(()=>{
-    const getCartProducts =()=>{
-        if (dataPanier !== null ) {
-            const cartItems: any = localStorage.getItem("CartItem");
-            if (cartItems !== "undefined") {
-                const cProducts = JSON.parse(cartItems);
-                setCartProducts(cProducts);
-            }
-            }
-    }
+
     if( !dataUser?.error && dataUser !== null ){
         getCartProducts()
 
@@ -308,43 +301,49 @@ async function calculateSuppPrice(item: any) {
     return prixsupp;
 }
 
-const getTotals = async () => {
+const getTotals = useCallback(async () => {
     // console.log({ cartProducts });
 
-    if (cartProducts !== null && typeof cartProducts !== "undefined") {
-        const promises = cartProducts.map(async (item) => {
-            let indexcheck = item.data.detail.taille.findIndex((el: any) => el === item.checkedDetail);
-            // console.log({ index });
-
-            let prixsupp = await calculateSuppPrice(item);
-
-            const itemTotal = item.data.detail.price[indexcheck] * item.quantity;
-            return {
-                total: itemTotal + prixsupp,
-                qty: item.quantity
-            };
-        });
-
-        const results = await Promise.all(promises);
-        const { total, qty } = results.reduce((acc, result) => {
-            acc.total += result.total;
-            acc.qty += result.qty;
-            return acc;
-        }, { total: 0, qty: 0 });
-
-        setCartTotalQty(qty);
-        // console.log({ total });
-        setCartTotalAmount(total);
-        return total;
+    if (cartProducts === null || typeof cartProducts === "undefined") {
+        setCartTotalQty(0);
+        setCartTotalAmount(0);
+        return 0;
     }
-}
+
+    const promises = cartProducts.map(async (item) => {
+        let indexcheck = item.data.detail.taille.findIndex((el: any) => el === item.checkedDetail);
+        // console.log({ index });
+
+        let prixsupp = await calculateSuppPrice(item);
+
+        const itemTotal = item.data.detail.price[indexcheck] * item.quantity;
+        return {
+            total: itemTotal + prixsupp,
+            qty: item.quantity
+        };
+    });
+
+    const results = await Promise.all(promises);
+    const { total, qty } = results.reduce((acc, result) => {
+        acc.total += result.total;
+        acc.qty += result.qty;
+        return acc;
+    }, { total: 0, qty: 0 });
+
+    setCartTotalQty(qty);
+    //  console.log({ total, qty });
+    setCartTotalAmount(total);
+    return total;
+} , [cartProducts,dataPanier] // Dépendances pour le hook useCallback
+);
+
 
 // get  totalAmount and total quantity
 useEffect(() => {
-    if(cartProducts !== null && typeof cartProducts !== "undefined"){
         getTotals()
-    }
 }, [cartProducts,dataPanier]);
+
+
 
 //Add panier
 
@@ -731,6 +730,7 @@ const value = {
     getTotals,
     fetchAllStat,
     calculateSuppPrice,
+    getCartProducts,
     // getProductData
 };
 return <CardContext.Provider value={value} {...props} />;

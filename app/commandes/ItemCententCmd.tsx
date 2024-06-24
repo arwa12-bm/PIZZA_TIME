@@ -72,8 +72,8 @@ const ItemCententCmd:React.FC<ItemCententProps>= ({item}) => {
         :""}
             </div>
         </div>
-      </div>
-     </>
+    </div>
+    </>
     );
 }
 

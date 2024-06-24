@@ -14,8 +14,6 @@ const InfoUser = () => {
     const {
         dataUser,
         getData,
-        getDataGoogle,
-        logWithGoogle
         } = useCard();
 
     const [formData, setFormData] = useState(dataUser);
@@ -36,7 +34,7 @@ const InfoUser = () => {
         const onSubmitUpdate: SubmitHandler<FieldValues> = async (formData) => {
             console.log({formData});
             
-            if(!logWithGoogle){
+    
 
                 await fetch(`http://localhost:8080/api/user/${dataUser?.id}`, {
                 method: "POST",
@@ -45,11 +43,6 @@ const InfoUser = () => {
             });
             getData();
 
-
-            }else{
-                getDataGoogle()
-
-            }
             
             };
 

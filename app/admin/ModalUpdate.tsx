@@ -41,16 +41,9 @@ const Update: React.FC<ComfirmationProps>= ({ Open,onClose,Data,categorie,plat,s
             onCancel={onClose}
             footer={[
         
-            <Button
-                label='Valider  '
-                key="link"
-                href=""
-                disabled={loading}
-                onClick={()=>{}}
-            />
             ]}
         >
-<div className='relative'>
+<div className='w-full'>
 { plat && <FormAddPlat update={true} Data={Data} onCloseModalUpdate={()=>onClose()} /> } 
 { categorie && <FormAddCategorie update={true} Data={Data} onCloseModalUpdate={()=>onClose()}/> }        
 { shop && <FormAddShop update={true} Data={Data} onCloseModalUpdate={()=>onClose()}/> }        

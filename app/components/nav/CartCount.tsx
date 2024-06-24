@@ -9,6 +9,7 @@ const CartCount = () => {
 
     const {isValidation}=useSnapshot(store)
     const  {cartTotalQty} =useCard()
+    
     const router =useRouter()
     return ( 
     <div className="absolute cursor-pointer" onClick={()=>setIsValidation(true)} >

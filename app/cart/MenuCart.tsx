@@ -72,6 +72,7 @@ const handlePassée =async()=>{
     setIsValidation(false)
     setShowPay(false)
     setShow(false); 
+    setCmdPass(false)
     // console.log({cartProducts})
     // console.log("close")
 

@@ -27,7 +27,6 @@ const ItemCentent: React.FC<ItemCententProps> = ({ item }) => {
     const updatePrixSupp = async (item: any) => {
         const calculatedSuppPrice = await calculateSuppPrice(item);
         setPrixSupp(calculatedSuppPrice);
-        // console.log("Updated prixSupp:", calculatedSuppPrice);
     };
 
     useEffect(() => {

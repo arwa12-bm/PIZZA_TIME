@@ -123,8 +123,8 @@ console.log({ updatedFormData });
 
     return (
         <Container>
-            <div className="flex justify-center">
-                <div className="border-[1.2px] border-slate-200 bg-white shadow-md rounded-2xl m-4 w-full px-8">
+            <div className="flex relative">
+                <div className="border-[1.2px] border-slate-200 bg-white shadow-md rounded-2xl w-full relative ">
                     <div className="flex justify-between">
                         <div className="flex p-2 gap-1">
                             <IoIosInformationCircleOutline size={25} />
@@ -138,7 +138,7 @@ console.log({ updatedFormData });
                             />
                         </div>
                     </div>
-                    <div className="p-2 relative grid gap-2">
+                    <div className="p-2 relative w-full grid gap-2">
                         <InputProfile
                             id="title"
                             required
@@ -171,7 +171,7 @@ console.log({ updatedFormData });
                                 })
                             }
                         />
-                <FormControl sx={{ m: 1, width: 300 }} error={!!errorsSignup.selectedShop}>
+                <FormControl sx={{ m: 1, width: 250 }} error={!!errorsSignup.selectedShop}>
             <InputLabel id="demo-multiple-chip-label">Shop Parent</InputLabel>
             <Select
                 labelId="demo-multiple-chip-label"

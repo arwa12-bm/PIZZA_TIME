@@ -49,11 +49,11 @@ getData,
 getTotals
 } = useCard();
 
-useEffect(() => {
-getData();
-const total = getTotals();
-console.log(total)
-}, []);
+// useEffect(() => {
+// getData();
+// const total = getTotals();
+// console.log(total)
+// }, []);
 
 //created suppList in localStorage
 const handleSuppChange = (item: any, SuppItems: any, newCount: any) => {
@@ -103,7 +103,7 @@ const Existingindex =
 
         )
     : -1; //same (composant de base )
-    let total:any = await getTotals();
+
 
 //add to cart new item
 if (Existingindex === -1 || cartProducts === null) {
@@ -124,7 +124,10 @@ if (Existingindex === -1 || cartProducts === null) {
 }
 
 setLoading(true)
+getData();
+getTotals();
 onClose()
+
 toast.success("Votre plat est ajouté au pannier");
 // setIsValidation(true)
 setCheckedDetail({})
